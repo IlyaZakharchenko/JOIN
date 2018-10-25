@@ -1,10 +1,12 @@
 package itis.ru.kpfu.join.ui.activity.base
 
+import android.app.DialogFragment
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import com.arellomobile.mvp.MvpAppCompatActivity
+import itis.ru.kpfu.join.ui.fragment.ProgressDialogFragment
 
 abstract class BaseActivity: MvpAppCompatActivity() {
 
@@ -18,6 +20,8 @@ abstract class BaseActivity: MvpAppCompatActivity() {
 
     protected abstract val toolbar: Toolbar?
 
+    private lateinit var dialog: DialogFragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(contentLayout)
@@ -25,6 +29,7 @@ abstract class BaseActivity: MvpAppCompatActivity() {
         toolbar?.let { setSupportActionBar(it) }
         enableBackPressed(enableBackPressed)
         setToolbarTitle(toolbarTitle)
+        dialog = ProgressDialogFragment.newInstance()
     }
 
     fun enableBackPressed(enable: Boolean) {
@@ -34,6 +39,14 @@ abstract class BaseActivity: MvpAppCompatActivity() {
 
     fun setToolbarTitle(title: Int?) {
         supportActionBar?.title = title?.let { getString(it) }
+    }
+
+    fun showProgressBar() {
+        dialog.show(fragmentManager, null)
+    }
+
+    fun hideProgressBar() {
+        dialog.dismiss()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

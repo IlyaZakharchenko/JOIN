@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.R.layout
 import itis.ru.kpfu.join.ui.activity.base.BaseActivity
+import itis.ru.kpfu.join.ui.fragment.SignInFragment
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 import kotlinx.android.synthetic.main.activity_main.toolbar_main_activity
 
@@ -29,7 +30,7 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
+        setFragment(SignInFragment.newInstance(), true)
     }
 
     fun setFragment(fragment: BaseFragment, addToBackStack: Boolean) {

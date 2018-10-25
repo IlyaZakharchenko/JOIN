@@ -4,26 +4,27 @@ import android.os.Bundle
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 
-class SignUpFragment: BaseFragment() {
+class MainFragment : BaseFragment() {
 
     companion object {
-        fun newInstance(): SignUpFragment {
+        fun newInstance(): MainFragment {
             val args = Bundle()
-            val fragment = SignUpFragment()
+            val fragment = MainFragment()
             fragment.arguments = args
             return fragment
         }
     }
 
     override val contentLayout: Int
-        get() = R.layout.fragment_sign_up
+        get() = R.layout.fragment_main
 
     override val toolbarTitle: Int?
-        get() = R.string.sign_up
+        get() = R.string.app_name
 
     override val menu: Int?
         get() = null
 
     override val enableBackPressed: Boolean
-        get() = true
+        get() = false
+
 }

@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 27
@@ -19,6 +20,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    realm {
+        syncEnabled = true
     }
 }
 
@@ -42,7 +46,7 @@ dependencies {
     //imagepicker
     implementation 'com.github.esafirm.android-image-picker:imagepicker:1.13.1'
     //Picasso
-    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
     //MaterialDialog
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     //Rx
@@ -63,4 +67,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     //multidex
     implementation 'com.android.support:multidex:1.0.3'
+    //GoogleServices
+    implementation'com.google.android.gms:play-services-auth:15.0.1'
+    //VkSDK
+    implementation 'com.vk:androidsdk:1.6.5'
 }
