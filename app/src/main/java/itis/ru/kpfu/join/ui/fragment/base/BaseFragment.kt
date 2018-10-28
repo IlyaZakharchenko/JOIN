@@ -7,10 +7,20 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import com.arellomobile.mvp.MvpAppCompatFragment
+import itis.ru.kpfu.join.JoinApplication
+import itis.ru.kpfu.join.api.TestApi
+import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.ui.activity.MainActivity
 import itis.ru.kpfu.join.ui.activity.base.BaseActivity
+import javax.inject.Inject
 
 abstract class BaseFragment : MvpAppCompatFragment() {
+
+    @Inject
+    lateinit var api: TestApi
+
+    @Inject
+    lateinit var userRepository: UserRepository
 
     protected abstract val contentLayout: Int
 
@@ -22,6 +32,11 @@ abstract class BaseFragment : MvpAppCompatFragment() {
 
     protected val baseActivity get() = activity as BaseActivity
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        JoinApplication.appComponent.inject(this)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(contentLayout, container, false)
     }
@@ -29,6 +44,7 @@ abstract class BaseFragment : MvpAppCompatFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (activity as MainActivity).showToolbar()
         (activity as MainActivity).setToolbarTitle(toolbarTitle)
         (activity as MainActivity).enableBackPressed(enableBackPressed)
         this.menu?.let { setHasOptionsMenu(true) }

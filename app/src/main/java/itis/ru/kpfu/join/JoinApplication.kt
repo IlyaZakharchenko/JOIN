@@ -3,6 +3,7 @@ package itis.ru.kpfu.join
 import android.content.Context
 import android.support.multidex.MultiDex
 import android.support.multidex.MultiDexApplication
+import com.facebook.FacebookSdk
 import com.vk.sdk.VKSdk
 import io.realm.Realm
 import io.realm.RealmConfiguration

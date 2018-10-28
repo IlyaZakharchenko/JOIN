@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Join</string>
     <integer name="com_vk_sdk_AppId">6731658</integer>
+    <string name="facebook_app_id">178979386345136</string>
+    <string name="fb_login_protocol_scheme">fb178979386345136</string>
     <string name="sign_in">Вход</string>
     <string name="sign_up">Регистрация</string>
+    <string name="email">Электронная почта</string>
+    <string name="password">Пароль</string>
 </resources>

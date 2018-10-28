@@ -1,14 +1,20 @@
 package itis.ru.kpfu.join.ui.activity
 
+import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
+import android.util.Base64
+import android.util.Log
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.R.layout
 import itis.ru.kpfu.join.ui.activity.base.BaseActivity
+import itis.ru.kpfu.join.ui.fragment.MainFragment
 import itis.ru.kpfu.join.ui.fragment.SignInFragment
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 import kotlinx.android.synthetic.main.activity_main.toolbar_main_activity
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 class MainActivity : BaseActivity() {
 
@@ -30,7 +36,7 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setFragment(SignInFragment.newInstance(), true)
+        setFragment(MainFragment.newInstance(), false)
     }
 
     fun setFragment(fragment: BaseFragment, addToBackStack: Boolean) {

@@ -1,29 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/join_logo"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password" />
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:background="@color/colorPrimary"
+        android:text="Войти"
+        android:textColor="@color/colorWhite" />
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:background="@color/colorGray"
+        android:text="Создать аккаунт" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="center"
-        android:layout_marginTop="300dp">
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/btn_sign_in_google"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/icon_google"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:background="@drawable/icon_google" />
 
         <ImageButton
             android:id="@+id/btn_sign_in_vk"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/icon_vk"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:background="@drawable/icon_vk" />
+
+        <ImageButton
+            android:id="@+id/btn_sign_in_facebook"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/icon_facebook" />
     </LinearLayout>
 
 </LinearLayout>
