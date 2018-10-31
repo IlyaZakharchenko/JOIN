@@ -4,11 +4,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.db.repository.UserRepository
-import itis.ru.kpfu.join.ui.activity.MainActivity
-import itis.ru.kpfu.join.ui.activity.base.BaseActivity
+import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
-import javax.inject.Inject
 
 class MainFragment : BaseFragment() {
 
@@ -39,7 +36,7 @@ class MainFragment : BaseFragment() {
         if (userRepository.getUser() != null) {
             Toast.makeText(activity, "youre signed in!", Toast.LENGTH_SHORT).show()
         } else {
-            (activity as MainActivity).setFragment(SignInFragment.newInstance(), false)
+            (activity as FragmentHostActivity).setFragment(SignInFragment.newInstance(), false)
         }
     }
 }

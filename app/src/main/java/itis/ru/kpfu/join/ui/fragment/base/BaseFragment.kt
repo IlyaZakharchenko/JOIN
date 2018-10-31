@@ -10,7 +10,7 @@ import com.arellomobile.mvp.MvpAppCompatFragment
 import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.api.TestApi
 import itis.ru.kpfu.join.db.repository.UserRepository
-import itis.ru.kpfu.join.ui.activity.MainActivity
+import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
 import itis.ru.kpfu.join.ui.activity.base.BaseActivity
 import javax.inject.Inject
 
@@ -44,9 +44,9 @@ abstract class BaseFragment : MvpAppCompatFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as MainActivity).showToolbar()
-        (activity as MainActivity).setToolbarTitle(toolbarTitle)
-        (activity as MainActivity).enableBackPressed(enableBackPressed)
+        (activity as FragmentHostActivity).showToolbar()
+        (activity as FragmentHostActivity).setToolbarTitle(toolbarTitle)
+        (activity as FragmentHostActivity).enableBackPressed(enableBackPressed)
         this.menu?.let { setHasOptionsMenu(true) }
     }
 

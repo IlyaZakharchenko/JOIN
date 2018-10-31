@@ -5,6 +5,8 @@ import com.arellomobile.mvp.MvpView
 
 interface SignInView: MvpView {
 
+    fun initClickListeners()
+
     fun showProgress()
 
     fun hideProgress()
@@ -12,6 +14,10 @@ interface SignInView: MvpView {
     fun onConnectionError()
 
     fun showResult(result: String)
+
+    fun onCreateAccountClick()
+
+    fun openSignUpFragment()
 
     fun signIn()
 }

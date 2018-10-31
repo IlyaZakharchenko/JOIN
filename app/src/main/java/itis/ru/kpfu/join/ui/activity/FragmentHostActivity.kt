@@ -1,22 +1,17 @@
 package itis.ru.kpfu.join.ui.activity
 
-import android.content.pm.PackageManager
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
-import android.util.Base64
-import android.util.Log
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.R.layout
 import itis.ru.kpfu.join.ui.activity.base.BaseActivity
 import itis.ru.kpfu.join.ui.fragment.MainFragment
-import itis.ru.kpfu.join.ui.fragment.SignInFragment
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 import kotlinx.android.synthetic.main.activity_main.toolbar_main_activity
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 
-class MainActivity : BaseActivity() {
+
+class FragmentHostActivity : BaseActivity() {
 
     override val contentLayout: Int
         get() = R.layout.activity_main
@@ -35,7 +30,7 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        Fabric.with(this, Crashlytics())
         setFragment(MainFragment.newInstance(), false)
     }
 

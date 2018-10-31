@@ -3,6 +3,7 @@ package itis.ru.kpfu.join.ui.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.facebook.CallbackManager
@@ -23,9 +24,10 @@ import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.mvp.presenter.SignInPresenter
 import itis.ru.kpfu.join.mvp.view.SignInView
-import itis.ru.kpfu.join.ui.activity.MainActivity
+import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
 import itis.ru.kpfu.join.ui.activity.base.BaseActivity
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
+import kotlinx.android.synthetic.main.fragment_sign_in.btn_create_account
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_facebook
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_google
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_vk
@@ -36,6 +38,8 @@ class SignInFragment : BaseFragment(), SignInView {
     lateinit var presenter: SignInPresenter
 
     lateinit var callbackManager: CallbackManager
+
+    lateinit var createAccountButton: Button
 
     companion object {
 
@@ -54,7 +58,7 @@ class SignInFragment : BaseFragment(), SignInView {
         get() = R.layout.fragment_sign_in
 
     override val toolbarTitle: Int?
-        get() = null
+        get() = R.string.sign_in
 
     override val menu: Int?
         get() = null
@@ -70,11 +74,18 @@ class SignInFragment : BaseFragment(), SignInView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //(activity as MainActivity).hideToolbar()
+        //(activity as FragmentHostActivity).hideToolbar()
         initFacebookSignIn()
         initGoogleSignIn()
         initVkSignIn()
+        initClickListeners()
         // presenter.getDataFromServer(api, testRepository)
+    }
+
+    override fun initClickListeners() {
+        btn_create_account.setOnClickListener {
+            onCreateAccountClick()
+        }
     }
 
     private fun initFacebookSignIn() {
@@ -155,10 +166,18 @@ class SignInFragment : BaseFragment(), SignInView {
     }
 
     override fun signIn() {
-        (activity as MainActivity).setFragment(MainFragment.newInstance(), false)
+        (activity as FragmentHostActivity).setFragment(MainFragment.newInstance(), false)
     }
 
     override fun showResult(result: String) {
         // tv_test.text = result
+    }
+
+    override fun onCreateAccountClick() {
+        presenter.onCreateAccountClick()
+    }
+
+    override fun openSignUpFragment() {
+        (activity as? FragmentHostActivity)?.setFragment(SignUpFragment.newInstance(), false)
     }
 }

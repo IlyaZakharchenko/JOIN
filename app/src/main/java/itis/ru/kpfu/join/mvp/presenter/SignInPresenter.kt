@@ -97,4 +97,8 @@ class SignInPresenter : MvpPresenter<SignInView>() {
             viewState.signIn()
         }.executeAsync()
     }
+
+    fun onCreateAccountClick() {
+        viewState.openSignUpFragment()
+    }
 }
