@@ -11,4 +11,8 @@
     <string name="sign_up_username">Имя пользователя</string>
     <string name="sign_up_password">Пароль</string>
     <string name="create_account">Создать аккаунт</string>
+    <string name="forgot_password">Забыли пароль?</string>
+    <string name="projects_toolbar">Проекты</string>
+    <string name="notifications_toolbar">Уведомления</string>
+    <string name="chat_toolbar">Сообщения</string>
 </resources>

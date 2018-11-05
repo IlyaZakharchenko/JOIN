@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.arellomobile.mvp.MvpAppCompatFragment
 import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.api.TestApi
+import itis.ru.kpfu.join.db.repository.TestRepository
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
 import itis.ru.kpfu.join.ui.activity.base.BaseActivity
@@ -22,6 +23,9 @@ abstract class BaseFragment : MvpAppCompatFragment() {
     @Inject
     lateinit var userRepository: UserRepository
 
+    @Inject
+    lateinit var testRepository: TestRepository
+
     protected abstract val contentLayout: Int
 
     protected abstract val toolbarTitle: Int?
@@ -29,6 +33,8 @@ abstract class BaseFragment : MvpAppCompatFragment() {
     protected abstract val menu: Int?
 
     protected abstract val enableBackPressed: Boolean
+
+    protected abstract val enableBottomNavBar: Boolean
 
     protected val baseActivity get() = activity as BaseActivity
 
@@ -47,6 +53,7 @@ abstract class BaseFragment : MvpAppCompatFragment() {
         (activity as FragmentHostActivity).showToolbar()
         (activity as FragmentHostActivity).setToolbarTitle(toolbarTitle)
         (activity as FragmentHostActivity).enableBackPressed(enableBackPressed)
+        (activity as FragmentHostActivity).enableBottomNavBar(enableBottomNavBar)
         this.menu?.let { setHasOptionsMenu(true) }
     }
 

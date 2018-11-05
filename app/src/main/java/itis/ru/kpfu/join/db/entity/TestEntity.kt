@@ -14,6 +14,6 @@ open class TestEntity(
 ) : RealmObject() {
 
     override fun toString(): String {
-        return "$name $site $desc $link $elementPureHtml"
+        return "$elementPureHtml"
     }
 }

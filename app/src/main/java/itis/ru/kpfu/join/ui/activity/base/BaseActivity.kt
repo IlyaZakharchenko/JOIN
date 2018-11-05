@@ -63,12 +63,4 @@ abstract class BaseActivity: MvpAppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    fun showToolbar() {
-        supportActionBar?.show()
-    }
-
-    fun hideToolbar() {
-        supportActionBar?.hide()
-    }
 }

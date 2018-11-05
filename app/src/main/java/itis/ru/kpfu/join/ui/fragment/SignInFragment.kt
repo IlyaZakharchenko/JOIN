@@ -3,9 +3,9 @@ package itis.ru.kpfu.join.ui.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -31,19 +31,18 @@ import kotlinx.android.synthetic.main.fragment_sign_in.btn_create_account
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_facebook
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_google
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_vk
+import kotlinx.android.synthetic.main.fragment_sign_up.btn_sign_in
 
 class SignInFragment : BaseFragment(), SignInView {
-
     @InjectPresenter
     lateinit var presenter: SignInPresenter
 
     lateinit var callbackManager: CallbackManager
 
-    lateinit var createAccountButton: Button
-
     companion object {
 
         const val GOOGLE_SIGN_IN = 0
+
         const val FACEBOOK_SIGN_IN = 1
         const val VK_SIGN_IN = 2
         fun newInstance(): SignInFragment {
@@ -52,6 +51,10 @@ class SignInFragment : BaseFragment(), SignInView {
             fragment.arguments = args
             return fragment
         }
+    }
+    @ProvidePresenter
+    fun providePresenter(): SignInPresenter {
+        return JoinApplication.appComponent.provideSignInPresenter()
     }
 
     override val contentLayout: Int
@@ -66,10 +69,8 @@ class SignInFragment : BaseFragment(), SignInView {
     override val enableBackPressed: Boolean
         get() = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        JoinApplication.appComponent.inject(this)
-    }
+    override val enableBottomNavBar: Boolean
+        get() = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -83,9 +84,8 @@ class SignInFragment : BaseFragment(), SignInView {
     }
 
     override fun initClickListeners() {
-        btn_create_account.setOnClickListener {
-            onCreateAccountClick()
-        }
+        btn_create_account.setOnClickListener { onCreateAccountClick() }
+        btn_sign_in.setOnClickListener { presenter.getDataFromServer()}
     }
 
     private fun initFacebookSignIn() {
@@ -166,11 +166,11 @@ class SignInFragment : BaseFragment(), SignInView {
     }
 
     override fun signIn() {
-        (activity as FragmentHostActivity).setFragment(MainFragment.newInstance(), false)
+        (activity as FragmentHostActivity).setFragment(ProjectsFragment.newInstance(), false)
     }
 
     override fun showResult(result: String) {
-        // tv_test.text = result
+         Toast.makeText(baseActivity, "Success", Toast.LENGTH_LONG).show()
     }
 
     override fun onCreateAccountClick() {
@@ -178,6 +178,6 @@ class SignInFragment : BaseFragment(), SignInView {
     }
 
     override fun openSignUpFragment() {
-        (activity as? FragmentHostActivity)?.setFragment(SignUpFragment.newInstance(), false)
+        (activity as? FragmentHostActivity)?.setFragment(SignUpFragment.newInstance(), true)
     }
 }

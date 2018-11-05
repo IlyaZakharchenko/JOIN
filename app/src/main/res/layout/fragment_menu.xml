@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:text="MAIN FRAGMENT"
-        android:textSize="30sp"/>
+        android:textSize="20sp"
+        android:text="MENU"/>
 
 </RelativeLayout>

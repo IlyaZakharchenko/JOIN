@@ -12,11 +12,11 @@ import itis.ru.kpfu.join.ui.activity.base.BaseActivity
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 
 class SignUpFragment : BaseFragment(), SignUpView {
-
     @InjectPresenter
     lateinit var presenter: SignUpPresenter
 
     companion object {
+
         fun newInstance(): SignUpFragment {
             val args = Bundle()
             val fragment = SignUpFragment()
@@ -24,7 +24,6 @@ class SignUpFragment : BaseFragment(), SignUpView {
             return fragment
         }
     }
-
     override val contentLayout: Int
         get() = R.layout.fragment_sign_up
 
@@ -36,6 +35,9 @@ class SignUpFragment : BaseFragment(), SignUpView {
 
     override val enableBackPressed: Boolean
         get() = true
+
+    override val enableBottomNavBar: Boolean
+        get() = false
 
     override fun showProgress() {
         (activity as? BaseActivity)?.showProgressBar()
@@ -54,7 +56,7 @@ class SignUpFragment : BaseFragment(), SignUpView {
     }
 
     override fun openMainFragment() {
-        (activity as? FragmentHostActivity)?.setFragment(MainFragment.newInstance(), false)
+        (activity as? FragmentHostActivity)?.setFragment(ProjectsFragment.newInstance(), false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
