@@ -7,12 +7,24 @@ import itis.ru.kpfu.join.mvp.view.SignUpView
 @InjectViewState
 class SignUpPresenter: MvpPresenter<SignUpView>() {
 
-    private fun checkUsernameUniqueness(){
+    private fun checkUsername(username : String){
         //TODO check username uniqueness
+        if (!username.isEmpty()) {
+
+        }
+        else {
+            viewState.onError("Username is empty")
+        }
     }
 
-    private fun checkEmailUniqueness() {
+    private fun checkEmail(email : String) {
         //TODO check email uniqueness
+        if (!email.isEmpty()) {
+
+        }
+        else {
+            viewState.onError("Username is empty")
+        }
     }
 
     private fun sendDataToServer() {
@@ -23,10 +35,10 @@ class SignUpPresenter: MvpPresenter<SignUpView>() {
         //TODO get response from server
     }
 
-    fun onSignUpClick() {
+    fun onSignUpClick(username : String, email : String, password : String) {
         viewState.showProgress()
-        checkEmailUniqueness()
-        checkUsernameUniqueness()
+        checkEmail(email)
+        checkUsername(username)
         sendDataToServer()
         getDataFromServer()
         viewState.hideProgress()

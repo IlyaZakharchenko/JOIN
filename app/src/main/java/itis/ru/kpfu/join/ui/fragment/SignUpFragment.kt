@@ -3,6 +3,7 @@ package itis.ru.kpfu.join.ui.fragment
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import com.arellomobile.mvp.presenter.InjectPresenter
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.mvp.presenter.SignUpPresenter
@@ -10,6 +11,10 @@ import itis.ru.kpfu.join.mvp.view.SignUpView
 import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
 import itis.ru.kpfu.join.ui.activity.base.BaseActivity
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
+import kotlinx.android.synthetic.main.fragment_sign_up.btn_sign_up
+import kotlinx.android.synthetic.main.fragment_sign_up.et_email
+import kotlinx.android.synthetic.main.fragment_sign_up.et_password
+import kotlinx.android.synthetic.main.fragment_sign_up.et_username
 
 class SignUpFragment : BaseFragment(), SignUpView {
 
@@ -50,7 +55,7 @@ class SignUpFragment : BaseFragment(), SignUpView {
     }
 
     override fun onSignUpClick() {
-        presenter.onSignUpClick()
+        presenter.onSignUpClick(et_email.text.toString(), et_username.text.toString(), et_password.text.toString())
     }
 
     override fun openMainFragment() {
@@ -59,5 +64,14 @@ class SignUpFragment : BaseFragment(), SignUpView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        btn_sign_up.setOnClickListener {
+            onSignUpClick()
+        }
+    }
+
+    override fun onError(message: String) {
+        //TODO
+        Toast.makeText(activity, message, LENGTH_SHORT).show()
     }
 }

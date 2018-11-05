@@ -10,6 +10,8 @@ interface SignUpView: MvpView {
 
     fun onConnectionError()
 
+    fun onError(message : String)
+
     fun openMainFragment()
 
     fun onSignUpClick()
