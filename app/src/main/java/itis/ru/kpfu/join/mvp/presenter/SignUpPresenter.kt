@@ -42,6 +42,5 @@ class SignUpPresenter: MvpPresenter<SignUpView>() {
         sendDataToServer()
         getDataFromServer()
         viewState.hideProgress()
-        viewState.openMainFragment()
     }
 }

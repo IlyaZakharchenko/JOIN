@@ -17,5 +17,6 @@ interface AppComponent {
     fun inject(fragment: BaseFragment)
 
     fun provideSignInPresenter(): SignInPresenter
+
     fun provideFragmentHostPresenter(): FragmentHostPresenter
 }

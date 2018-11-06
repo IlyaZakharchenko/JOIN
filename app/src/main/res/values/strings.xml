@@ -15,4 +15,6 @@
     <string name="projects_toolbar">Проекты</string>
     <string name="notifications_toolbar">Уведомления</string>
     <string name="chat_toolbar">Сообщения</string>
+    <string name="restore_pass_title">Мы отправим сообщения для восстановления пароля на вашу электронную почту</string>
+    <string name="restore_password">Восстановить пароль</string>
 </resources>

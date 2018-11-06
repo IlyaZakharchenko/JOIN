@@ -2,43 +2,46 @@ package itis.ru.kpfu.join.ui.fragment
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.mvp.presenter.MenuPresenter
-import itis.ru.kpfu.join.mvp.view.MenuView
+import itis.ru.kpfu.join.mvp.presenter.RestorePassPresenter
+import itis.ru.kpfu.join.mvp.view.RestorePassView
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
-import javax.inject.Inject
+import kotlinx.android.synthetic.main.fragment_restore_pass.btn_restore_pass_restore
 
-class MenuFragment: BaseFragment(), MenuView {
+class RestorePassFragment : BaseFragment(), RestorePassView {
 
     companion object {
-        fun newInstance(): MenuFragment {
+        fun newInstance(): RestorePassFragment {
             val args = Bundle()
-            val fragment = MenuFragment()
+            val fragment = RestorePassFragment()
             fragment.arguments = args
             return fragment
         }
     }
 
     override val contentLayout: Int
-        get() = R.layout.fragment_menu
+        get() = R.layout.fragment_restore_pass
 
     override val toolbarTitle: Int?
-        get() = null
+        get() = R.string.restore_password
 
     override val menu: Int?
         get() = null
 
     override val enableBackPressed: Boolean
-        get() = false
-
-    override val enableBottomNavBar: Boolean
         get() = true
 
+    override val enableBottomNavBar: Boolean
+        get() = false
+
     @InjectPresenter
-    lateinit var presenter: MenuPresenter
+    lateinit var presenter: RestorePassPresenter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        btn_restore_pass_restore.setOnClickListener { Toast.makeText(baseActivity, "OK", Toast.LENGTH_SHORT).show() }
     }
 }
