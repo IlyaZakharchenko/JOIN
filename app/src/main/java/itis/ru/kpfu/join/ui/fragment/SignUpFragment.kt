@@ -17,11 +17,11 @@ import kotlinx.android.synthetic.main.fragment_sign_up.et_password
 import kotlinx.android.synthetic.main.fragment_sign_up.et_username
 
 class SignUpFragment : BaseFragment(), SignUpView {
+
     @InjectPresenter
     lateinit var presenter: SignUpPresenter
 
     companion object {
-
         fun newInstance(): SignUpFragment {
             val args = Bundle()
             val fragment = SignUpFragment()
@@ -29,6 +29,7 @@ class SignUpFragment : BaseFragment(), SignUpView {
             return fragment
         }
     }
+
     override val contentLayout: Int
         get() = R.layout.fragment_sign_up
 

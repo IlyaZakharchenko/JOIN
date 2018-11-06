@@ -32,6 +32,7 @@ import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_facebook
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_google
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_vk
+import kotlinx.android.synthetic.main.fragment_sign_up.btn_sign_in
 
 class SignInFragment : BaseFragment(), SignInView {
     @InjectPresenter

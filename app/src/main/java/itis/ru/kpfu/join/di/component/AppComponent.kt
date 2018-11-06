@@ -7,8 +7,6 @@ import itis.ru.kpfu.join.di.module.RepositoryModule
 import itis.ru.kpfu.join.di.module.TestApiModule
 import itis.ru.kpfu.join.mvp.presenter.FragmentHostPresenter
 import itis.ru.kpfu.join.mvp.presenter.SignInPresenter
-import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
-import itis.ru.kpfu.join.ui.activity.base.BaseActivity
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 import javax.inject.Singleton
 

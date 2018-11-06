@@ -10,7 +10,6 @@ import itis.ru.kpfu.join.ui.fragment.MenuFragment
 import itis.ru.kpfu.join.ui.fragment.NotificationsFragment
 import itis.ru.kpfu.join.ui.fragment.ProjectsFragment
 import itis.ru.kpfu.join.ui.fragment.SignInFragment
-import javax.inject.Inject
 
 @InjectViewState
 class FragmentHostPresenter(private val userRepository: UserRepository) : MvpPresenter<FragmentHostView>() {

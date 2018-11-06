@@ -6,7 +6,6 @@ import android.support.design.internal.BottomNavigationItemView
 import android.support.design.internal.BottomNavigationMenuView
 import android.support.v7.widget.Toolbar
 import android.view.View
-import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.crashlytics.android.Crashlytics
@@ -15,11 +14,9 @@ import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.mvp.presenter.FragmentHostPresenter
-import itis.ru.kpfu.join.mvp.presenter.SignInPresenter
 import itis.ru.kpfu.join.mvp.view.FragmentHostView
 import itis.ru.kpfu.join.ui.activity.base.BaseActivity
 import itis.ru.kpfu.join.ui.fragment.ProjectsFragment
-import itis.ru.kpfu.join.ui.fragment.SignInFragment
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 import kotlinx.android.synthetic.main.activity_main.bottom_nav_bar
 import kotlinx.android.synthetic.main.activity_main.toolbar_main_activity
