@@ -16,29 +16,33 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import itis.ru.kpfu.join.api.TestApi
 import itis.ru.kpfu.join.db.entity.User
+import itis.ru.kpfu.join.db.repository.TestRepository
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.mvp.view.SignInView
 
 @InjectViewState
-class SignInPresenter : MvpPresenter<SignInView>() {
+class SignInPresenter(private val api: TestApi, private val userRepository: UserRepository) :
+        MvpPresenter<SignInView>() {
 
     private val compositeDisposable = CompositeDisposable()
 
-  /*  fun getDataFromServer(api: TestApi, repo: TestRepository) {
+    fun getDataFromServer() {
         compositeDisposable.add(api
                 .getData("bash", 50)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { viewState.showProgress() }
                 .doAfterTerminate { viewState.hideProgress() }
+                // .onErrorResumeNext { repository.getTests() }
                 .subscribe(
                         {
-                            repo.addTests(it)
-                            viewState.showResult(repo.getTests().get(0).toString())
+                            userRepository.addUser(User(1, "asd", "asd"))
+                            //viewState.showResult(it.toString())
+                            viewState.signIn()
                         },
                         {
                             viewState.onConnectionError()
                         }))
-    }*/
+    }
 
     override fun onDestroy() {
         super.onDestroy()

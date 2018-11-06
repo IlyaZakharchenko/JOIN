@@ -11,7 +11,6 @@ import io.realm.rx.RealmObservableFactory
 import itis.ru.kpfu.join.di.component.AppComponent
 import itis.ru.kpfu.join.di.component.DaggerAppComponent
 import itis.ru.kpfu.join.di.module.AppContextModule
-import itis.ru.kpfu.join.di.module.TestApiModule
 
 class JoinApplication : MultiDexApplication() {
 

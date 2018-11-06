@@ -23,7 +23,7 @@ class SignUpPresenter: MvpPresenter<SignUpView>() {
 
         }
         else {
-            viewState.onError("Username is empty")
+            viewState.onError("Email is empty")
         }
     }
 

@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import com.arellomobile.mvp.MvpAppCompatActivity
+import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.ui.fragment.ProgressDialogFragment
 
 abstract class BaseActivity: MvpAppCompatActivity() {
@@ -62,13 +63,5 @@ abstract class BaseActivity: MvpAppCompatActivity() {
             onBackPressed()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    fun showToolbar() {
-        supportActionBar?.show()
-    }
-
-    fun hideToolbar() {
-        supportActionBar?.hide()
     }
 }
