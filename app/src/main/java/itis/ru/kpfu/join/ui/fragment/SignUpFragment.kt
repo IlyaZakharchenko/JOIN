@@ -18,9 +18,6 @@ import kotlinx.android.synthetic.main.fragment_sign_up.et_username
 
 class SignUpFragment : BaseFragment(), SignUpView {
 
-    @InjectPresenter
-    lateinit var presenter: SignUpPresenter
-
     companion object {
         fun newInstance(): SignUpFragment {
             val args = Bundle()
@@ -45,6 +42,22 @@ class SignUpFragment : BaseFragment(), SignUpView {
     override val enableBottomNavBar: Boolean
         get() = false
 
+    @InjectPresenter
+    lateinit var presenter: SignUpPresenter
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        btn_sign_up.setOnClickListener {
+            onSignUpClick()
+        }
+    }
+
+    override fun onError(message: String) {
+        //TODO
+        Toast.makeText(activity, message, LENGTH_SHORT).show()
+    }
+
     override fun showProgress() {
         (activity as? BaseActivity)?.showProgressBar()
     }
@@ -63,18 +76,5 @@ class SignUpFragment : BaseFragment(), SignUpView {
 
     override fun openProjectsFragment() {
         (activity as? FragmentHostActivity)?.setFragment(ProjectsFragment.newInstance(), false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        btn_sign_up.setOnClickListener {
-            onSignUpClick()
-        }
-    }
-
-    override fun onError(message: String) {
-        //TODO
-        Toast.makeText(activity, message, LENGTH_SHORT).show()
     }
 }

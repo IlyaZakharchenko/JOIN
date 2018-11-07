@@ -3,8 +3,10 @@ package itis.ru.kpfu.join
 import android.content.Context
 import android.support.multidex.MultiDex
 import android.support.multidex.MultiDexApplication
+import com.crashlytics.android.Crashlytics
 import com.facebook.FacebookSdk
 import com.vk.sdk.VKSdk
+import io.fabric.sdk.android.Fabric
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.rx.RealmObservableFactory
@@ -23,6 +25,15 @@ class JoinApplication : MultiDexApplication() {
         VKSdk.initialize(this)
         initComponent()
         initRealm()
+        initFabric()
+    }
+
+    private fun initFabric() {
+        val fabric = Fabric.Builder(this)
+                .kits(Crashlytics())
+                .debuggable(true)
+                .build()
+        Fabric.with(fabric)
     }
 
     private fun initComponent() {

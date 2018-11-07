@@ -47,8 +47,6 @@ class FragmentHostActivity : BaseActivity(), FragmentHostView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Fabric.with(this, Crashlytics())
-        setFragment(ProjectsFragment.newInstance(), false)
         disableShiftMode()
 
         bottom_nav_bar.setOnNavigationItemSelectedListener {

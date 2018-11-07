@@ -1,6 +1,7 @@
 package itis.ru.kpfu.join.ui.fragment
 
 import android.os.Bundle
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.mvp.presenter.ChatPresenter
@@ -35,4 +36,8 @@ class ChatFragment: BaseFragment(), ChatView {
 
     @InjectPresenter
     lateinit var presenter: ChatPresenter
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
 }

@@ -1,6 +1,7 @@
 package itis.ru.kpfu.join.ui.fragment
 
 import android.os.Bundle
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.mvp.presenter.NotificationsPresenter
@@ -35,4 +36,8 @@ class NotificationsFragment : BaseFragment(), NotificationsView {
 
     @InjectPresenter
     lateinit var presenter: NotificationsPresenter
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
 }

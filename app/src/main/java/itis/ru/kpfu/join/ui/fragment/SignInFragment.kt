@@ -28,34 +28,24 @@ import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
 import itis.ru.kpfu.join.ui.activity.base.BaseActivity
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_create_account
+import kotlinx.android.synthetic.main.fragment_sign_in.btn_forgot_pass
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_facebook
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_google
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_vk
-import kotlinx.android.synthetic.main.fragment_sign_up.btn_sign_in
 
 class SignInFragment : BaseFragment(), SignInView {
-    @InjectPresenter
-    lateinit var presenter: SignInPresenter
-
-    lateinit var callbackManager: CallbackManager
 
     companion object {
 
         const val GOOGLE_SIGN_IN = 0
 
-        const val FACEBOOK_SIGN_IN = 1
-        const val VK_SIGN_IN = 2
         fun newInstance(): SignInFragment {
             val args = Bundle()
             val fragment = SignInFragment()
             fragment.arguments = args
             return fragment
         }
-    }
-    @ProvidePresenter
-    fun providePresenter(): SignInPresenter {
-        return JoinApplication.appComponent.provideSignInPresenter()
     }
 
     override val contentLayout: Int
@@ -73,10 +63,14 @@ class SignInFragment : BaseFragment(), SignInView {
     override val enableBottomNavBar: Boolean
         get() = false
 
+    @InjectPresenter
+    lateinit var presenter: SignInPresenter
+
+    lateinit var callbackManager: CallbackManager
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //(activity as FragmentHostActivity).hideToolbar()
         initFacebookSignIn()
         initGoogleSignIn()
         initVkSignIn()
@@ -84,9 +78,17 @@ class SignInFragment : BaseFragment(), SignInView {
         // presenter.getDataFromServer(api, testRepository)
     }
 
+    @ProvidePresenter
+    fun providePresenter(): SignInPresenter {
+        return JoinApplication.appComponent.provideSignInPresenter()
+    }
+
     override fun initClickListeners() {
         btn_create_account.setOnClickListener { onCreateAccountClick() }
-        btn_sign_in.setOnClickListener { presenter.getDataFromServer()}
+        btn_sign_in.setOnClickListener { presenter.getDataFromServer() }
+        btn_forgot_pass.setOnClickListener {
+            (activity as? FragmentHostActivity)?.setFragment(RestorePassFragment.newInstance(), true)
+        }
     }
 
     private fun initFacebookSignIn() {
@@ -171,7 +173,7 @@ class SignInFragment : BaseFragment(), SignInView {
     }
 
     override fun showResult(result: String) {
-         Toast.makeText(baseActivity, "Success", Toast.LENGTH_LONG).show()
+        Toast.makeText(baseActivity, "Success", Toast.LENGTH_LONG).show()
     }
 
     override fun onCreateAccountClick() {

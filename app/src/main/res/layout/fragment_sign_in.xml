@@ -59,8 +59,8 @@
         android:id="@+id/ti_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/et_password"
@@ -70,14 +70,25 @@
     </android.support.design.widget.TextInputLayout>
 
     <Button
+        android:id="@+id/btn_forgot_pass"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:text="@string/forgot_password"
+        android:layout_gravity="center"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        android:background="@null"
+        />
+
+    <Button
         android:id="@+id/btn_sign_in"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp"
         android:background="@color/colorPrimary"
         android:text="Войти"
-        android:textColor="@color/colorWhite" />
+        android:textColor="@color/colorWhite"
+        android:layout_marginTop="16dp"/>
 
     <Button
         android:id="@+id/btn_create_account"
