@@ -1,6 +1,7 @@
 package itis.ru.kpfu.join.ui.fragment
 
 import android.os.Bundle
+import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
@@ -15,10 +16,12 @@ import kotlinx.android.synthetic.main.fragment_sign_up.btn_sign_up
 import kotlinx.android.synthetic.main.fragment_sign_up.et_email
 import kotlinx.android.synthetic.main.fragment_sign_up.et_password
 import kotlinx.android.synthetic.main.fragment_sign_up.et_username
+import kotlinx.android.synthetic.main.fragment_sign_up.toolbar_sign_up
 
 class SignUpFragment : BaseFragment(), SignUpView {
 
     companion object {
+
         fun newInstance(): SignUpFragment {
             val args = Bundle()
             val fragment = SignUpFragment()
@@ -26,7 +29,6 @@ class SignUpFragment : BaseFragment(), SignUpView {
             return fragment
         }
     }
-
     override val contentLayout: Int
         get() = R.layout.fragment_sign_up
 
@@ -41,6 +43,9 @@ class SignUpFragment : BaseFragment(), SignUpView {
 
     override val enableBottomNavBar: Boolean
         get() = false
+
+    override val toolbar: Toolbar?
+        get() = toolbar_sign_up
 
     @InjectPresenter
     lateinit var presenter: SignUpPresenter
@@ -59,11 +64,15 @@ class SignUpFragment : BaseFragment(), SignUpView {
     }
 
     override fun showProgress() {
-        (activity as? BaseActivity)?.showProgressBar()
+        showProgressBar()
+    }
+
+    override fun onSignUpSuccess() {
+        activity?.onBackPressed()
     }
 
     override fun hideProgress() {
-        (activity as? BaseActivity)?.hideProgressBar()
+        hideProgressBar()
     }
 
     override fun onConnectionError() {
@@ -72,9 +81,5 @@ class SignUpFragment : BaseFragment(), SignUpView {
 
     override fun onSignUpClick() {
         presenter.onSignUpClick(et_email.text.toString(), et_username.text.toString(), et_password.text.toString())
-    }
-
-    override fun openProjectsFragment() {
-        (activity as? FragmentHostActivity)?.setFragment(ProjectsFragment.newInstance(), false)
     }
 }

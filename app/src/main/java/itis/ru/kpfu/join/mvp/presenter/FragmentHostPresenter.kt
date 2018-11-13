@@ -20,11 +20,13 @@ class FragmentHostPresenter(private val userRepository: UserRepository) : MvpPre
     private val menuFragment = MenuFragment.newInstance()
 
     fun onBottomNavBarClick(itemId: Int) {
+        viewState.clearFragmentsStack()
+
         when (itemId) {
-            R.id.bottom_projects -> viewState.setFragment(projectsFragment, true)
-            R.id.bottom_chat -> viewState.setFragment(chatFragment, true)
-            R.id.bottom_notifications -> viewState.setFragment(notificationsFragment, true)
-            else -> viewState.setFragment(menuFragment, true)
+            R.id.bottom_projects -> viewState.setFragment(projectsFragment, false)
+            R.id.bottom_chat -> viewState.setFragment(chatFragment, false)
+            R.id.bottom_notifications -> viewState.setFragment(notificationsFragment, false)
+            else -> viewState.setFragment(menuFragment, false)
         }
     }
 

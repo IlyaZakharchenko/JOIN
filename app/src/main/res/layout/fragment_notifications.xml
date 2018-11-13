@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/app_bar_notifications"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="20sp"
-        android:text="NOTIFICATIONS"/>
+        android:background="@color/colorPrimary"
+        android:elevation="8dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-</RelativeLayout>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_notifications"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            app:titleTextColor="@color/colorWhite" />
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="NOTIFICATIONS"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

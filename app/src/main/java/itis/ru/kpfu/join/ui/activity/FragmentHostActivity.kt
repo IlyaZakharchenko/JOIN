@@ -4,22 +4,19 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.design.internal.BottomNavigationItemView
 import android.support.design.internal.BottomNavigationMenuView
+import android.support.v4.app.FragmentManager
 import android.support.v7.widget.Toolbar
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.crashlytics.android.Crashlytics
-import io.fabric.sdk.android.Fabric
 import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.mvp.presenter.FragmentHostPresenter
 import itis.ru.kpfu.join.mvp.view.FragmentHostView
 import itis.ru.kpfu.join.ui.activity.base.BaseActivity
-import itis.ru.kpfu.join.ui.fragment.ProjectsFragment
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
-import kotlinx.android.synthetic.main.activity_main.bottom_nav_bar
-import kotlinx.android.synthetic.main.activity_main.toolbar_main_activity
+import kotlinx.android.synthetic.main.activity_fragment_host.bottom_nav_bar
 import javax.inject.Inject
 
 class FragmentHostActivity : BaseActivity(), FragmentHostView {
@@ -31,7 +28,7 @@ class FragmentHostActivity : BaseActivity(), FragmentHostView {
     lateinit var userRepository: UserRepository
 
     override val contentLayout: Int
-        get() = R.layout.activity_main
+        get() = R.layout.activity_fragment_host
 
     override val menu: Int?
         get() = null
@@ -43,7 +40,12 @@ class FragmentHostActivity : BaseActivity(), FragmentHostView {
         get() = false
 
     override val toolbar: Toolbar?
-        get() = toolbar_main_activity
+        get() = null
+
+    @ProvidePresenter
+    fun providePresenter(): FragmentHostPresenter {
+        return JoinApplication.appComponent.provideFragmentHostPresenter()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +65,10 @@ class FragmentHostActivity : BaseActivity(), FragmentHostView {
             transaction?.addToBackStack(fragment.javaClass.name)
         }
         transaction?.replace(R.id.main_container, fragment, fragment.javaClass.name)?.commit()
+    }
+
+    override fun clearFragmentsStack() {
+        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
     fun showToolbar() {
@@ -94,10 +100,5 @@ class FragmentHostActivity : BaseActivity(), FragmentHostView {
 
     fun enableBottomNavBar(state: Boolean) {
         bottom_nav_bar.visibility = if (state) View.VISIBLE else View.GONE
-    }
-
-    @ProvidePresenter
-    fun providePresenter(): FragmentHostPresenter {
-        return JoinApplication.appComponent.provideFragmentHostPresenter()
     }
 }

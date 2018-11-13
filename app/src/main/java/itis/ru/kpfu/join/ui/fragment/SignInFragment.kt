@@ -2,6 +2,7 @@ package itis.ru.kpfu.join.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -33,6 +34,7 @@ import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_facebook
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_google
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_vk
+import kotlinx.android.synthetic.main.fragment_sign_in.toolbar_sign_in
 
 class SignInFragment : BaseFragment(), SignInView {
 
@@ -63,6 +65,9 @@ class SignInFragment : BaseFragment(), SignInView {
     override val enableBottomNavBar: Boolean
         get() = false
 
+    override val toolbar: Toolbar?
+        get() = toolbar_sign_in
+
     @InjectPresenter
     lateinit var presenter: SignInPresenter
 
@@ -84,7 +89,7 @@ class SignInFragment : BaseFragment(), SignInView {
     }
 
     override fun initClickListeners() {
-        btn_create_account.setOnClickListener { onCreateAccountClick() }
+        btn_create_account.setOnClickListener { presenter.onCreateAccountClick() }
         btn_sign_in.setOnClickListener { presenter.getDataFromServer() }
         btn_forgot_pass.setOnClickListener {
             (activity as? FragmentHostActivity)?.setFragment(RestorePassFragment.newInstance(), true)
@@ -157,11 +162,11 @@ class SignInFragment : BaseFragment(), SignInView {
     }
 
     override fun showProgress() {
-        (activity as? BaseActivity)?.showProgressBar()
+        showProgressBar()
     }
 
     override fun hideProgress() {
-        (activity as? BaseActivity)?.hideProgressBar()
+        hideProgressBar()
     }
 
     override fun onConnectionError() {
@@ -173,14 +178,14 @@ class SignInFragment : BaseFragment(), SignInView {
     }
 
     override fun showResult(result: String) {
-        Toast.makeText(baseActivity, "Success", Toast.LENGTH_LONG).show()
-    }
-
-    override fun onCreateAccountClick() {
-        presenter.onCreateAccountClick()
+        Toast.makeText(baseActivity, result, Toast.LENGTH_LONG).show()
     }
 
     override fun openSignUpFragment() {
         (activity as? FragmentHostActivity)?.setFragment(SignUpFragment.newInstance(), true)
+    }
+
+    override fun onSignInError() {
+        showProgressError { presenter.getDataFromServer() }
     }
 }

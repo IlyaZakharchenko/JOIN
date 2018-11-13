@@ -12,7 +12,7 @@ interface SignUpView: MvpView {
 
     fun onError(message : String)
 
-    fun openProjectsFragment()
-
     fun onSignUpClick()
+
+    fun onSignUpSuccess()
 }
