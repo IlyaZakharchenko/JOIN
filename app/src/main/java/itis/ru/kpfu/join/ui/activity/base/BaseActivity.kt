@@ -6,11 +6,13 @@ import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import com.afollestad.materialdialogs.MaterialDialog
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.facebook.appevents.codeless.ViewIndexer
 import itis.ru.kpfu.join.JoinApplication
@@ -29,6 +31,8 @@ abstract class BaseActivity : MvpAppCompatActivity() {
 
     protected abstract val toolbar: Toolbar?
 
+    lateinit var exitDialog: MaterialDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(contentLayout)
@@ -36,6 +40,17 @@ abstract class BaseActivity : MvpAppCompatActivity() {
         setToolbar(toolbar)
         enableBackPressed(enableBackPressed)
         setToolbarTitle(toolbarTitle)
+        initExitDialog()
+    }
+
+    private fun initExitDialog() {
+        exitDialog = MaterialDialog.Builder(this)
+                .title("Вы действительно хотите выйти?")
+                .positiveText("Да")
+                .negativeText("Нет")
+                .onPositive { dialog, which -> finish() }
+                .onNegative { dialog, which -> dialog.dismiss() }
+                .build()
     }
 
     fun enableBackPressed(enable: Boolean) {
@@ -60,6 +75,14 @@ abstract class BaseActivity : MvpAppCompatActivity() {
             onBackPressed()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount == 0) {
+            exitDialog.show()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     fun setToolbar(toolbar: Toolbar?) {
