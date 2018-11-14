@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -17,10 +18,10 @@
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:collapsedTitleTextAppearance="@style/CollapsedAppBar"
             app:contentScrim="@color/colorPrimary"
             app:expandedTitleMarginEnd="16dp"
             app:expandedTitleMarginStart="16dp"
-            app:expandedTitleTextAppearance="@style/CollapsedAppBar"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
@@ -44,20 +45,79 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:clipToPadding="false">
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextView
-            android:id="@+id/textView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:gravity="center_horizontal"
-            android:text="TEST"
-            android:textSize="20sp" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="16dp"
+                android:text="@string/btn_edit" />
+
+            <ImageView
+                android:id="@+id/ic_user"
+                android:layout_below="@id/btn_edit"
+                android:layout_width="wrap_content"
+                android:src="@drawable/ic_username"
+                android:layout_margin="8dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_edit"
+                android:layout_toEndOf="@+id/ic_user"
+                android:textSize="18sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="8dp"
+                tools:text="TestUser" />
+
+            <ImageView
+                android:id="@+id/ic_email"
+                android:layout_below="@id/ic_user"
+                android:layout_width="wrap_content"
+                android:src="@drawable/ic_email"
+                android:layout_margin="8dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_toEndOf="@+id/ic_email"
+                android:layout_below="@+id/tv_username"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="8dp"
+                tools:text="test@test.com" />
+
+            <ImageView
+                android:id="@+id/ic_phone"
+                android:layout_below="@id/ic_email"
+                android:layout_width="wrap_content"
+                android:src="@drawable/ic_phone"
+                android:layout_margin="8dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_phone"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/ic_phone"
+                android:layout_below="@+id/tv_email"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="8dp"
+                tools:text="+9-999-999-99-99" />
+        </RelativeLayout>
 
     </android.support.v4.widget.NestedScrollView>
 

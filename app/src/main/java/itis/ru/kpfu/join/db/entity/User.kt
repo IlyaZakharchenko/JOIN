@@ -10,6 +10,10 @@ open class User(
         var email: String? = null,
         var firstName: String? = null,
         var middleName: String? = null,
-        var lastName: String? = null
+        var lastName: String? = null,
+        var imagePath: String? = null,
+        var phone: String? = null
 
-) : RealmObject()
+) : RealmObject() {
+
+}

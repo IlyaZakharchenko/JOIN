@@ -69,7 +69,7 @@ dependencies {
     //multidex
     implementation 'com.android.support:multidex:1.0.3'
     //GoogleServices
-    implementation'com.google.android.gms:play-services-auth:15.0.1'
+    implementation 'com.google.android.gms:play-services-auth:15.0.1'
     //VkSDK
     implementation 'com.vk:androidsdk:1.6.5'
     //FacebookSGDK

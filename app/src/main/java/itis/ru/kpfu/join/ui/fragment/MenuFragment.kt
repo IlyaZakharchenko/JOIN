@@ -1,37 +1,34 @@
 package itis.ru.kpfu.join.ui.fragment
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.provider.MediaStore
 import android.support.v7.widget.Toolbar
-import android.util.TypedValue
 import android.view.View
-import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.esafirm.imagepicker.features.ImagePicker
 import com.esafirm.imagepicker.features.ReturnMode.NONE
 import com.squareup.picasso.Picasso
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
+import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.mvp.presenter.MenuPresenter
 import itis.ru.kpfu.join.mvp.view.MenuView
 import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
-import itis.ru.kpfu.join.utils.Constants
 import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_make_photo
 import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_open_gallery
 import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_remove_photo
 import kotlinx.android.synthetic.main.fragment_menu.app_bar_profile
+import kotlinx.android.synthetic.main.fragment_menu.btn_edit
 import kotlinx.android.synthetic.main.fragment_menu.collapsing_toolbar
 import kotlinx.android.synthetic.main.fragment_menu.iv_profile_avatar
 import kotlinx.android.synthetic.main.fragment_menu.toolbar_profile
+import kotlinx.android.synthetic.main.fragment_menu.tv_email
+import kotlinx.android.synthetic.main.fragment_menu.tv_phone
+import kotlinx.android.synthetic.main.fragment_menu.tv_username
 import java.io.File
-import java.util.concurrent.TimeUnit.SECONDS
-import javax.inject.Inject
 
 class MenuFragment : BaseFragment(), MenuView {
 
@@ -77,6 +74,21 @@ class MenuFragment : BaseFragment(), MenuView {
         }
         // iv_profile_avatar.setOnClickListener { chooseAvatarDialog.show() }
         collapsing_toolbar.setOnClickListener { chooseAvatarDialog.show() }
+
+        //TODO profile info test
+        presenter.createUser()
+        val user = presenter.getUser()
+        tv_username.text = user?.userName
+        tv_email.text = user?.email
+        tv_phone.text = user?.phone
+        btn_edit.setOnClickListener {
+            (activity as? FragmentHostActivity)?.setFragment(ProfileEditFragment.newInstance(), false)
+        }
+    }
+
+    @ProvidePresenter
+    fun providePresenter(): MenuPresenter {
+        return JoinApplication.appComponent.provideMenuPresenter()
     }
 
     private fun openGallery() {
@@ -119,6 +131,7 @@ class MenuFragment : BaseFragment(), MenuView {
                     .resize(iv_profile_avatar.width,
                             iv_profile_avatar.height)
                     .into(iv_profile_avatar)
+            presenter.changeAvatar(image.path)
 
             chooseAvatarDialog.dismiss()
         }

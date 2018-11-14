@@ -90,7 +90,7 @@ class SignInFragment : BaseFragment(), SignInView {
 
     override fun initClickListeners() {
         btn_create_account.setOnClickListener { presenter.onCreateAccountClick() }
-        btn_sign_in.setOnClickListener { presenter.getDataFromServer() }
+        btn_sign_in.setOnClickListener { signIn() }
         btn_forgot_pass.setOnClickListener {
             (activity as? FragmentHostActivity)?.setFragment(RestorePassFragment.newInstance(), true)
         }

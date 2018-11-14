@@ -36,7 +36,7 @@ class SignUpFragment : BaseFragment(), SignUpView {
         get() = R.string.sign_up
 
     override val menu: Int?
-        get() = R.menu.menu
+        get() = null
 
     override val enableBackPressed: Boolean
         get() = true

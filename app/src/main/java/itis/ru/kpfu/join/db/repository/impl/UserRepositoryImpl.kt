@@ -7,6 +7,12 @@ import itis.ru.kpfu.join.db.repository.base.BaseRepository
 
 class UserRepositoryImpl : BaseRepository(), UserRepository {
 
+    override fun updateUser(user: User?) {
+        executeTransaction(Realm.Transaction {
+            it.insertOrUpdate(user)
+        })
+    }
+
     override fun addUser(user: User) {
         executeTransaction(Realm.Transaction {
             user.id = nextKey(User::class.java)
