@@ -2,7 +2,7 @@ package itis.ru.kpfu.join.mvp.view
 
 import com.arellomobile.mvp.MvpView
 
-interface SignUpView: MvpView {
+interface PersonalProfileView : MvpView {
 
     fun showProgress()
 
@@ -12,7 +12,4 @@ interface SignUpView: MvpView {
 
     fun onError(message : String)
 
-    fun onSignUpClick()
-
-    fun onSignUpSuccess()
 }

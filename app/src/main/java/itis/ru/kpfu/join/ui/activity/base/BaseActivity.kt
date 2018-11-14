@@ -2,14 +2,24 @@ package itis.ru.kpfu.join.ui.activity.base
 
 import android.app.DialogFragment
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CollapsingToolbarLayout
+import android.support.design.widget.CoordinatorLayout
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import com.afollestad.materialdialogs.MaterialDialog
 import com.arellomobile.mvp.MvpAppCompatActivity
+import com.facebook.appevents.codeless.ViewIndexer
 import itis.ru.kpfu.join.JoinApplication
-import itis.ru.kpfu.join.ui.fragment.ProgressDialogFragment
+import itis.ru.kpfu.join.R
+import kotlinx.android.synthetic.main.fragment_progress.view.progress_dialog_progress
 
-abstract class BaseActivity: MvpAppCompatActivity() {
+abstract class BaseActivity : MvpAppCompatActivity() {
 
     protected abstract val contentLayout: Int
 
@@ -21,16 +31,26 @@ abstract class BaseActivity: MvpAppCompatActivity() {
 
     protected abstract val toolbar: Toolbar?
 
-    private lateinit var dialog: DialogFragment
+    lateinit var exitDialog: MaterialDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(contentLayout)
 
-        toolbar?.let { setSupportActionBar(it) }
+        setToolbar(toolbar)
         enableBackPressed(enableBackPressed)
         setToolbarTitle(toolbarTitle)
-        dialog = ProgressDialogFragment.newInstance()
+        initExitDialog()
+    }
+
+    private fun initExitDialog() {
+        exitDialog = MaterialDialog.Builder(this)
+                .title("Вы действительно хотите выйти?")
+                .positiveText("Да")
+                .negativeText("Нет")
+                .onPositive { dialog, which -> finish() }
+                .onNegative { dialog, which -> dialog.dismiss() }
+                .build()
     }
 
     fun enableBackPressed(enable: Boolean) {
@@ -40,14 +60,6 @@ abstract class BaseActivity: MvpAppCompatActivity() {
 
     fun setToolbarTitle(title: Int?) {
         supportActionBar?.title = title?.let { getString(it) }
-    }
-
-    fun showProgressBar() {
-        dialog.show(fragmentManager, null)
-    }
-
-    fun hideProgressBar() {
-        dialog.dismiss()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -63,5 +75,17 @@ abstract class BaseActivity: MvpAppCompatActivity() {
             onBackPressed()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount == 0) {
+            exitDialog.show()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    fun setToolbar(toolbar: Toolbar?) {
+        setSupportActionBar(toolbar)
     }
 }

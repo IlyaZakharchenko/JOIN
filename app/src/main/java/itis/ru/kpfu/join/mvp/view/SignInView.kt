@@ -17,10 +17,10 @@ interface SignInView: MvpView {
 
     fun showResult(result: String)
 
-    fun onCreateAccountClick()
-
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun openSignUpFragment()
 
     fun signIn()
+
+    fun onSignInError()
 }

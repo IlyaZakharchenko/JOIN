@@ -8,9 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="asd" parent="android:Widget">
-        <item name="colorControlNormal">#000000</item>
-        <item name="colorControlActivated">#000000</item>
-        <item name="colorControlHighlight">#000000</item>
+    <style name="CollapsedAppBar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textStyle">normal</item>
     </style>
 </resources>

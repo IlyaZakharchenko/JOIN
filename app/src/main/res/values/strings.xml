@@ -15,6 +15,10 @@
     <string name="projects_toolbar">Проекты</string>
     <string name="notifications_toolbar">Уведомления</string>
     <string name="chat_toolbar">Сообщения</string>
+    <string name="toolbar_title_empty"/>
     <string name="restore_pass_title">Мы отправим сообщения для восстановления пароля на вашу электронную почту</string>
     <string name="restore_password">Восстановить пароль</string>
+    <string name="repeat">Повторить</string>
+    <string name="download_error">Произошла ошибка при загрузке</string>
+    <string name="profile">Гаязов Дамир</string>
 </resources>

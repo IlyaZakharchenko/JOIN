@@ -4,6 +4,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
     <application
         android:name=".JoinApplication"
         android:allowBackup="true"
@@ -15,6 +19,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.activity.FragmentHostActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
