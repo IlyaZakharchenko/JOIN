@@ -9,6 +9,8 @@ import itis.ru.kpfu.join.mvp.presenter.FragmentHostPresenter
 import itis.ru.kpfu.join.mvp.presenter.MenuPresenter
 import itis.ru.kpfu.join.mvp.presenter.ProfileEditPresenter
 import itis.ru.kpfu.join.mvp.presenter.SignInPresenter
+import itis.ru.kpfu.join.mvp.presenter.SignUpStepOnePresenter
+import itis.ru.kpfu.join.mvp.presenter.SignUpStepTwoPresenter
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 import javax.inject.Singleton
 
@@ -21,6 +23,10 @@ interface AppComponent {
     fun provideSignInPresenter(): SignInPresenter
 
     fun provideFragmentHostPresenter(): FragmentHostPresenter
+
+    fun provideSignUpStepOnePresenter(): SignUpStepOnePresenter
+
+    fun provideSignUpStepTwoPresenter(): SignUpStepTwoPresenter
 
     fun provideMenuPresenter(): MenuPresenter
 

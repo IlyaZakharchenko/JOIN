@@ -1,6 +1,5 @@
 package itis.ru.kpfu.join.mvp.presenter
 
-import android.os.Handler
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
@@ -15,33 +14,35 @@ import com.vk.sdk.api.VKRequest.VKRequestListener
 import com.vk.sdk.api.VKResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import itis.ru.kpfu.join.api.TestApi
+import itis.ru.kpfu.join.api.JoinApi
 import itis.ru.kpfu.join.db.entity.User
-import itis.ru.kpfu.join.db.repository.TestRepository
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.mvp.view.SignInView
-import java.util.concurrent.TimeUnit.SECONDS
 
 @InjectViewState
-class SignInPresenter(private val api: TestApi, private val userRepository: UserRepository) :
+class SignInPresenter(private val api: JoinApi, private val userRepository: UserRepository) :
         MvpPresenter<SignInView>() {
 
     private val compositeDisposable = CompositeDisposable()
 
-    fun getDataFromServer() {
-
+    fun signIn(email: String, password: String) {
         compositeDisposable.add(api
-                .getData("bash", 50)
+                .signIn(User(email = email, password = password))
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { viewState.showProgress() }
-                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate { viewState.hideProgress() }
                 .subscribe({
-                    run {
-                        viewState.showResult(it[0].name.toString())
-                        viewState.hideProgress()
+                    if (it.code() == 200) {
+                        val user = User(email = email, password = password)
+                        userRepository.addUser(user)
+
+                        viewState.signIn()
+                    } else {
+                        viewState.onSignInError()
                     }
-                }, { viewState.onSignInError() }))
+                }, {
+                    viewState.onConnectionError()
+                }))
     }
 
     override fun onDestroy() {

@@ -7,7 +7,6 @@
     <string name="sign_up">Регистрация</string>
     <string name="email">Электронная почта</string>
     <string name="password">Пароль</string>
-    <string name="sign_up_email">Email</string>
     <string name="sign_up_username">Имя пользователя</string>
     <string name="sign_up_password">Пароль</string>
     <string name="create_account">Создать аккаунт</string>
@@ -21,9 +20,15 @@
     <string name="repeat">Повторить</string>
     <string name="download_error">Произошла ошибка при загрузке</string>
     <string name="profile">Гаязов Дамир</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="password_repeat">Повторите пароль</string>
+    <string name="confirmation_code">Код подтверждения</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="toolbar_profile_edit">Редактировать профиль</string>
     <string name="btn_edit">Редактировать</string>
+    <string name="do_sign_up">Зарегистрироваться</string>
+    <string name="email_confirm_title">Для того, чтобы подтвердить вашу почту, введите код, который мы отправили вам на почту</string>
+    <string name="error_password_should_be_equals">Пароли должны совпадать</string>
+    <string name="error_username">Имя пользователя должно содержать как минимум 6 символов</string>
+    <string name="error_email">Некорректная почта</string>
+    <string name="error_password">Пароль должен содержать как минимум 7 символов</string>
 </resources>

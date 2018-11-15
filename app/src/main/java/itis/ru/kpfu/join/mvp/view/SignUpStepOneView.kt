@@ -2,13 +2,11 @@ package itis.ru.kpfu.join.mvp.view
 
 import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy
-import com.arellomobile.mvp.viewstate.strategy.SkipStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
+import itis.ru.kpfu.join.db.entity.User
 
 @StateStrategyType(OneExecutionStateStrategy::class)
-interface SignInView: MvpView {
-
-    fun initClickListeners()
+interface SignUpStepOneView: MvpView {
 
     fun showProgress()
 
@@ -16,11 +14,15 @@ interface SignInView: MvpView {
 
     fun onConnectionError()
 
-    fun showResult(result: String)
+    fun onFirstStepSuccess(user: User)
 
-    fun openSignUpFragment()
+    fun buttonEnabled(enabled: Boolean)
 
-    fun signIn()
+    fun onPasswordsNotEquals()
 
-    fun onSignInError()
+    fun onInvalidUsername()
+
+    fun onInvalidEmail()
+
+    fun onInvalidPassword()
 }

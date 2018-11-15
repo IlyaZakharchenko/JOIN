@@ -51,11 +51,11 @@ class ProjectsFragment : BaseFragment(), ProjectsView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Single.just("asd")
+       /* Single.just("asd")
                 .delay(3, SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { showProgressBar() }
                 .subscribe({ showProgressError { Toast.makeText(baseActivity, "add", Toast.LENGTH_SHORT).show() } },
-                        { showProgressError { Toast.makeText(baseActivity, "ad", Toast.LENGTH_SHORT).show() } })
+                        { showProgressError { Toast.makeText(baseActivity, "ad", Toast.LENGTH_SHORT).show() } })*/
     }
 }

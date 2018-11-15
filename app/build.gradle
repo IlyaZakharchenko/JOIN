@@ -11,8 +11,8 @@ android {
         applicationId "itis.ru.kpfu.join"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -74,6 +74,12 @@ dependencies {
     implementation 'com.vk:androidsdk:1.6.5'
     //FacebookSGDK
     implementation 'com.facebook.android:facebook-login:[4,5)'
+    //RxBinding
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+    implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.0.0'
+    //MaskedEditText
+    implementation 'ru.egslava:MaskedEditText:1.0.5'
+
 
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
         transitive = true

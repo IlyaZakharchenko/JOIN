@@ -2,6 +2,7 @@ package itis.ru.kpfu.join.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.Toast
@@ -26,7 +27,6 @@ import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.mvp.presenter.SignInPresenter
 import itis.ru.kpfu.join.mvp.view.SignInView
 import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
-import itis.ru.kpfu.join.ui.activity.base.BaseActivity
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_create_account
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_forgot_pass
@@ -34,6 +34,8 @@ import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_facebook
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_google
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_vk
+import kotlinx.android.synthetic.main.fragment_sign_in.et_email
+import kotlinx.android.synthetic.main.fragment_sign_in.et_password
 import kotlinx.android.synthetic.main.fragment_sign_in.toolbar_sign_in
 
 class SignInFragment : BaseFragment(), SignInView {
@@ -80,7 +82,6 @@ class SignInFragment : BaseFragment(), SignInView {
         initGoogleSignIn()
         initVkSignIn()
         initClickListeners()
-        // presenter.getDataFromServer(api, testRepository)
     }
 
     @ProvidePresenter
@@ -90,7 +91,7 @@ class SignInFragment : BaseFragment(), SignInView {
 
     override fun initClickListeners() {
         btn_create_account.setOnClickListener { presenter.onCreateAccountClick() }
-        btn_sign_in.setOnClickListener { signIn() }
+        btn_sign_in.setOnClickListener { presenter.signIn(et_email.text.toString(), et_password.text.toString()) }
         btn_forgot_pass.setOnClickListener {
             (activity as? FragmentHostActivity)?.setFragment(RestorePassFragment.newInstance(), true)
         }
@@ -182,10 +183,10 @@ class SignInFragment : BaseFragment(), SignInView {
     }
 
     override fun openSignUpFragment() {
-        (activity as? FragmentHostActivity)?.setFragment(SignUpFragment.newInstance(), true)
+        (activity as? FragmentHostActivity)?.setFragment(SignUpStepOneFragment.newInstance(), true)
     }
 
     override fun onSignInError() {
-        showProgressError { presenter.getDataFromServer() }
+        Snackbar.make(btn_create_account, "Неверные данные авторизации", Snackbar.LENGTH_LONG).show()
     }
 }

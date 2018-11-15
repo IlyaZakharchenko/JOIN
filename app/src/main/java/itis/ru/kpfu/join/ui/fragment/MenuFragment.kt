@@ -1,22 +1,30 @@
 package itis.ru.kpfu.join.ui.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v7.widget.Toolbar
+import android.util.TypedValue
 import android.view.View
+import android.widget.ImageView
+import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.esafirm.imagepicker.features.ImagePicker
 import com.esafirm.imagepicker.features.ReturnMode.NONE
 import com.squareup.picasso.Picasso
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.mvp.presenter.MenuPresenter
 import itis.ru.kpfu.join.mvp.view.MenuView
 import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
+import itis.ru.kpfu.join.utils.Constants
 import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_make_photo
 import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_open_gallery
 import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_remove_photo
@@ -29,6 +37,8 @@ import kotlinx.android.synthetic.main.fragment_menu.tv_email
 import kotlinx.android.synthetic.main.fragment_menu.tv_phone
 import kotlinx.android.synthetic.main.fragment_menu.tv_username
 import java.io.File
+import java.util.concurrent.TimeUnit.SECONDS
+import javax.inject.Inject
 
 class MenuFragment : BaseFragment(), MenuView {
 
@@ -64,16 +74,16 @@ class MenuFragment : BaseFragment(), MenuView {
 
     lateinit var chooseAvatarDialog: MaterialDialog
 
+    @ProvidePresenter
+    fun providePresenter(): MenuPresenter {
+        return JoinApplication.appComponent.provideMenuPresenter()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initChooseAvatarDialog()
-
-        toolbar_profile.setOnClickListener {
-            app_bar_profile.setExpanded(true)
-        }
-        // iv_profile_avatar.setOnClickListener { chooseAvatarDialog.show() }
-        collapsing_toolbar.setOnClickListener { chooseAvatarDialog.show() }
+        initListeners()
 
         //TODO profile info test
         presenter.createUser()
@@ -81,14 +91,15 @@ class MenuFragment : BaseFragment(), MenuView {
         tv_username.text = user?.userName
         tv_email.text = user?.email
         tv_phone.text = user?.phone
-        btn_edit.setOnClickListener {
-            (activity as? FragmentHostActivity)?.setFragment(ProfileEditFragment.newInstance(), false)
-        }
     }
 
-    @ProvidePresenter
-    fun providePresenter(): MenuPresenter {
-        return JoinApplication.appComponent.provideMenuPresenter()
+    private fun initListeners() {
+        btn_edit.setOnClickListener {
+            (activity as? FragmentHostActivity)?.setFragment(ProfileEditFragment.newInstance(), true)
+        }
+        // iv_profile_avatar.setOnClickListener { chooseAvatarDialog.show() }
+        collapsing_toolbar.setOnClickListener { chooseAvatarDialog.show() }
+        toolbar_profile.setOnClickListener { app_bar_profile.setExpanded(true) }
     }
 
     private fun openGallery() {

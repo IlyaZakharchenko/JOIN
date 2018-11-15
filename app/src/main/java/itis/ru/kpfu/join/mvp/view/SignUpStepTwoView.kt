@@ -2,13 +2,10 @@ package itis.ru.kpfu.join.mvp.view
 
 import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy
-import com.arellomobile.mvp.viewstate.strategy.SkipStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(OneExecutionStateStrategy::class)
-interface SignInView: MvpView {
-
-    fun initClickListeners()
+interface SignUpStepTwoView: MvpView {
 
     fun showProgress()
 
@@ -16,11 +13,11 @@ interface SignInView: MvpView {
 
     fun onConnectionError()
 
-    fun showResult(result: String)
+    fun onCodeInvalid()
 
-    fun openSignUpFragment()
+    fun onRegistrationSuccess()
 
-    fun signIn()
+    fun buttonEnabled(state: Boolean)
 
-    fun onSignInError()
+    fun updateSendAgainMessage(text: String, isClickable: Boolean)
 }

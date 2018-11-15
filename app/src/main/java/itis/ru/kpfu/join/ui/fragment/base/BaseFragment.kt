@@ -9,8 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.arellomobile.mvp.MvpAppCompatFragment
 import itis.ru.kpfu.join.JoinApplication
-import itis.ru.kpfu.join.api.TestApi
-import itis.ru.kpfu.join.db.repository.TestRepository
+import itis.ru.kpfu.join.api.JoinApi
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
 import itis.ru.kpfu.join.ui.activity.base.BaseActivity
@@ -37,13 +36,10 @@ abstract class BaseFragment : MvpAppCompatFragment() {
     protected val baseActivity get() = activity as BaseActivity
 
     @Inject
-    lateinit var api: TestApi
+    lateinit var api: JoinApi
 
     @Inject
     lateinit var userRepository: UserRepository
-
-    @Inject
-    lateinit var testRepository: TestRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
