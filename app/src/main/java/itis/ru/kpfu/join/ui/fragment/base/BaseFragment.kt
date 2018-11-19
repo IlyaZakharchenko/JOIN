@@ -1,5 +1,7 @@
 package itis.ru.kpfu.join.ui.fragment.base
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
@@ -7,6 +9,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import com.arellomobile.mvp.MvpAppCompatFragment
 import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.api.JoinApi
@@ -34,9 +37,6 @@ abstract class BaseFragment : MvpAppCompatFragment() {
     protected abstract val toolbar: Toolbar?
 
     protected val baseActivity get() = activity as BaseActivity
-
-    @Inject
-    lateinit var api: JoinApi
 
     @Inject
     lateinit var userRepository: UserRepository
@@ -68,6 +68,7 @@ abstract class BaseFragment : MvpAppCompatFragment() {
     }
 
     fun showProgressBar() {
+        hideKeyboard()
         (activity as? FragmentHostActivity)?.fragment_progress?.visibility = View.VISIBLE
         (activity as? FragmentHostActivity)?.main_container?.visibility = View.GONE
     }
@@ -90,5 +91,10 @@ abstract class BaseFragment : MvpAppCompatFragment() {
     fun hideProgressError() {
         (activity as? FragmentHostActivity)?.fragment_progress_error?.visibility = View.GONE
         (activity as? FragmentHostActivity)?.main_container?.visibility = View.VISIBLE
+    }
+
+    fun hideKeyboard() {
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
     }
 }

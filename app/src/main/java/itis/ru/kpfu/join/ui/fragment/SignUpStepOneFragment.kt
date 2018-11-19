@@ -65,7 +65,7 @@ class SignUpStepOneFragment : BaseFragment(), SignUpStepOneView {
 
     @ProvidePresenter
     fun providePresenter(): SignUpStepOnePresenter {
-        return JoinApplication.appComponent.provideSignUpStepOnePresenter()
+        return JoinApplication.appComponent.providePresenters().provideSignUpStepOnePresenter()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -90,7 +90,7 @@ class SignUpStepOneFragment : BaseFragment(), SignUpStepOneView {
         hideProgressBar()
     }
 
-    override fun onFirstStepSuccess(user: User) {
+    override fun onFirstStepSuccess(user: UserRegistrationForm) {
         ti_username.error = null
         ti_email.error = null
         ti_password.error = null

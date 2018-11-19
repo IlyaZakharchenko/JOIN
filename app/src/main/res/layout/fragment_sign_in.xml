@@ -31,7 +31,7 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_gravity="center"
-            android:layout_margin="8dp"
+            android:layout_marginBottom="8dp"
             android:src="@drawable/join_logo" />
 
         <LinearLayout
@@ -124,7 +124,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:background="@color/colorGray"
+            android:background="@color/colorGrey"
             android:text="@string/create_account" />
 
     </LinearLayout>

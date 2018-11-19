@@ -62,7 +62,7 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
 
     @ProvidePresenter
     fun providePresenter(): ProfileEditPresenter {
-        return JoinApplication.appComponent.provideProfileEditPresenter()
+        return JoinApplication.appComponent.providePresenters().provideProfileEditPresenter()
     }
 
     override fun showProgress() {
@@ -89,9 +89,9 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
 
         //TODO profile info test
         val user = presenter.getUser()
-        et_first_name.setText(user?.firstName)
-        et_last_name.setText(user?.lastName)
-        et_username.setText(user?.userName)
+        et_first_name.setText(user?.name)
+        et_last_name.setText(user?.lastname)
+        et_username.setText(user?.username)
         et_email.setText(user?.email)
         et_phone.setText(user?.phone)
         /*Picasso
@@ -102,11 +102,11 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
                 .into(iv_avatar)*/
 
         btn_save.setOnClickListener {
-            user?.userName = et_username.text.toString()
+            user?.username = et_username.text.toString()
             user?.email = et_email.text.toString()
             user?.phone = et_phone.text.toString()
-            user?.firstName = et_first_name.text.toString()
-            user?.lastName = et_last_name.text.toString()
+            user?.name = et_first_name.text.toString()
+            user?.lastname = et_last_name.text.toString()
             presenter.updateUser(user)
         }
     }

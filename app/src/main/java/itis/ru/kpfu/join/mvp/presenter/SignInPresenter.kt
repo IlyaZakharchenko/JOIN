@@ -6,6 +6,7 @@ import com.arellomobile.mvp.MvpPresenter
 import com.facebook.GraphRequest
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.gson.Gson
 import com.vk.sdk.VKAccessToken
 import com.vk.sdk.api.VKApiConst
 import com.vk.sdk.api.VKParameters
@@ -27,16 +28,22 @@ class SignInPresenter(private val api: JoinApi, private val userRepository: User
 
     fun signIn(email: String, password: String) {
         compositeDisposable.add(api
-                .signIn(User(email = email, password = password))
+                .signIn(User(email = email.trim(), password = password.trim()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { viewState.showProgress() }
                 .doAfterTerminate { viewState.hideProgress() }
                 .subscribe({
                     if (it.code() == 200) {
-                        val user = User(email = email, password = password)
-                        userRepository.addUser(user)
+                        val id = it.body()?.get("user_id")?.asLong
+                        val token = it.headers().get("Authorization")
 
-                        viewState.signIn()
+                        compositeDisposable.add(api.getUserInfo(token, id)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .doOnSubscribe { viewState.showProgress() }
+                                .subscribe({
+                                    userRepository.addUser(it)
+                                    viewState.signIn()
+                                }, { viewState.onConnectionError() }))
                     } else {
                         viewState.onSignInError()
                     }
@@ -64,7 +71,7 @@ class SignInPresenter(private val api: JoinApi, private val userRepository: User
                     val firstName = jsonObject?.get("first_name") as String
                     val lastName = jsonObject.get("last_name") as String
 
-                    val user = User(firstName = firstName, lastName = lastName)
+                    val user = User(name = firstName, lastname = lastName)
                     userRepository.addUser(user)
 
                     viewState.signIn()
@@ -80,7 +87,7 @@ class SignInPresenter(private val api: JoinApi, private val userRepository: User
         val lastName = account.familyName
         val email = account.email
 
-        val user = User(firstName = givenName, lastName = lastName, email = email)
+        val user = User(name = givenName, lastname = lastName, email = email)
         userRepository.addUser(user)
 
         viewState.signIn()
@@ -96,7 +103,7 @@ class SignInPresenter(private val api: JoinApi, private val userRepository: User
             val firstName = `object`.get("first_name") as String
             val lastName = `object`.get("last_name") as String
 
-            val user = User(firstName = firstName, lastName = lastName, email = email)
+            val user = User(name = firstName, lastname = lastName, email = email)
             userRepository.addUser(user)
 
             viewState.signIn()

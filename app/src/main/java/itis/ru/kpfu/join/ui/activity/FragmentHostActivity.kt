@@ -44,7 +44,7 @@ class FragmentHostActivity : BaseActivity(), FragmentHostView {
 
     @ProvidePresenter
     fun providePresenter(): FragmentHostPresenter {
-        return JoinApplication.appComponent.provideFragmentHostPresenter()
+        return JoinApplication.appComponent.providePresenters().provideFragmentHostPresenter()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

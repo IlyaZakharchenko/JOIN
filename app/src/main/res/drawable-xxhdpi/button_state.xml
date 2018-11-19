@@ -3,7 +3,7 @@
 
     <item android:state_pressed="true">
         <shape xmlns:android="http://schemas.android.com/apk/res/android">
-            <solid android:color="@color/colorGray" />
+            <solid android:color="@color/colorGrey" />
             <corners android:radius="5dp" />
             <padding android:bottom="0dp" android:left="0dp" android:right="0dp" android:top="0dp" />
         </shape>
@@ -19,7 +19,7 @@
 
     <item>
         <shape xmlns:android="http://schemas.android.com/apk/res/android">
-            <solid android:color="@color/colorGray" />
+            <solid android:color="@color/colorGrey" />
             <corners android:radius="5dp" />
             <padding android:bottom="0dp" android:left="0dp" android:right="0dp" android:top="0dp" />
         </shape>

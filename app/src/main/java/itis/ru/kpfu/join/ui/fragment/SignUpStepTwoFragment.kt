@@ -10,6 +10,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.db.entity.User
+import itis.ru.kpfu.join.model.UserRegistrationForm
 import itis.ru.kpfu.join.mvp.presenter.SignUpStepTwoPresenter
 import itis.ru.kpfu.join.mvp.view.SignUpStepTwoView
 import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
@@ -25,7 +26,7 @@ class SignUpStepTwoFragment: BaseFragment(), SignUpStepTwoView {
 
     companion object {
 
-        fun newInstance(user: User): SignUpStepTwoFragment {
+        fun newInstance(user: UserRegistrationForm): SignUpStepTwoFragment {
             val args = Bundle()
             args.putSerializable(Constants.USER, user)
 
@@ -57,18 +58,18 @@ class SignUpStepTwoFragment: BaseFragment(), SignUpStepTwoView {
 
     @ProvidePresenter
     fun providePresenter(): SignUpStepTwoPresenter{
-        return JoinApplication.appComponent.provideSignUpStepTwoPresenter()
+        return JoinApplication.appComponent.providePresenters().provideSignUpStepTwoPresenter()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val user = arguments?.getSerializable(Constants.USER) as User
+        val user = arguments?.getSerializable(Constants.USER) as UserRegistrationForm
 
         presenter.checkButtonState(RxTextView.textChanges(et_confirmation_code))
         presenter.startCounter()
 
-        tv_resend_code.setOnClickListener { user.email?.let { it1 -> presenter.resendCode(it1) } }
+        tv_resend_code.setOnClickListener { user.email.let { it1 -> presenter.resendCode(it1) } }
         btn_sign_up.setOnClickListener {
             user.code = et_confirmation_code.rawText.toString()
             presenter.finishRegistration(user)

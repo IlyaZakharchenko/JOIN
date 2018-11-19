@@ -33,7 +33,7 @@ class SignUpStepOnePresenter(private val api: JoinApi) : MvpPresenter<SignUpStep
                     .subscribe({
                         run {
                             viewState.onFirstStepSuccess(
-                                    User(userName = form.username, email = form.email, password = form.password))
+                                    UserRegistrationForm(username = form.username, email = form.email, password = form.password))
                         }
                     }, { viewState.onConnectionError() }))
         }

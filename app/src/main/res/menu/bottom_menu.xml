@@ -12,14 +12,14 @@
         android:icon="@drawable/ic_bottom_notifications"
         />
     <item
-        android:id="@+id/bottom_chat"
+        android:id="@+id/bottom_dialogs"
         android:title=""
         android:icon="@drawable/ic_bottom_chat"
         />
     <item
-        android:id="@+id/bottom_menu"
+        android:id="@+id/bottom_profile"
         android:title=""
-        android:icon="@drawable/ic_bottom_menu"
+        android:icon="@drawable/ic_profile"
         />
 
 </menu>

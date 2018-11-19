@@ -8,6 +8,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import itis.ru.kpfu.join.api.JoinApi
 import itis.ru.kpfu.join.db.entity.User
+import itis.ru.kpfu.join.model.UserRegistrationForm
 import itis.ru.kpfu.join.mvp.view.SignUpStepTwoView
 import java.lang.ref.WeakReference
 
@@ -16,9 +17,11 @@ class SignUpStepTwoPresenter(private val api: JoinApi) : MvpPresenter<SignUpStep
 
     private val compositeDisposable = CompositeDisposable()
 
-    private var timer: Timer? = null
+    private var timer: CountDownTimer? = null
 
-    fun finishRegistration(user: User) {
+    private var timeLeft: Long = 15
+
+    fun finishRegistration(user: UserRegistrationForm) {
         compositeDisposable.add(api
                 .signUp(user)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -47,12 +50,9 @@ class SignUpStepTwoPresenter(private val api: JoinApi) : MvpPresenter<SignUpStep
         compositeDisposable.add(api
                 .confirmEmail(email.trim())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { viewState.showProgress() }
-                .doAfterTerminate { viewState.hideProgress() }
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     run {
-                       startCounter()
+                        startCounter()
                     }
                 }, { viewState.onConnectionError() }))
     }
@@ -62,7 +62,9 @@ class SignUpStepTwoPresenter(private val api: JoinApi) : MvpPresenter<SignUpStep
         compositeDisposable.dispose()
     }
 
-    fun startCounter() = runTimer(15000)
+    fun startCounter() {
+        runTimer(15000)
+    }
 
     fun stopTimer() {
         timer?.cancel()
@@ -74,24 +76,18 @@ class SignUpStepTwoPresenter(private val api: JoinApi) : MvpPresenter<SignUpStep
 
     private fun runTimer(time: Long) {
         timer?.cancel()
-        timer = Timer(time, WeakReference(viewState))
-        timer?.start()
-    }
-
-    companion object {
-        var timeLeft: Long = 15
-
-        class Timer(val time: Long, val viewState: WeakReference<SignUpStepTwoView>) : CountDownTimer(time, 1000) {
-
+        timer = null
+        timer = object : CountDownTimer(time, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 timeLeft = millisUntilFinished / 1000
-                viewState.get()?.updateSendAgainMessage(
-                        "Повторная отправка кода возможна через $timeLeft секунд", false)
+                viewState.updateSendAgainMessage(
+                        "Повторная отправка кода возможна через ${timeLeft} секунд", false)
             }
 
             override fun onFinish() {
-                viewState.get()?.updateSendAgainMessage("Выслать код еще раз", true)
+                viewState.updateSendAgainMessage("Выслать код еще раз", true)
             }
         }
+        timer?.start()
     }
 }

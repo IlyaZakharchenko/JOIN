@@ -1,6 +1,7 @@
 package itis.ru.kpfu.join.ui.activity.base
 
 import android.app.DialogFragment
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
@@ -10,6 +11,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import com.afollestad.materialdialogs.MaterialDialog
@@ -60,6 +62,10 @@ abstract class BaseActivity : MvpAppCompatActivity() {
 
     fun setToolbarTitle(title: Int?) {
         supportActionBar?.title = title?.let { getString(it) }
+    }
+
+    fun setToolbarTitle(title: String){
+        supportActionBar?.title = title
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

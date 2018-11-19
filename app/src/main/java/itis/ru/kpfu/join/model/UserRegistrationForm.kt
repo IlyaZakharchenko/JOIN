@@ -1,6 +1,10 @@
 package itis.ru.kpfu.join.model
 
-data class UserRegistrationForm(val username: String = "",
-        val email: String = "",
-        val password: String = "",
-        val passwordAgain: String = "")
+import java.io.Serializable
+
+data class UserRegistrationForm(
+        var username: String = "",
+        var email: String = "",
+        var password: String = "",
+        var passwordAgain: String = "",
+        var code: String = ""): Serializable

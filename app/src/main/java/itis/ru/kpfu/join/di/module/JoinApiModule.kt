@@ -10,10 +10,11 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Singleton
 
 @Module
-class TestApiModule {
+class JoinApiModule {
 
     @Singleton
     @Provides
@@ -27,6 +28,8 @@ class TestApiModule {
     @Provides
     fun httpClient(interceptor: HttpLoggingInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
+                .readTimeout(15, SECONDS)
+                .connectTimeout(15, SECONDS)
                 .addInterceptor(interceptor)
                 .build()
     }
@@ -44,7 +47,7 @@ class TestApiModule {
 
     @Singleton
     @Provides
-    fun provideTestApi(retrofit: Retrofit): JoinApi {
+    fun provideJoinApi(retrofit: Retrofit): JoinApi {
         return retrofit.create(JoinApi::class.java)
     }
 }

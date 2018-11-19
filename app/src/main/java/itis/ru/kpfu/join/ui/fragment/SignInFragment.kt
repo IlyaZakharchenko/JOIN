@@ -1,10 +1,12 @@
 package itis.ru.kpfu.join.ui.fragment
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.Toolbar
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -36,6 +38,7 @@ import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_google
 import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_vk
 import kotlinx.android.synthetic.main.fragment_sign_in.et_email
 import kotlinx.android.synthetic.main.fragment_sign_in.et_password
+import kotlinx.android.synthetic.main.fragment_sign_in.fragment_sign_in
 import kotlinx.android.synthetic.main.fragment_sign_in.toolbar_sign_in
 
 class SignInFragment : BaseFragment(), SignInView {
@@ -86,12 +89,14 @@ class SignInFragment : BaseFragment(), SignInView {
 
     @ProvidePresenter
     fun providePresenter(): SignInPresenter {
-        return JoinApplication.appComponent.provideSignInPresenter()
+        return JoinApplication.appComponent.providePresenters().provideSignInPresenter()
     }
 
     override fun initClickListeners() {
         btn_create_account.setOnClickListener { presenter.onCreateAccountClick() }
-        btn_sign_in.setOnClickListener { presenter.signIn(et_email.text.toString(), et_password.text.toString()) }
+        btn_sign_in.setOnClickListener {
+            presenter.signIn(et_email.text.toString(), et_password.text.toString())
+        }
         btn_forgot_pass.setOnClickListener {
             (activity as? FragmentHostActivity)?.setFragment(RestorePassFragment.newInstance(), true)
         }

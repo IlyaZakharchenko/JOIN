@@ -5,12 +5,11 @@ import dagger.Provides
 import itis.ru.kpfu.join.api.JoinApi
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.mvp.presenter.FragmentHostPresenter
-import itis.ru.kpfu.join.mvp.presenter.MenuPresenter
+import itis.ru.kpfu.join.mvp.presenter.ProfilePresenter
 import itis.ru.kpfu.join.mvp.presenter.ProfileEditPresenter
 import itis.ru.kpfu.join.mvp.presenter.SignInPresenter
 import itis.ru.kpfu.join.mvp.presenter.SignUpStepOnePresenter
 import itis.ru.kpfu.join.mvp.presenter.SignUpStepTwoPresenter
-import javax.inject.Singleton
 
 @Module
 class PresenterModule {
@@ -36,8 +35,8 @@ class PresenterModule {
     }
 
     @Provides
-    fun menuPresenter(userRepository: UserRepository): MenuPresenter {
-        return MenuPresenter(userRepository)
+    fun menuPresenter(userRepository: UserRepository): ProfilePresenter {
+        return ProfilePresenter(userRepository)
     }
 
     @Provides

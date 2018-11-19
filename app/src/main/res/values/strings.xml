@@ -31,4 +31,7 @@
     <string name="error_username">Имя пользователя должно содержать как минимум 6 символов</string>
     <string name="error_email">Некорректная почта</string>
     <string name="error_password">Пароль должен содержать как минимум 7 символов</string>
+    <string name="settings">Настройки</string>
+    <string name="type_your_message">Введите ваше сообщение</string>
+    <string name="no_messages_yet">Ваш список сообщений пуст</string>
 </resources>
