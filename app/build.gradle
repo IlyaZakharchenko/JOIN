@@ -79,6 +79,8 @@ dependencies {
     implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.0.0'
     //MaskedEditText
     implementation 'ru.egslava:MaskedEditText:1.0.5'
+    //CircleImageView
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 
 
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {

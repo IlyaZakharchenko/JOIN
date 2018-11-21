@@ -34,4 +34,6 @@
     <string name="settings">Настройки</string>
     <string name="type_your_message">Введите ваше сообщение</string>
     <string name="no_messages_yet">Ваш список сообщений пуст</string>
+    <string name="popup_edit">Изменить</string>
+    <string name="popup_delete">Удалить</string>
 </resources>

@@ -7,6 +7,7 @@ import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.db.entity.Specialization
 import itis.ru.kpfu.join.utils.toPx
 import kotlinx.android.synthetic.main.item_specialisation.view.item_grid
+import kotlinx.android.synthetic.main.item_specialisation.view.popup_btn
 import kotlinx.android.synthetic.main.item_specialisation.view.tv_experience
 import kotlinx.android.synthetic.main.item_specialisation.view.tv_experience_years
 import kotlinx.android.synthetic.main.item_specialisation.view.tv_lvl
@@ -31,6 +32,8 @@ class SpecializationViewHolder(itemView: View) : BaseViewHolder<Specialization>(
         } else {
             tv_experience_years.text = "лет"
         }
+
+        popup_btn.setOnClickListener {  }
     }
 
     private fun generateImages() = with(itemView) {

@@ -58,13 +58,15 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="16dp"
-                android:text="@string/btn_edit" />
+                android:background="@drawable/button_state"
+                android:text="@string/btn_edit"
+                android:textColor="@color/colorWhite" />
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardElevation="2dp"
-                app:cardCornerRadius="0dp">
+                app:cardCornerRadius="0dp"
+                app:cardElevation="2dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -143,8 +145,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:cardElevation="2dp"
-                app:cardCornerRadius="0dp">
+                app:cardCornerRadius="0dp"
+                app:cardElevation="2dp">
 
                 <LinearLayout
                     android:id="@+id/specializations_container"
@@ -155,15 +157,15 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
                         android:layout_marginBottom="16dp"
                         android:text="Специализации"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:layout_margin="16dp"/>
+                        android:textColor="@color/colorPrimaryDark" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_specializations"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content" />
 
 
                 </LinearLayout>

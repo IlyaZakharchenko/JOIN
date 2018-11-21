@@ -14,6 +14,7 @@ import com.esafirm.imagepicker.features.ReturnMode.NONE
 import com.squareup.picasso.Picasso
 import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.R
+import itis.ru.kpfu.join.db.entity.User
 import itis.ru.kpfu.join.mvp.presenter.ProfileEditPresenter
 import itis.ru.kpfu.join.mvp.view.ProfileEditView
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
@@ -49,7 +50,7 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
     override val menu: Int?
         get() = null
     override val enableBackPressed: Boolean
-        get() = false
+        get() = true
     override val enableBottomNavBar: Boolean
         get() = true
     override val toolbar: Toolbar?
@@ -94,20 +95,22 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
         et_username.setText(user?.username)
         et_email.setText(user?.email)
         et_phone.setText(user?.phone)
-        /*Picasso
-                .with(context)
-                .load(File(user?.imagePath))
-                .resize(iv_avatar.width,
-                        iv_avatar.height)
-                .into(iv_avatar)*/
+        user?.imagePath?.let {
+            Picasso
+                    .with(context)
+                    .load(File(it))
+                    .resize(iv_avatar.width,
+                            iv_avatar.height)
+                    .into(iv_avatar)
+        }
+
 
         btn_save.setOnClickListener {
-            user?.username = et_username.text.toString()
-            user?.email = et_email.text.toString()
-            user?.phone = et_phone.text.toString()
-            user?.name = et_first_name.text.toString()
-            user?.lastname = et_last_name.text.toString()
-            presenter.updateUser(user)
+            val updatedUser = User(username = et_username.text.toString(), email = et_email.text.toString(), name =
+            et_first_name.text.toString(), lastname = et_last_name.text.toString(), phone = et_phone.text.toString
+            ())
+            presenter.updateUser(updatedUser)
+            fragmentManager?.popBackStackImmediate()
         }
     }
 
