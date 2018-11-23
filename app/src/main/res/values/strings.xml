@@ -36,4 +36,8 @@
     <string name="no_messages_yet">Ваш список сообщений пуст</string>
     <string name="popup_edit">Изменить</string>
     <string name="popup_delete">Удалить</string>
+    <string name="username">Имя пользователя</string>
+    <string name="phone_number">Номер телефона</string>
+    <string name="fill_field">Заполните поле</string>
+    <string name="error_phone_number">Некорректный номер телефона</string>
 </resources>

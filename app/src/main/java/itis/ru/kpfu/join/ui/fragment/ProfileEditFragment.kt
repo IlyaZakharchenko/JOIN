@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
@@ -14,20 +15,26 @@ import com.esafirm.imagepicker.features.ReturnMode.NONE
 import com.squareup.picasso.Picasso
 import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.R
+import itis.ru.kpfu.join.R.string
 import itis.ru.kpfu.join.db.entity.User
 import itis.ru.kpfu.join.mvp.presenter.ProfileEditPresenter
 import itis.ru.kpfu.join.mvp.view.ProfileEditView
+import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_make_photo
 import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_open_gallery
 import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_remove_photo
-import kotlinx.android.synthetic.main.fragment_profile_edit.btn_save
 import kotlinx.android.synthetic.main.fragment_profile_edit.et_email
 import kotlinx.android.synthetic.main.fragment_profile_edit.et_first_name
 import kotlinx.android.synthetic.main.fragment_profile_edit.et_last_name
 import kotlinx.android.synthetic.main.fragment_profile_edit.et_phone
 import kotlinx.android.synthetic.main.fragment_profile_edit.et_username
 import kotlinx.android.synthetic.main.fragment_profile_edit.iv_avatar
+import kotlinx.android.synthetic.main.fragment_profile_edit.ti_email
+import kotlinx.android.synthetic.main.fragment_profile_edit.ti_first_name
+import kotlinx.android.synthetic.main.fragment_profile_edit.ti_last_name
+import kotlinx.android.synthetic.main.fragment_profile_edit.ti_phone
+import kotlinx.android.synthetic.main.fragment_profile_edit.ti_username
 import kotlinx.android.synthetic.main.fragment_profile_edit.toolbar_profile_edit
 import java.io.File
 
@@ -45,14 +52,19 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
 
     override val contentLayout: Int
         get() = R.layout.fragment_profile_edit
+
     override val toolbarTitle: Int?
         get() = R.string.toolbar_profile_edit
+
     override val menu: Int?
-        get() = null
+        get() = R.menu.menu_edit_profile
+
     override val enableBackPressed: Boolean
         get() = true
+
     override val enableBottomNavBar: Boolean
-        get() = true
+        get() = false
+
     override val toolbar: Toolbar?
         get() = toolbar_profile_edit
 
@@ -94,7 +106,7 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
         et_last_name.setText(user?.lastname)
         et_username.setText(user?.username)
         et_email.setText(user?.email)
-        et_phone.setText(user?.phone)
+        et_phone.setText(user?.phoneNumber)
         user?.imagePath?.let {
             Picasso
                     .with(context)
@@ -102,15 +114,6 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
                     .resize(iv_avatar.width,
                             iv_avatar.height)
                     .into(iv_avatar)
-        }
-
-
-        btn_save.setOnClickListener {
-            val updatedUser = User(username = et_username.text.toString(), email = et_email.text.toString(), name =
-            et_first_name.text.toString(), lastname = et_last_name.text.toString(), phone = et_phone.text.toString
-            ())
-            presenter.updateUser(updatedUser)
-            fragmentManager?.popBackStackImmediate()
         }
     }
 
@@ -158,5 +161,62 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
             chooseAvatarDialog.dismiss()
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onEditSuccess() {
+        (activity as? FragmentHostActivity)?.onBackPressed()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId) {
+            R.id.profile_edit_save ->  {
+                val updatedUser = User(username = et_username.text.toString(), email = et_email.text.toString(), name =
+                et_first_name.text.toString(), lastname = et_last_name.text.toString(), phoneNumber = et_phone.rawText.toString
+                ())
+                refreshErrors()
+                presenter.updateUser(updatedUser)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onEmptyName() {
+        ti_first_name.error = getString(string.fill_field)
+    }
+
+    override fun onEmptySurname() {
+        ti_last_name.error = getString(string.fill_field)
+    }
+
+    override fun onEmptyEmail() {
+        ti_email.error = getString(string.fill_field)
+    }
+
+    override fun onEmptyUsername() {
+        ti_phone.error = getString(string.fill_field)
+    }
+
+    override fun onEmptyPhoneNumber() {
+        ti_phone.error = getString(string.fill_field)
+    }
+
+    override fun onInvalidUsername() {
+        ti_username.error = getString(string.error_username)
+    }
+
+    override fun onInvalidEmail() {
+        ti_email.error = getString(string.error_email)
+    }
+
+    override fun onInvalidPhoneNumber() {
+        ti_phone.error = getString(string.error_phone_number)
+    }
+
+    fun refreshErrors() {
+        ti_first_name.error = null
+        ti_last_name.error = null
+        ti_username.error = null
+        ti_email.error = null
+        ti_phone.error = null
     }
 }

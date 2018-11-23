@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import com.afollestad.materialdialogs.MaterialDialog
@@ -32,6 +33,7 @@ import kotlinx.android.synthetic.main.fragment_profile.btn_edit
 import kotlinx.android.synthetic.main.fragment_profile.collapsing_toolbar
 import kotlinx.android.synthetic.main.fragment_profile.iv_profile_avatar
 import kotlinx.android.synthetic.main.fragment_profile.rv_specializations
+import kotlinx.android.synthetic.main.fragment_profile.scroll_view_profile
 import kotlinx.android.synthetic.main.fragment_profile.specializations_container
 import kotlinx.android.synthetic.main.fragment_profile.toolbar_profile
 import kotlinx.android.synthetic.main.fragment_profile.tv_email
@@ -83,6 +85,10 @@ class ProfileFragment : BaseFragment(), ProfileView {
         return JoinApplication.appComponent.providePresenters().provideProfilePresenter()
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -98,7 +104,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
         tv_username.text = user?.username
         tv_email.text = user?.email
-        tv_phone.text = "89046666200"
+        tv_phone.text = if(user?.phoneNumber.isNullOrEmpty()) "Не указан" else "8${user?.phoneNumber}"
 
         if (user?.name.isNullOrEmpty() || user?.lastname.isNullOrEmpty()) {
             user?.username?.let { (activity as? FragmentHostActivity)?.setToolbarTitle(it) }
@@ -110,6 +116,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     private fun initRecyclerView() {
         adapter = SpecializationsAdapter(initSpecializations())
         rv_specializations.adapter = adapter
+        rv_specializations.isNestedScrollingEnabled = false
         rv_specializations.layoutManager = LinearLayoutManager(baseActivity)
     }
 

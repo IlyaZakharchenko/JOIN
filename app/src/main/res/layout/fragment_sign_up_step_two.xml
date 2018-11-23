@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mask="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:mask="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -24,17 +24,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginTop="?actionBarSize"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:layout_marginTop="?actionBarSize">
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:src="@drawable/join_logo" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
             android:gravity="center"
-            android:textColor="#212121"
             android:text="@string/email_confirm_title"
-            android:textSize="16sp"/>
+            android:textColor="#212121"
+            android:textSize="16sp" />
 
 
         <android.support.design.widget.TextInputLayout
@@ -47,11 +54,11 @@
                 android:id="@+id/et_confirmation_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
                 android:gravity="center"
+                android:imeOptions="actionDone"
+                android:inputType="number"
                 android:textColor="#de000000"
                 android:textSize="22sp"
-                android:imeOptions="actionDone"
                 mask:mask="#  #  #  #  #  #" />
 
         </android.support.design.widget.TextInputLayout>

@@ -17,14 +17,13 @@ class UserRepositoryImpl : BaseRepository(), UserRepository {
             if (!it.email.equals(savedUser?.email)) savedUser?.email = it.email
             if (!it.imagePath.equals(savedUser?.imagePath)) savedUser?.imagePath = it.imagePath
             if (!it.password.equals(savedUser?.password)) savedUser?.password = it.password
-            if (!it.phone.equals(savedUser?.phone)) savedUser?.phone = it.phone
+            if (!it.phoneNumber.equals(savedUser?.phoneNumber)) savedUser?.phoneNumber = it.phoneNumber
             realm.commitTransaction()
         }
     }
 
     override fun addUser(user: User) {
         executeTransaction(Realm.Transaction {
-            user.id = nextKey(User::class.java)
             it.insertOrUpdate(user)
         })
     }

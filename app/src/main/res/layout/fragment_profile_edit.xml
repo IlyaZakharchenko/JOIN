@@ -1,39 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:mask="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/app_bar_sign_in"
+        android:id="@+id/app_bar_profile_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:elevation="8dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <RelativeLayout
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_profile_edit"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="?actionBarSize"
+            app:titleTextColor="@color/colorWhite" />
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar_profile_edit"
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                app:titleTextColor="@color/colorWhite" />
-
-            <ImageButton
-                android:id="@+id/btn_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="16dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_save" />
-        </RelativeLayout>
     </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
@@ -57,34 +44,43 @@
                     android:id="@+id/iv_avatar"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:layout_margin="16dp"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_no_avatar" />
+                    android:layout_margin="8dp"
+                    android:background="@drawable/ic_no_avatar" />
 
-                <EditText
-                    android:id="@+id/et_first_name"
-                    android:layout_width="wrap_content"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/ti_first_name"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_toEndOf="@id/iv_avatar"
-                    android:hint="Имя"
-                    android:textSize="20sp"
-                    tools:text="Василий" />
+                    android:layout_toEndOf="@id/iv_avatar">
+
+                    <EditText
+                        android:id="@+id/et_first_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Имя"
+                        android:textSize="20sp"
+                        tools:text="Василий" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/ti_last_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@id/ti_first_name"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@id/iv_avatar">
 
                 <EditText
                     android:id="@+id/et_last_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_below="@id/et_first_name"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_toEndOf="@id/iv_avatar"
                     android:hint="Фамилия"
                     android:textSize="20sp"
                     tools:text="Пупкин" />
+
+                </android.support.design.widget.TextInputLayout>
             </RelativeLayout>
 
         </android.support.v7.widget.CardView>
@@ -121,6 +117,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
+                        android:layout_marginTop="8dp"
                         android:src="@drawable/ic_username" />
 
 
@@ -133,8 +130,8 @@
                             android:id="@+id/et_username"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="18sp"
-                            tools:text="TestUser" />
+                            android:inputType="text"
+                            android:textSize="16sp" />
                     </android.support.design.widget.TextInputLayout>
 
                 </LinearLayout>
@@ -151,6 +148,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
+                        android:layout_marginTop="8dp"
                         android:src="@drawable/ic_email" />
 
 
@@ -163,8 +161,8 @@
                             android:id="@+id/et_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="18sp"
-                            tools:text="test@test.com" />
+                            android:inputType="textEmailAddress"
+                            android:textSize="16sp" />
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
 
@@ -180,6 +178,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
+                        android:layout_marginTop="8dp"
                         android:src="@drawable/ic_phone" />
 
                     <android.support.design.widget.TextInputLayout
@@ -187,13 +186,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <android.support.design.widget.TextInputEditText
+                        <br.com.sapereaude.maskedEditText.MaskedEditText
                             android:id="@+id/et_phone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="+9-999-999-99-99"
-                            android:textSize="18sp"
-                            tools:text="+9-999-999-99-99" />
+                            android:imeOptions="actionDone"
+                            android:inputType="phone"
+                            android:textSize="16sp"
+                            mask:mask="+7 (###) ###-##-##" />
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
             </RelativeLayout>

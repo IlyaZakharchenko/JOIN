@@ -47,11 +47,11 @@ class MessagesAdapter(private var messages: List<TextMessage>) :
     }
 
     override fun getItemViewType(position: Int): Int {
-            when {
-                messages[position].text.isNullOrEmpty() -> return DATE_HEADER
-                messages[position].to.equals("staff") -> return TEXT_MESSAGE_RIGHT
-                messages[position].from.equals("staff") -> return TEXT_MESSAGE_LEFT
-            }
+        when {
+            messages[position].text.isNullOrEmpty() -> return DATE_HEADER
+            messages[position].to.equals("staff") -> return TEXT_MESSAGE_RIGHT
+            messages[position].from.equals("staff") -> return TEXT_MESSAGE_LEFT
+        }
 
         return 0
     }

@@ -15,4 +15,21 @@ interface ProfileEditView : MvpView {
 
     fun onError(message : String)
 
+    fun onEditSuccess()
+
+    fun onEmptyName()
+
+    fun onEmptySurname()
+
+    fun onEmptyEmail()
+
+    fun onEmptyUsername()
+
+    fun onEmptyPhoneNumber()
+
+    fun onInvalidUsername()
+
+    fun onInvalidEmail()
+
+    fun onInvalidPhoneNumber()
 }

@@ -26,6 +26,7 @@ interface JoinApi {
     @GET("/user/{id}")
     fun getUserInfo(@Header("Authorization") token: String?, @Path("id") id: Long?): Single<User>
 
-    @POST("/user{id}/change")
-    fun changeUser(@Body user: User?): Single<Response<Void>>
+    @POST("/user/{id}/change")
+    fun changeUser(@Header("Authorization") token: String?, @Body user: User?, @Path(
+            "id") id: Long?): Single<Response<Void>>
 }

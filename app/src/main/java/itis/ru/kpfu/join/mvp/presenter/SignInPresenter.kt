@@ -41,6 +41,7 @@ class SignInPresenter(private val api: JoinApi, private val userRepository: User
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .doOnSubscribe { viewState.showProgress() }
                                 .subscribe({
+                                    it.token = token
                                     userRepository.addUser(it)
                                     viewState.signIn()
                                 }, { viewState.onConnectionError() }))
