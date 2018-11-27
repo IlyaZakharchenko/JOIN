@@ -8,7 +8,6 @@ import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 @StateStrategyType(OneExecutionStateStrategy::class)
 interface FragmentHostView : MvpView {
 
-    @StateStrategyType(OneExecutionStateStrategy::class)
     fun setFragment(fragment: BaseFragment, addToBackStack: Boolean)
 
     fun clearFragmentsStack()

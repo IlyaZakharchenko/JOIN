@@ -50,8 +50,8 @@ abstract class BaseActivity : MvpAppCompatActivity() {
                 .title("Вы действительно хотите выйти?")
                 .positiveText("Да")
                 .negativeText("Нет")
-                .onPositive { dialog, which -> finish() }
-                .onNegative { dialog, which -> dialog.dismiss() }
+                .onPositive { _, _ -> finish() }
+                .onNegative { dialog, _ -> dialog.dismiss() }
                 .build()
     }
 

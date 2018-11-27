@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/spinners_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Специализация"
+                    android:textColor="@color/colorBlackText" />
+
+                <com.jaredrummler.materialspinner.MaterialSpinner
+                    android:id="@+id/spinner_spec"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Технологии"
+                    android:textColor="@color/colorBlackText" />
+
+                <com.jaredrummler.materialspinner.MaterialSpinner
+                    android:id="@+id/spinner_tech"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_add_spec"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_below="@id/spinners_container"
+                android:background="@null"
+                android:text="Добавить технологию"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimary" />
+
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/btn_add_spec"
+                android:layout_margin="16dp"
+                android:background="@color/colorPrimary"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                android:text="Сохранить"
+                android:textColor="@color/colorWhite" />
+
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_below="@id/btn_add_spec"
+                android:layout_marginTop="16dp"
+                android:layout_toLeftOf="@id/btn_save"
+                android:background="@color/colorGrey"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                android:text="Отмена" />
+        </RelativeLayout>
+
+    </ScrollView>
+</RelativeLayout>

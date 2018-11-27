@@ -3,6 +3,7 @@ package itis.ru.kpfu.join.ui.fragment
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
@@ -16,20 +17,26 @@ import com.squareup.picasso.Picasso
 import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.R.string
+import itis.ru.kpfu.join.db.entity.Specialization
 import itis.ru.kpfu.join.db.entity.User
 import itis.ru.kpfu.join.mvp.presenter.ProfileEditPresenter
 import itis.ru.kpfu.join.mvp.view.ProfileEditView
 import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
+import itis.ru.kpfu.join.ui.fragment.dialog.AddSpecializationDialog
+import itis.ru.kpfu.join.ui.recyclerView.adapter.SpecializationsEditAdapter
+import itis.ru.kpfu.join.utils.Constants
 import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_make_photo
 import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_open_gallery
 import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_remove_photo
+import kotlinx.android.synthetic.main.fragment_profile_edit.btn_add_spec
 import kotlinx.android.synthetic.main.fragment_profile_edit.et_email
 import kotlinx.android.synthetic.main.fragment_profile_edit.et_first_name
 import kotlinx.android.synthetic.main.fragment_profile_edit.et_last_name
 import kotlinx.android.synthetic.main.fragment_profile_edit.et_phone
 import kotlinx.android.synthetic.main.fragment_profile_edit.et_username
 import kotlinx.android.synthetic.main.fragment_profile_edit.iv_avatar
+import kotlinx.android.synthetic.main.fragment_profile_edit.rv_specializations_edit
 import kotlinx.android.synthetic.main.fragment_profile_edit.ti_email
 import kotlinx.android.synthetic.main.fragment_profile_edit.ti_first_name
 import kotlinx.android.synthetic.main.fragment_profile_edit.ti_last_name
@@ -73,6 +80,8 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
 
     lateinit var chooseAvatarDialog: MaterialDialog
 
+    private var adapter: SpecializationsEditAdapter? = null
+
     @ProvidePresenter
     fun providePresenter(): ProfileEditPresenter {
         return JoinApplication.appComponent.providePresenters().provideProfileEditPresenter()
@@ -97,11 +106,21 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initChooseAvatarDialog()
-        iv_avatar.setOnClickListener { chooseAvatarDialog.show() }
+        initDialogs()
+        initRecyclerView()
+        initFields(presenter.getUser())
+        initListeners()
+    }
 
-        //TODO profile info test
-        val user = presenter.getUser()
+    private fun initListeners() {
+        iv_avatar.setOnClickListener { chooseAvatarDialog.show() }
+        btn_add_spec.setOnClickListener {
+            val addSpecializationDialog = AddSpecializationDialog.newInstance()
+            addSpecializationDialog.show(baseActivity.fragmentManager, Constants.DIALOG_ADD_SPECIALIZATION)
+        }
+    }
+
+    private fun initFields(user: User?) {
         et_first_name.setText(user?.name)
         et_last_name.setText(user?.lastname)
         et_username.setText(user?.username)
@@ -132,7 +151,49 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
                 .start()
     }
 
-    private fun initChooseAvatarDialog() {
+    private fun initRecyclerView() {
+        adapter = SpecializationsEditAdapter(initSpecializations(), { pos, sp -> onItemRemove(pos, sp) }
+        ) { pos, sp -> onItemEdit(pos, sp) }
+        rv_specializations_edit.adapter = adapter
+        rv_specializations_edit.isNestedScrollingEnabled = false
+        rv_specializations_edit.layoutManager = LinearLayoutManager(baseActivity)
+    }
+
+    private fun onItemRemove(position: Int, item: Specialization) {
+        adapter?.removeItem(position);
+    }
+
+    private fun onItemEdit(position: Int, item: Specialization) {
+        val addSpecializationDialog = AddSpecializationDialog.newInstance()
+        addSpecializationDialog.show(baseActivity.fragmentManager, Constants.DIALOG_ADD_SPECIALIZATION);
+    }
+
+    private fun initSpecializations(): MutableList<Specialization> {
+        return mutableListOf(
+                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
+                        knowledgeLevel = "Junior"),
+                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
+                        knowledgeLevel = "Junior"),
+                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
+                        knowledgeLevel = "Junior"),
+                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
+                        knowledgeLevel = "Junior"),
+                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
+                        knowledgeLevel = "Junior"),
+                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
+                        knowledgeLevel = "Junior"),
+                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
+                        knowledgeLevel = "Junior"),
+                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
+                        knowledgeLevel = "Junior"),
+                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
+                        knowledgeLevel = "Junior"),
+                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
+                        knowledgeLevel = "Junior")
+        )
+    }
+
+    private fun initDialogs() {
         chooseAvatarDialog = MaterialDialog.Builder(baseActivity)
                 .customView(R.layout.dialog_choose_avatar, false)
                 .build()
@@ -168,11 +229,13 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId) {
-            R.id.profile_edit_save ->  {
-                val updatedUser = User(username = et_username.text.toString(), email = et_email.text.toString(), name =
-                et_first_name.text.toString(), lastname = et_last_name.text.toString(), phoneNumber = et_phone.rawText.toString
-                ())
+        when (item?.itemId) {
+            R.id.profile_edit_save -> {
+                val updatedUser = User(username = et_username.text.toString(), email = et_email.text.toString(),
+                        name =
+                        et_first_name.text.toString(), lastname = et_last_name.text.toString(),
+                        phoneNumber = et_phone.rawText.toString
+                        ())
                 refreshErrors()
                 presenter.updateUser(updatedUser)
             }

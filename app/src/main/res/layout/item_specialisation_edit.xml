@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="16dp"
-    android:paddingEnd="16dp"
-    android:paddingStart="16dp">
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
 
     <TextView
         android:id="@+id/tv_spec_name"
@@ -67,7 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_toRightOf="@id/tv_spec_name"
-        android:columnCount="6"
+        android:columnCount="5"
         app:layout_constraintStart_toEndOf="@+id/tv_spec_name"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -82,7 +82,7 @@
         android:background="@color/colorGrey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_experience" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_remove" />
 
     <TextView
         android:id="@+id/tv_experience_years"
@@ -95,4 +95,38 @@
         app:layout_constraintEnd_toStartOf="@+id/item_grid"
         app:layout_constraintStart_toEndOf="@+id/tv_experience"
         app:layout_constraintTop_toBottomOf="@+id/tv_lvl" />
+
+    <Button
+        android:id="@+id/btn_remove"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorGrey"
+        android:paddingEnd="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Удалить"
+        app:layout_constraintEnd_toStartOf="@+id/btn_edit"
+        app:layout_constraintTop_toBottomOf="@+id/tv_experience_title" />
+
+    <Button
+        android:id="@+id/btn_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorGrey"
+        android:backgroundTint="@color/colorPrimary"
+        android:paddingEnd="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingStart="8dp"
+        android:text="Редактировать"
+        android:textColor="@color/ef_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_experience_title" />
+
 </android.support.constraint.ConstraintLayout>
