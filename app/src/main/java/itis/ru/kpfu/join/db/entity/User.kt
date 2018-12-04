@@ -18,4 +18,5 @@ open class User(
         var code: String? = null,
         var password: String? = null,
         var specializations: RealmList<Specialization>? = null
-) : RealmObject(), Serializable {}
+) : RealmObject(), Serializable {
+}

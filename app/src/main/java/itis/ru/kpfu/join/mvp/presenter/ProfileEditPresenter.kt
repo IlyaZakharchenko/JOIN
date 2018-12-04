@@ -19,12 +19,6 @@ class ProfileEditPresenter(private val api: JoinApi, private val userRepository:
         return userRepository.getUser()
     }
 
-    fun changeAvatar(path: String?) {
-//        var user : User? = userRepository.getUser()
-//        user?.imagePath = path
-//        userRepository.updateUser(user)
-    }
-
     fun updateUser(user: User?) {
 
         if (!hasErrors(user)) {
@@ -80,6 +74,10 @@ class ProfileEditPresenter(private val api: JoinApi, private val userRepository:
         }
         if (user?.username?.trim()?.length ?: 0 < 6) {
             viewState.onInvalidUsername()
+            hasError = true
+        }
+        if (user?.specializations?.size == 0) {
+            viewState.onEmptySpecializations()
             hasError = true
         }
 

@@ -15,7 +15,9 @@ import com.vk.sdk.api.VKRequest.VKRequestListener
 import com.vk.sdk.api.VKResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.realm.RealmList
 import itis.ru.kpfu.join.api.JoinApi
+import itis.ru.kpfu.join.db.entity.Specialization
 import itis.ru.kpfu.join.db.entity.User
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.mvp.view.SignInView
@@ -42,6 +44,7 @@ class SignInPresenter(private val api: JoinApi, private val userRepository: User
                                 .doOnSubscribe { viewState.showProgress() }
                                 .subscribe({
                                     it.token = token
+
                                     userRepository.addUser(it)
                                     viewState.signIn()
                                 }, { viewState.onConnectionError() }))
@@ -95,8 +98,6 @@ class SignInPresenter(private val api: JoinApi, private val userRepository: User
     }
 
     fun getFacebookUserInfo(result: LoginResult?, userRepository: UserRepository) {
-
-        Log.d("ASDASDASD", "asdasdasd")
 
         GraphRequest.newMeRequest(result?.accessToken
         ) { `object`, response ->

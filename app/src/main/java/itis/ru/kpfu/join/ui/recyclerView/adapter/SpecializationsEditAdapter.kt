@@ -3,11 +3,12 @@ package itis.ru.kpfu.join.ui.recyclerView.adapter
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.GridLayout.Spec
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.db.entity.Specialization
 import itis.ru.kpfu.join.ui.recyclerView.viewHolder.SpecializationEditViewHolder
 
-class SpecializationsEditAdapter(private var items: MutableList<Specialization>,
+class SpecializationsEditAdapter(private var items: ArrayList<Specialization>,
         private var onItemRemove: (Int, Specialization) -> Unit,
         private var onItemEdit: (Int, Specialization) -> Unit) :
         RecyclerView.Adapter<SpecializationEditViewHolder>() {
@@ -28,5 +29,19 @@ class SpecializationsEditAdapter(private var items: MutableList<Specialization>,
     fun removeItem(position: Int) {
         items.removeAt(position)
         notifyItemRemoved(position)
+    }
+
+    fun updateItem(position: Int, item: Specialization) {
+        items[position] = item
+        notifyItemChanged(position)
+    }
+
+    fun addItem(item: Specialization) {
+        items.add(item)
+        notifyItemInserted(itemCount - 1)
+    }
+
+    fun getItems(): List<Specialization> {
+        return items
     }
 }

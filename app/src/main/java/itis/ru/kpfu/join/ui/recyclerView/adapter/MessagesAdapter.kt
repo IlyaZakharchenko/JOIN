@@ -6,13 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.db.entity.TextMessage
-import itis.ru.kpfu.join.ui.recyclerView.viewHolder.BaseViewHolder
 import itis.ru.kpfu.join.ui.recyclerView.viewHolder.DateHeaderViewHolder
 import itis.ru.kpfu.join.ui.recyclerView.viewHolder.MessageLeftViewHolder
 import itis.ru.kpfu.join.ui.recyclerView.viewHolder.MessageRightViewHolder
 
 class MessagesAdapter(private var messages: List<TextMessage>) :
-        RecyclerView.Adapter<BaseViewHolder<TextMessage>>() {
+        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         const val TEXT_MESSAGE_RIGHT = 0
@@ -20,7 +19,7 @@ class MessagesAdapter(private var messages: List<TextMessage>) :
         const val DATE_HEADER = 2
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<TextMessage> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         val v: View
 
@@ -42,8 +41,12 @@ class MessagesAdapter(private var messages: List<TextMessage>) :
 
     override fun getItemCount() = messages.size
 
-    override fun onBindViewHolder(holder: BaseViewHolder<TextMessage>, position: Int) {
-        holder.bindViewHolder(messages[position])
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when(holder.itemViewType){
+            DATE_HEADER ->  (holder as DateHeaderViewHolder).bindViewHolder(messages[position])
+            TEXT_MESSAGE_LEFT -> (holder as MessageLeftViewHolder).bindViewHolder(messages[position])
+            TEXT_MESSAGE_RIGHT -> (holder as MessageRightViewHolder).bindViewHolder(messages[position])
+        }
     }
 
     override fun getItemViewType(position: Int): Int {

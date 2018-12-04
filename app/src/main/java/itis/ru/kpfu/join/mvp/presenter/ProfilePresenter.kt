@@ -9,8 +9,7 @@ import itis.ru.kpfu.join.mvp.view.ProfileView
 @InjectViewState
 class ProfilePresenter(private val userRepository: UserRepository) : MvpPresenter<ProfileView>() {
 
-    fun getUser() : User? {
+    fun getUser(): User? {
         return userRepository.getUser()
     }
-
 }

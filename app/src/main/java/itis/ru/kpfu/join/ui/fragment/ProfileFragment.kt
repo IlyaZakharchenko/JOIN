@@ -16,6 +16,8 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.esafirm.imagepicker.features.ImagePicker
 import com.esafirm.imagepicker.features.ReturnMode.NONE
 import com.squareup.picasso.Picasso
+import io.realm.Realm
+import io.realm.RealmList
 import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.db.entity.Specialization
@@ -39,7 +41,6 @@ import kotlinx.android.synthetic.main.fragment_profile.toolbar_profile
 import kotlinx.android.synthetic.main.fragment_profile.tv_email
 import kotlinx.android.synthetic.main.fragment_profile.tv_phone
 import kotlinx.android.synthetic.main.fragment_profile.tv_username
-import kotlinx.android.synthetic.main.item_specialisation.view.item_grid
 import kotlinx.android.synthetic.main.item_specialisation.view.tv_spec_name
 import java.io.File
 import java.util.Random
@@ -74,7 +75,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
         get() = toolbar_profile
 
     @InjectPresenter
-    lateinit var mPresenter: ProfilePresenter
+    lateinit var presenter: ProfilePresenter
 
     lateinit var chooseAvatarDialog: MaterialDialog
 
@@ -85,16 +86,11 @@ class ProfileFragment : BaseFragment(), ProfileView {
         return JoinApplication.appComponent.providePresenters().provideProfilePresenter()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initChooseAvatarDialog()
         initListeners()
-        initSpecializations()
         initFields()
         initRecyclerView()
     }
@@ -104,7 +100,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
         tv_username.text = user?.username
         tv_email.text = user?.email
-        tv_phone.text = if(user?.phoneNumber.isNullOrEmpty()) "Не указан" else "8${user?.phoneNumber}"
+        tv_phone.text = if (user?.phoneNumber.isNullOrEmpty()) "Не указан" else "8${user?.phoneNumber}"
 
         if (user?.name.isNullOrEmpty() || user?.lastname.isNullOrEmpty()) {
             user?.username?.let { (activity as? FragmentHostActivity)?.setToolbarTitle(it) }
@@ -114,35 +110,10 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun initRecyclerView() {
-        adapter = SpecializationsAdapter(initSpecializations())
+        adapter = SpecializationsAdapter(presenter.getUser()?.specializations as List<Specialization>)
         rv_specializations.adapter = adapter
         rv_specializations.isNestedScrollingEnabled = false
         rv_specializations.layoutManager = LinearLayoutManager(baseActivity)
-    }
-
-    private fun initSpecializations(): List<Specialization> {
-        return arrayListOf(
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior"),
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior"),
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior"),
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior"),
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior"),
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior"),
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior"),
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior"),
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior"),
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior")
-        ).shuffled()
     }
 
     private fun initListeners() {

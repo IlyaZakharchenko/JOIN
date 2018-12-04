@@ -27,6 +27,8 @@ interface ProfileEditView : MvpView {
 
     fun onEmptyPhoneNumber()
 
+    fun onEmptySpecializations()
+
     fun onInvalidUsername()
 
     fun onInvalidEmail()

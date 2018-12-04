@@ -21,6 +21,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
                     android:text="Специализация"
                     android:textColor="@color/colorBlackText" />
 
@@ -32,13 +34,36 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Технологии"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:text="Уровень"
                     android:textColor="@color/colorBlackText" />
 
                 <com.jaredrummler.materialspinner.MaterialSpinner
-                    android:id="@+id/spinner_tech"
+                    android:id="@+id/spinner_lvl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:text="Опыт(лет)"
+                    android:textColor="@color/colorBlackText" />
+
+                <com.jaredrummler.materialspinner.MaterialSpinner
+                    android:id="@+id/spinner_exp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:text="Технологии"
+                    android:textColor="@color/colorBlackText" />
 
             </LinearLayout>
 

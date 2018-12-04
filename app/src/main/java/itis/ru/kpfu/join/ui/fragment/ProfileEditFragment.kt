@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import android.widget.GridLayout.Spec
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -14,6 +15,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.esafirm.imagepicker.features.ImagePicker
 import com.esafirm.imagepicker.features.ReturnMode.NONE
 import com.squareup.picasso.Picasso
+import io.realm.RealmList
 import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.R.string
@@ -108,19 +110,22 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
 
         initDialogs()
         initRecyclerView()
-        initFields(presenter.getUser())
+        initFields()
         initListeners()
     }
 
     private fun initListeners() {
         iv_avatar.setOnClickListener { chooseAvatarDialog.show() }
         btn_add_spec.setOnClickListener {
-            val addSpecializationDialog = AddSpecializationDialog.newInstance()
-            addSpecializationDialog.show(baseActivity.fragmentManager, Constants.DIALOG_ADD_SPECIALIZATION)
+            val addSpecializationDialog = AddSpecializationDialog.newInstance(null, -1)
+            addSpecializationDialog.setTargetFragment(this, AddSpecializationDialog.REQUEST_CODE)
+            addSpecializationDialog.show(baseActivity.supportFragmentManager, AddSpecializationDialog.SPECIALIZATION)
         }
     }
 
-    private fun initFields(user: User?) {
+    private fun initFields() {
+        val user = presenter.getUser()
+
         et_first_name.setText(user?.name)
         et_last_name.setText(user?.lastname)
         et_username.setText(user?.username)
@@ -138,7 +143,7 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
 
     private fun openGallery() {
         ImagePicker.create(this)
-                .returnMode(NONE) // set whether pick and / or camera action should return immediate result or not.
+                .returnMode(NONE)
                 .folderMode(true)
                 .toolbarFolderTitle("Выберите папку")
                 .toolbarImageTitle("Выберите фотографию")
@@ -152,7 +157,10 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
     }
 
     private fun initRecyclerView() {
-        adapter = SpecializationsEditAdapter(initSpecializations(), { pos, sp -> onItemRemove(pos, sp) }
+        val items = ArrayList<Specialization>()
+        presenter.getUser()?.specializations?.let { items.addAll(it) }
+
+        adapter = SpecializationsEditAdapter(items, { pos, sp -> onItemRemove(pos, sp) }
         ) { pos, sp -> onItemEdit(pos, sp) }
         rv_specializations_edit.adapter = adapter
         rv_specializations_edit.isNestedScrollingEnabled = false
@@ -160,37 +168,13 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
     }
 
     private fun onItemRemove(position: Int, item: Specialization) {
-        adapter?.removeItem(position);
+        adapter?.removeItem(position)
     }
 
     private fun onItemEdit(position: Int, item: Specialization) {
-        val addSpecializationDialog = AddSpecializationDialog.newInstance()
-        addSpecializationDialog.show(baseActivity.fragmentManager, Constants.DIALOG_ADD_SPECIALIZATION);
-    }
-
-    private fun initSpecializations(): MutableList<Specialization> {
-        return mutableListOf(
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior"),
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior"),
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior"),
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior"),
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior"),
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior"),
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior"),
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior"),
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior"),
-                Specialization(specializationName = "Android developer", experience = (Math.random() * 100).toInt(),
-                        knowledgeLevel = "Junior")
-        )
+        val addSpecializationDialog = AddSpecializationDialog.newInstance(item, position)
+        addSpecializationDialog.setTargetFragment(this, AddSpecializationDialog.REQUEST_CODE)
+        addSpecializationDialog.show(baseActivity.supportFragmentManager, AddSpecializationDialog.SPECIALIZATION);
     }
 
     private fun initDialogs() {
@@ -218,8 +202,13 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
                     .resize(iv_avatar.width,
                             iv_avatar.height)
                     .into(iv_avatar)
-            presenter.changeAvatar(image.path)
+
             chooseAvatarDialog.dismiss()
+        } else if (requestCode == AddSpecializationDialog.REQUEST_CODE) {
+            val result = data?.getSerializableExtra(AddSpecializationDialog.RESULT_SPEC) as Specialization
+            val position = data.getIntExtra(AddSpecializationDialog.RESULT_POS, -1)
+
+            if (position == -1) adapter?.addItem(result) else adapter?.updateItem(position, result)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -231,12 +220,14 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.profile_edit_save -> {
+                refreshErrors()
+                val items: RealmList<Specialization> = RealmList()
+                adapter?.getItems()?.let { items.addAll(it) }
+
                 val updatedUser = User(username = et_username.text.toString(), email = et_email.text.toString(),
                         name =
                         et_first_name.text.toString(), lastname = et_last_name.text.toString(),
-                        phoneNumber = et_phone.rawText.toString
-                        ())
-                refreshErrors()
+                        phoneNumber = et_phone.rawText.toString(), specializations = items)
                 presenter.updateUser(updatedUser)
             }
         }
@@ -275,7 +266,11 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
         ti_phone.error = getString(string.error_phone_number)
     }
 
-    fun refreshErrors() {
+    override fun onEmptySpecializations() {
+        Toast.makeText(baseActivity, "Требуется добавить хотя бы одну специализацию", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun refreshErrors() {
         ti_first_name.error = null
         ti_last_name.error = null
         ti_username.error = null

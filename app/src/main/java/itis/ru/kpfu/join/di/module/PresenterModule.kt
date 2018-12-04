@@ -40,7 +40,7 @@ class PresenterModule {
     }
 
     @Provides
-    fun profileEditPresenter(api:JoinApi, userRepository: UserRepository): ProfileEditPresenter{
+    fun profileEditPresenter(api: JoinApi, userRepository: UserRepository): ProfileEditPresenter {
         return ProfileEditPresenter(api, userRepository)
     }
 }

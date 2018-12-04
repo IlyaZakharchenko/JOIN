@@ -1,34 +1,35 @@
 package itis.ru.kpfu.join.ui.recyclerView.viewHolder
 
+import android.support.design.chip.Chip
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.ImageView
 import android.widget.LinearLayout
-import itis.ru.kpfu.join.R
+import android.widget.LinearLayout.LayoutParams
 import itis.ru.kpfu.join.db.entity.Specialization
+import itis.ru.kpfu.join.utils.divideString
 import itis.ru.kpfu.join.utils.toPx
+import kotlinx.android.synthetic.main.item_specialisation.view.chip_container
 import kotlinx.android.synthetic.main.item_specialisation_edit.view.btn_edit
 import kotlinx.android.synthetic.main.item_specialisation_edit.view.btn_remove
-import kotlinx.android.synthetic.main.item_specialisation_edit.view.item_grid
 import kotlinx.android.synthetic.main.item_specialisation_edit.view.tv_experience
 import kotlinx.android.synthetic.main.item_specialisation_edit.view.tv_experience_years
 import kotlinx.android.synthetic.main.item_specialisation_edit.view.tv_lvl
 import kotlinx.android.synthetic.main.item_specialisation_edit.view.tv_spec_name
-import java.util.Random
 
 class SpecializationEditViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
     fun bindViewHolder(item: Specialization, onItemRemove: (Int, Specialization) -> Unit,
             onItemEdit: (Int, Specialization) -> Unit)= with(itemView) {
 
-        generateImages()
+        chip_container.removeAllViews()
+        item.technologies?.let { initTechnologies(divideString(it)) }
 
-        btn_edit.setOnClickListener { onItemEdit(position, item) }
-        btn_remove.setOnClickListener { onItemRemove(position, item) }
+        btn_edit.setOnClickListener { onItemEdit(adapterPosition, item) }
+        btn_remove.setOnClickListener { onItemRemove(adapterPosition, item) }
 
         tv_experience.text = item.experience.toString()
         tv_lvl.text = item.knowledgeLevel
-        tv_spec_name.text = item.specializationName
+        tv_spec_name.text = item.name
 
         val rem = item.experience.rem(10)
 
@@ -41,21 +42,14 @@ class SpecializationEditViewHolder(itemView: View): RecyclerView.ViewHolder(item
         }
     }
 
-    private fun generateImages() = with(itemView) {
-        for (j in 1..(Random().nextInt(10 - 1) + 1)) {
-            val image = ImageView(context)
-            when ((Math.random() * 3).toInt()) {
-                0 -> image.setImageResource(R.drawable.kotlin_logo)
-                1 -> image.setImageResource(R.drawable.android_logo)
-                2 -> image.setImageResource(R.drawable.junit_logo)
-                3 -> image.setImageResource(R.drawable.rx_logo)
-            }
-
-            val layoutParams = LinearLayout.LayoutParams(toPx(20, context), toPx(20, context))
+    private fun initTechnologies(items: HashSet<String>) = with(itemView) {
+        items.forEach {
+            val chip = Chip(context)
+            chip.chipText = it
+            val layoutParams = LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
             layoutParams.setMargins(toPx(8, context), 0, 0, toPx(8, context))
-
-            image.layoutParams = layoutParams
-            item_grid.addView(image)
+            chip.layoutParams = layoutParams
+            chip_container.addView(chip)
         }
     }
 }

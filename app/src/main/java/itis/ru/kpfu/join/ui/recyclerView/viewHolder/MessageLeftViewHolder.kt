@@ -6,9 +6,9 @@ import itis.ru.kpfu.join.db.entity.TextMessage
 import kotlinx.android.synthetic.main.item_message_left.view.*
 import java.util.*
 
-class MessageLeftViewHolder(itemView: View) : BaseViewHolder<TextMessage>(itemView) {
+class MessageLeftViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    override fun bindViewHolder(item: TextMessage) = with(itemView) {
+    fun bindViewHolder(item: TextMessage) = with(itemView) {
         tv_item_chat_left_text_message.text = item.text
         tv_item_chat_left_time.text = item.dateSend
     }

@@ -49,13 +49,13 @@ class FragmentHostActivity : BaseActivity(), FragmentHostView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        disableShiftMode()
 
         bottom_nav_bar.setOnNavigationItemSelectedListener {
             presenter.onBottomNavBarClick(it.itemId)
             true
         }
         presenter.checkLogin()
+
     }
 
     override fun setFragment(fragment: BaseFragment, addToBackStack: Boolean) {
@@ -77,25 +77,6 @@ class FragmentHostActivity : BaseActivity(), FragmentHostView {
 
     fun hideToolbar() {
         supportActionBar?.hide()
-    }
-
-    @SuppressLint("RestrictedApi")
-    fun disableShiftMode() {
-        val menuView = bottom_nav_bar.getChildAt(0) as BottomNavigationMenuView
-        try {
-            val shiftingMode = menuView.javaClass.getDeclaredField("mShiftingMode")
-            shiftingMode.isAccessible = true
-            shiftingMode.setBoolean(menuView, false)
-            shiftingMode.isAccessible = false
-
-            for (i in 0..menuView.childCount) {
-                val item = menuView.getChildAt(i) as BottomNavigationItemView
-                item.setShiftingMode(false)
-                item.setChecked(item.itemData.isChecked)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
     }
 
     fun enableBottomNavBar(state: Boolean) {
