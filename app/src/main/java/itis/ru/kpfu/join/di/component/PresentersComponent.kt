@@ -5,10 +5,12 @@ import itis.ru.kpfu.join.di.module.PresenterModule
 import itis.ru.kpfu.join.mvp.presenter.FragmentHostPresenter
 import itis.ru.kpfu.join.mvp.presenter.ProfileEditPresenter
 import itis.ru.kpfu.join.mvp.presenter.ProfilePresenter
+import itis.ru.kpfu.join.mvp.presenter.ProjectPresenter
 import itis.ru.kpfu.join.mvp.presenter.ProjectsPresenter
 import itis.ru.kpfu.join.mvp.presenter.SignInPresenter
 import itis.ru.kpfu.join.mvp.presenter.SignUpStepOnePresenter
 import itis.ru.kpfu.join.mvp.presenter.SignUpStepTwoPresenter
+import itis.ru.kpfu.join.mvp.presenter.UsersPresenter
 
 @Subcomponent(modules = [PresenterModule::class])
 interface PresentersComponent {
@@ -26,4 +28,8 @@ interface PresentersComponent {
     fun provideProfileEditPresenter(): ProfileEditPresenter
 
     fun provideProjectsPresenter(): ProjectsPresenter
+
+    fun provideProjectPresenter(): ProjectPresenter
+
+    fun provideUsersPresenter(): UsersPresenter
 }

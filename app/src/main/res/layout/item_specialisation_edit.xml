@@ -23,62 +23,62 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Android developer"
                 android:textColor="#212121"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Android developer" />
 
             <TextView
                 android:id="@+id/tv_lvl_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Уровень:"
                 android:textAlignment="textStart"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_job_name" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_name"
+                tools:text="Уровень:" />
 
             <TextView
                 android:id="@+id/tv_lvl"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="Middle"
                 android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/tv_job_lvl_title"
-                app:layout_constraintTop_toTopOf="@+id/tv_job_lvl_title" />
+                app:layout_constraintStart_toEndOf="@+id/tv_lvl_title"
+                app:layout_constraintTop_toTopOf="@+id/tv_lvl_title"
+                tools:text="Middle" />
 
             <TextView
                 android:id="@+id/tv_experience_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Опыт:"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_job_lvl_title" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_lvl_title"
+                tools:text="Опыт:" />
 
             <TextView
                 android:id="@+id/tv_experience"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="2"
                 android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/tv_job_experience_title"
-                app:layout_constraintTop_toTopOf="@+id/tv_job_experience_title" />
+                app:layout_constraintStart_toEndOf="@+id/tv_experience_title"
+                app:layout_constraintTop_toTopOf="@+id/tv_experience_title"
+                tools:text="2" />
 
             <TextView
                 android:id="@+id/tv_experience_years"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="года"
                 android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/tv_job_experience"
-                app:layout_constraintTop_toTopOf="@+id/tv_job_experience" />
+                app:layout_constraintStart_toEndOf="@+id/tv_experience"
+                app:layout_constraintTop_toTopOf="@+id/tv_experience"
+                tools:text="года" />
         </android.support.constraint.ConstraintLayout>
 
 
@@ -108,9 +108,9 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:paddingStart="8dp"
-        android:text="Удалить"
         app:layout_constraintEnd_toStartOf="@+id/btn_edit"
-        app:layout_constraintTop_toBottomOf="@+id/all_container" />
+        app:layout_constraintTop_toBottomOf="@+id/all_container"
+        android:text="Удалить" />
 
     <Button
         android:id="@+id/btn_edit"
@@ -124,10 +124,10 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:paddingStart="8dp"
-        android:text="Редактировать"
         android:textColor="@color/ef_white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/all_container" />
+        app:layout_constraintTop_toBottomOf="@+id/all_container"
+        android:text="Редактировать" />
 
     <View
         android:id="@+id/view"

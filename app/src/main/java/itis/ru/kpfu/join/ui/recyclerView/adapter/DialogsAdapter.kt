@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.db.entity.Dialog
+import itis.ru.kpfu.join.api.model.Dialog
 import itis.ru.kpfu.join.ui.recyclerView.viewHolder.DialogViewHolder
 
 class DialogsAdapter(private var dialogs: List<Dialog>, private val onChatClick: (Dialog) -> Unit) :

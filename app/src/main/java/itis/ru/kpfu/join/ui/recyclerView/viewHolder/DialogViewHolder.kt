@@ -2,7 +2,7 @@ package itis.ru.kpfu.join.ui.recyclerView.viewHolder
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import itis.ru.kpfu.join.db.entity.Dialog
+import itis.ru.kpfu.join.api.model.Dialog
 import kotlinx.android.synthetic.main.item_dialog.view.*
 
 class DialogViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

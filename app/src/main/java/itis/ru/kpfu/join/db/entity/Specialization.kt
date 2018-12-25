@@ -9,5 +9,4 @@ open class Specialization(
         var name: String? = null,
         var knowledgeLevel: Int? = null,
         var experience: Int = 0,
-        var technologies: String? = null) : RealmObject(), Serializable {
-}
+        var technologies: String? = null) : RealmObject(), Serializable

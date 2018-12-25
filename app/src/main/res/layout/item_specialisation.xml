@@ -23,7 +23,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Android developer"
+                tools:text="Android developer"
                 android:textSize="16sp"
                 android:textColor="#212121"
                 app:layout_constraintStart_toStartOf="parent"
@@ -34,51 +34,51 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Уровень:"
+                tools:text="Уровень:"
                 android:textAlignment="textStart"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_job_name" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
             <TextView
                 android:id="@+id/tv_lvl"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="Middle"
+                tools:text="Middle"
                 android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/tv_job_lvl_title"
-                app:layout_constraintTop_toTopOf="@+id/tv_job_lvl_title" />
+                app:layout_constraintStart_toEndOf="@+id/tv_lvl_title"
+                app:layout_constraintTop_toTopOf="@+id/tv_lvl_title" />
 
             <TextView
                 android:id="@+id/tv_experience_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Опыт:"
+                tools:text="Опыт:"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_job_lvl_title" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_lvl_title" />
 
             <TextView
                 android:id="@+id/tv_experience"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="2"
+                tools:text="2"
                 android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/tv_job_experience_title"
-                app:layout_constraintTop_toTopOf="@+id/tv_job_experience_title" />
+                app:layout_constraintStart_toEndOf="@+id/tv_experience_title"
+                app:layout_constraintTop_toTopOf="@+id/tv_experience_title" />
 
             <TextView
                 android:id="@+id/tv_experience_years"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="года"
+                tools:text="года"
                 android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/tv_job_experience"
-                app:layout_constraintTop_toTopOf="@+id/tv_job_experience" />
+                app:layout_constraintStart_toEndOf="@+id/tv_experience"
+                app:layout_constraintTop_toTopOf="@+id/tv_experience" />
         </android.support.constraint.ConstraintLayout>
 
 

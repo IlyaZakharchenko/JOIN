@@ -2,20 +2,17 @@ package itis.ru.kpfu.join.ui.recyclerView.viewHolder
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import com.squareup.picasso.Picasso
-import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.db.entity.Project
-import itis.ru.kpfu.join.db.entity.User
+import itis.ru.kpfu.join.api.model.Project
 import kotlinx.android.synthetic.main.item_project.view.tv_project_description
 import kotlinx.android.synthetic.main.item_project.view.tv_project_name
 
 class ProjectsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bindViewHolder(item: Project) = with(itemView) {
+    fun bindViewHolder(item: Project, onClick: (Long) -> Unit) = with(itemView) {
         tv_project_name.text = item.name
         tv_project_description.text = item.description
+
+        itemView.setOnClickListener { item.id?.let { it1 -> onClick(it1) } }
     }
 
    /* private fun initUsers(userList: List<User>) = with(itemView) {
@@ -27,7 +24,7 @@ class ProjectsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 layoutParams.marginStart = -24
             }
             avatarCIV.layoutParams = layoutParams
-            avatarCIV.setImageResource(R.drawable.ic_no_avatar)
+            avatarCIV.setProfileImage(R.drawable.ic_no_avatar)
             Picasso
                     .with(context)
                     .load(R.drawable.ic_no_avatar)

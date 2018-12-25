@@ -6,8 +6,8 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.db.entity.Dialog
-import itis.ru.kpfu.join.db.entity.TextMessage
+import itis.ru.kpfu.join.api.model.Dialog
+import itis.ru.kpfu.join.api.model.TextMessage
 import itis.ru.kpfu.join.mvp.presenter.ChatPresenter
 import itis.ru.kpfu.join.mvp.view.ChatView
 import itis.ru.kpfu.join.ui.activity.FragmentHostActivity

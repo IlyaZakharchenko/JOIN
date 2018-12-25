@@ -1,19 +1,17 @@
 package itis.ru.kpfu.join.ui.fragment
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.db.entity.Project
-import itis.ru.kpfu.join.db.entity.User
+import itis.ru.kpfu.join.api.model.Project
+import itis.ru.kpfu.join.model.ProjectMember
 import itis.ru.kpfu.join.mvp.presenter.MyProjectsPresenter
 import itis.ru.kpfu.join.mvp.view.MyProjectsView
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 import itis.ru.kpfu.join.ui.recyclerView.adapter.ProjectsAdapter
-import kotlinx.android.synthetic.main.fragment_projects.rv_projects
 import kotlinx.android.synthetic.main.fragment_projects.toolbar_projects
 
 class MyProjectsFragment : BaseFragment(), MyProjectsView {
@@ -77,23 +75,23 @@ class MyProjectsFragment : BaseFragment(), MyProjectsView {
     }
 
     override fun initRecyclerView() {
-       adapter = ProjectsAdapter(list)
+       /*adapter = ProjectsAdapter(list)
         rv_projects.adapter = adapter
-        rv_projects.layoutManager = LinearLayoutManager(baseActivity)
+        rv_projects.layoutManager = LinearLayoutManager(baseActivity)*/
     }
 
     //TODO test data
     private fun initTestData() {
         var project: Project
         list = ArrayList()
-        var userList = ArrayList<User>()
+        val userList = ArrayList<ProjectMember>()
         for (j in 0..6) {
-            var user = User(username = "User$j")
+            val user = ProjectMember(username = "User$j")
             userList.add(user)
         }
         for (i in 0..20) {
             project = Project(name = "Project Name",
-                   description =  "Description of this undoubtably incredible and unique project, " +
+                    description = "Description of this undoubtably incredible and unique project, " +
                             "requiring professional developers with all possible skills!", participants = userList)
             (list as ArrayList<Project>).add(project)
         }

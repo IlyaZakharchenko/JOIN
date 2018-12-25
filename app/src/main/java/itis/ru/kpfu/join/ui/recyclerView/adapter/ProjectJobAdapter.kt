@@ -7,7 +7,8 @@ import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.db.entity.Specialization
 import itis.ru.kpfu.join.ui.recyclerView.viewHolder.ProjectJobViewHolder
 
-class ProjectJobAdapter(private val items: MutableList<Specialization>): RecyclerView.Adapter<ProjectJobViewHolder>() {
+class ProjectJobAdapter(private var items: List<Specialization> = ArrayList()) :
+        RecyclerView.Adapter<ProjectJobViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectJobViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_project_job, parent, false)
@@ -20,5 +21,10 @@ class ProjectJobAdapter(private val items: MutableList<Specialization>): Recycle
 
     override fun onBindViewHolder(holder: ProjectJobViewHolder, position: Int) {
         holder.bindViewHolder(items[position])
+    }
+
+    fun setJobs(list: List<Specialization>){
+        this.items = list
+        notifyDataSetChanged()
     }
 }

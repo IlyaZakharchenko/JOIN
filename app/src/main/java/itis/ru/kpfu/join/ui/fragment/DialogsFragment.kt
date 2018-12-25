@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.db.entity.Dialog
-import itis.ru.kpfu.join.db.entity.TextMessage
+import itis.ru.kpfu.join.R.drawable
+import itis.ru.kpfu.join.api.model.Dialog
+import itis.ru.kpfu.join.api.model.TextMessage
 import itis.ru.kpfu.join.mvp.presenter.DialogsPresenter
-import itis.ru.kpfu.join.mvp.presenter.FragmentHostPresenter
 import itis.ru.kpfu.join.mvp.view.DialogsView
 import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
@@ -67,16 +65,19 @@ class DialogsFragment : BaseFragment(), DialogsView {
 
     private fun initDialogs(): List<Dialog> {
         return arrayListOf(
-                Dialog("Project THE BEST", R.drawable.rx_logo,
-                        TextMessage(text = "lastMessage", to = "staff", dateSend = "12:12")),
-                Dialog("Project IPHONE 11", R.drawable.kotlin_logo,
+                Dialog("Project THE BEST", drawable.rx_logo,
+                        TextMessage(text = "lastMessage", to = "staff",
+                                dateSend = "12:12")),
+                Dialog("Project IPHONE 11", drawable.kotlin_logo,
                         TextMessage(text = "lastMessage", dateSend = "20:23")),
-                Dialog("Project SMTH", R.drawable.icon_vk,
-                        TextMessage(text = "lastMessage", to = "staff", dateSend = "19:12")),
-                Dialog("Project HZ", R.drawable.icon_twitter,
+                Dialog("Project SMTH", drawable.icon_vk,
+                        TextMessage(text = "lastMessage", to = "staff",
+                                dateSend = "19:12")),
+                Dialog("Project HZ", drawable.icon_twitter,
                         TextMessage(text = "lastMessage", dateSend = "15:00")),
-                Dialog("Project V", R.drawable.junit_logo,
-                        TextMessage(text = "lastMessage", to = "staff", dateSend = "18:12"))
+                Dialog("Project V", drawable.junit_logo,
+                        TextMessage(text = "lastMessage", to = "staff",
+                                dateSend = "18:12"))
         ).shuffled()
     }
 

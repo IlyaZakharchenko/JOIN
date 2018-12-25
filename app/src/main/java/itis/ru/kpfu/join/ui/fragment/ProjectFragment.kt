@@ -3,23 +3,36 @@ package itis.ru.kpfu.join.ui.fragment
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
+import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.db.entity.Specialization
-import itis.ru.kpfu.join.model.ProjectMember
+import itis.ru.kpfu.join.api.model.Project
+import itis.ru.kpfu.join.mvp.presenter.ProjectPresenter
+import itis.ru.kpfu.join.mvp.view.ProjectView
+import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 import itis.ru.kpfu.join.ui.recyclerView.adapter.ProjectJobAdapter
 import itis.ru.kpfu.join.ui.recyclerView.adapter.ProjectMemberAdapter
+import kotlinx.android.synthetic.main.fragment_project.add_member_container
+import kotlinx.android.synthetic.main.fragment_project.et_project_desc
+import kotlinx.android.synthetic.main.fragment_project.et_project_name
 import kotlinx.android.synthetic.main.fragment_project.rv_project_jobs
 import kotlinx.android.synthetic.main.fragment_project.rv_project_members
 import kotlinx.android.synthetic.main.fragment_project.toolbar_project
-import kotlinx.android.synthetic.main.fragment_projects.rv_projects
 
-class ProjectFragment: BaseFragment() {
-    
+class ProjectFragment : BaseFragment(), ProjectView {
+
     companion object {
-        fun newInstance(): ProjectFragment {
+        const val PROJECT = "project"
+
+        fun newInstance(id: Long): ProjectFragment {
             val args = Bundle()
+            args.putLong(PROJECT, id)
+
             val fragment = ProjectFragment()
             fragment.arguments = args
             return fragment
@@ -44,32 +57,63 @@ class ProjectFragment: BaseFragment() {
     override val toolbar: Toolbar?
         get() = toolbar_project
 
+    private var projectId: Long? = null
+
+    private var membersAdapter: ProjectMemberAdapter? = null
+    private var jobsAdapter: ProjectJobAdapter? = null
+
+    @InjectPresenter
+    lateinit var presenter: ProjectPresenter
+
+    @ProvidePresenter
+    fun providePresenter(): ProjectPresenter {
+        return JoinApplication.appComponent.providePresenters().provideProjectPresenter()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerViews()
+        initListeners()
+        projectId = arguments?.getLong(PROJECT)
+
+        projectId?.let { presenter.getProject(it) }
+    }
+
+    private fun initListeners() {
+        add_member_container.setOnClickListener {
+            (baseActivity as? FragmentHostActivity)?.setFragment(UsersFragment.newInstance(), true)
+        }
     }
 
     private fun initRecyclerViews() {
-        val memberItems = arrayListOf(
-                ProjectMember(name = "Damir Gayazov"),
-                ProjectMember(name = "Vasya Pupkin"),
-                ProjectMember(name = "Ilya Petrov"),
-                ProjectMember(name = "Vova Nosurname"),
-                ProjectMember(name = "Noname Hz")
-        )
-
-        val specItems = arrayListOf(
-                Specialization(name = "first", knowledgeLevel = 0, experience = 3, technologies = "A, B, C"),
-                Specialization(name = "second", knowledgeLevel = 1, experience = 12, technologies = "D, E, F"),
-                Specialization(name = "third", knowledgeLevel = 2, experience = 34, technologies = "G, H, L"),
-                Specialization(name = "fourth", knowledgeLevel = 2, experience = 12, technologies = "R, T, Y")
-        )
+        membersAdapter = ProjectMemberAdapter()
+        jobsAdapter = ProjectJobAdapter()
 
         rv_project_members.layoutManager = LinearLayoutManager(baseActivity)
-        rv_project_members.adapter = ProjectMemberAdapter(memberItems)
+        rv_project_members.adapter = membersAdapter
 
         rv_project_jobs.layoutManager = LinearLayoutManager(baseActivity)
-        rv_project_jobs.adapter = ProjectJobAdapter(specItems)
+        rv_project_jobs.adapter = jobsAdapter
+    }
+
+    override fun setProject(item: Project) {
+        et_project_name.setText(item.name)
+        et_project_desc.setText(item.description)
+
+        item.participants?.let { membersAdapter?.setMembers(it) }
+        item.vacancies?.let { jobsAdapter?.setJobs(it) }
+    }
+
+    override fun onConnectionError() {
+        showProgressError { projectId?.let { presenter.getProject(it) } }
+    }
+
+    override fun showProgress() {
+        showProgressBar()
+    }
+
+    override fun hideProgress() {
+        hideProgressBar()
     }
 }

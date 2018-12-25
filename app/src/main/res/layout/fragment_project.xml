@@ -61,10 +61,10 @@
                         android:background="@drawable/edit_text_back"
                         android:enabled="false"
                         android:padding="8dp"
-                        android:text="Project 1"
                         android:textColor="@color/colorBlackText"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_project_name_title" />
+                        app:layout_constraintTop_toBottomOf="@+id/tv_project_name_title"
+                        tools:text="Project 1" />
 
                     <TextView
                         android:id="@+id/tv_project_desc_title"
@@ -88,12 +88,12 @@
                         android:background="@drawable/edit_text_back"
                         android:enabled="false"
                         android:padding="8dp"
-                        android:text="Какое нибудь описание которое занимает больше одной строки ыва ыва"
                         android:textColor="@color/colorBlackText"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_project_desc_title" />
+                        app:layout_constraintTop_toBottomOf="@+id/tv_project_desc_title"
+                        tools:text="Какое нибудь описание которое занимает больше одной строки ыва ыва" />
 
                 </android.support.constraint.ConstraintLayout>
 
@@ -126,13 +126,12 @@
                         android:id="@+id/rv_project_jobs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_jobs_title"
-                        tools:listitem ="@layout/item_project_job"/>
+                        app:layout_constraintTop_toBottomOf="@+id/tv_jobs_title" />
 
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.CardView>
@@ -163,9 +162,9 @@
                         android:id="@+id/add_member_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
+                        android:padding="16dp"
                         android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_members_title">
 
@@ -189,7 +188,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginTop="8dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

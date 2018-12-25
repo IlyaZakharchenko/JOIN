@@ -9,10 +9,10 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.db.entity.Project
-import itis.ru.kpfu.join.db.entity.User
+import itis.ru.kpfu.join.api.model.Project
 import itis.ru.kpfu.join.mvp.presenter.ProjectsPresenter
 import itis.ru.kpfu.join.mvp.view.ProjectsView
+import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 import itis.ru.kpfu.join.ui.recyclerView.adapter.ProjectsAdapter
 import kotlinx.android.synthetic.main.fragment_projects.rv_projects
@@ -29,6 +29,7 @@ class ProjectsFragment : BaseFragment(), ProjectsView {
             return fragment
         }
     }
+
     override val contentLayout: Int
         get() = R.layout.fragment_projects
 
@@ -85,8 +86,12 @@ class ProjectsFragment : BaseFragment(), ProjectsView {
     }
 
     private fun initRecyclerView() {
-        adapter = ProjectsAdapter()
+        adapter = ProjectsAdapter { onProjectClick(it) }
         rv_projects.adapter = adapter
         rv_projects.layoutManager = LinearLayoutManager(baseActivity)
+    }
+
+    private fun onProjectClick(id: Long) {
+        (activity as? FragmentHostActivity)?.setFragment(ProjectFragment.newInstance(id), true)
     }
 }

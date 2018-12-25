@@ -19,7 +19,7 @@ class FragmentHostPresenter(private val userRepository: UserRepository) : MvpPre
     private val projectsFragment = ProjectsFragment.newInstance()
     private val myProjectsFragment = MyProjectsFragment.newInstance()
     private val dialogsFragment = DialogsFragment.newInstance()
-    private val notificationsFragment = ProjectFragment.newInstance()
+    private val notificationsFragment = NotificationsFragment.newInstance()
     private val profileFragment = ProfileFragment.newInstance()
 
     fun onBottomNavBarClick(itemId: Int) {

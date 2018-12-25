@@ -2,9 +2,8 @@ package itis.ru.kpfu.join.ui.recyclerView.viewHolder
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import itis.ru.kpfu.join.db.entity.TextMessage
+import itis.ru.kpfu.join.api.model.TextMessage
 import kotlinx.android.synthetic.main.item_message_left.view.*
-import java.util.*
 
 class MessageLeftViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

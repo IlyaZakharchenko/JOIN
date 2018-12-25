@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.db.entity.TextMessage
+import itis.ru.kpfu.join.api.model.TextMessage
 import itis.ru.kpfu.join.ui.recyclerView.viewHolder.DateHeaderViewHolder
 import itis.ru.kpfu.join.ui.recyclerView.viewHolder.MessageLeftViewHolder
 import itis.ru.kpfu.join.ui.recyclerView.viewHolder.MessageRightViewHolder
