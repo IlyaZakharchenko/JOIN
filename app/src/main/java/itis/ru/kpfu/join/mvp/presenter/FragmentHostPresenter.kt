@@ -9,6 +9,7 @@ import itis.ru.kpfu.join.ui.fragment.DialogsFragment
 import itis.ru.kpfu.join.ui.fragment.MyProjectsFragment
 import itis.ru.kpfu.join.ui.fragment.ProfileFragment
 import itis.ru.kpfu.join.ui.fragment.NotificationsFragment
+import itis.ru.kpfu.join.ui.fragment.ProjectFragment
 import itis.ru.kpfu.join.ui.fragment.ProjectsFragment
 import itis.ru.kpfu.join.ui.fragment.SignInFragment
 
@@ -18,7 +19,7 @@ class FragmentHostPresenter(private val userRepository: UserRepository) : MvpPre
     private val projectsFragment = ProjectsFragment.newInstance()
     private val myProjectsFragment = MyProjectsFragment.newInstance()
     private val dialogsFragment = DialogsFragment.newInstance()
-    private val notificationsFragment = NotificationsFragment.newInstance()
+    private val notificationsFragment = ProjectFragment.newInstance()
     private val profileFragment = ProfileFragment.newInstance()
 
     fun onBottomNavBarClick(itemId: Int) {

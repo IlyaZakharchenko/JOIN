@@ -1,10 +1,13 @@
 package itis.ru.kpfu.join.mvp.presenter
 
+import android.widget.GridLayout.Spec
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.realm.RealmList
 import itis.ru.kpfu.join.api.JoinApi
+import itis.ru.kpfu.join.db.entity.Specialization
 import itis.ru.kpfu.join.db.entity.User
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.mvp.view.ProfileEditView
@@ -20,19 +23,18 @@ class ProfileEditPresenter(private val api: JoinApi, private val userRepository:
     }
 
     fun updateUser(user: User?) {
+        user?.id = userRepository.getUser()?.id
 
         if (!hasErrors(user)) {
             compositeDisposable.add(api
-                    .changeUser(userRepository.getUser()?.token, user, userRepository.getUser()?.id)
+                    .changeUser(userRepository.getUser()?.token, user, user?.id)
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe { viewState.showProgress() }
                     .doAfterTerminate { viewState.hideProgress() }
                     .subscribe({
-                        if (it.code() == 200) {
-                            userRepository.updateUser(user)
+                        if (it.isSuccessful) {
+                            user?.let { it1 -> userRepository.updateUser(it1) }
                             viewState.onEditSuccess()
-                        } else {
-                            viewState.onError("Не удалось передать данные")
                         }
                     }, {
                         it.printStackTrace()

@@ -10,7 +10,7 @@ import itis.ru.kpfu.join.ui.recyclerView.viewHolder.ProjectsViewHolder
 /**
  * Created by Ilya Zakharchenko on 05.12.2018.
  */
-class ProjectsAdapter(private var list: List<Project>) : RecyclerView.Adapter<ProjectsViewHolder>() {
+class ProjectsAdapter(private var list: List<Project> = ArrayList()) : RecyclerView.Adapter<ProjectsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectsViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_project, parent, false)
@@ -21,5 +21,10 @@ class ProjectsAdapter(private var list: List<Project>) : RecyclerView.Adapter<Pr
 
     override fun onBindViewHolder(holder: ProjectsViewHolder, position: Int) {
         holder.bindViewHolder(list.get(position))
+    }
+
+    fun setItems(list: List<Project>) {
+        this.list = list
+        notifyDataSetChanged()
     }
 }

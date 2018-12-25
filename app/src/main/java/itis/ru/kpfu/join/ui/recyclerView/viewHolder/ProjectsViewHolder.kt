@@ -5,25 +5,20 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import com.squareup.picasso.Picasso
-import de.hdodenhof.circleimageview.CircleImageView
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.db.entity.Project
 import itis.ru.kpfu.join.db.entity.User
-import kotlinx.android.synthetic.main.item_project.view.image_container
 import kotlinx.android.synthetic.main.item_project.view.tv_project_description
-import kotlinx.android.synthetic.main.item_project.view.tv_project_leader
 import kotlinx.android.synthetic.main.item_project.view.tv_project_name
 
 class ProjectsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bindViewHolder(item: Project) = with(itemView) {
         tv_project_name.text = item.name
-        tv_project_leader.text = item.userList[0].username
         tv_project_description.text = item.description
-        initUsers(item.userList)
     }
 
-    private fun initUsers(userList: List<User>) = with(itemView) {
+   /* private fun initUsers(userList: List<User>) = with(itemView) {
         for (i in 0..userList.lastIndex) {
             var it = userList[i]
             var layoutParams = LinearLayout.LayoutParams(48, 48)
@@ -40,5 +35,5 @@ class ProjectsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     .into(avatarCIV)
             image_container.addView(avatarCIV)
         }
-    }
+    }*/
 }

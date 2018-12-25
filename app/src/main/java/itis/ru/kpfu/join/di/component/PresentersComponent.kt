@@ -5,6 +5,7 @@ import itis.ru.kpfu.join.di.module.PresenterModule
 import itis.ru.kpfu.join.mvp.presenter.FragmentHostPresenter
 import itis.ru.kpfu.join.mvp.presenter.ProfileEditPresenter
 import itis.ru.kpfu.join.mvp.presenter.ProfilePresenter
+import itis.ru.kpfu.join.mvp.presenter.ProjectsPresenter
 import itis.ru.kpfu.join.mvp.presenter.SignInPresenter
 import itis.ru.kpfu.join.mvp.presenter.SignUpStepOnePresenter
 import itis.ru.kpfu.join.mvp.presenter.SignUpStepTwoPresenter
@@ -23,4 +24,6 @@ interface PresentersComponent {
     fun provideProfilePresenter(): ProfilePresenter
 
     fun provideProfileEditPresenter(): ProfileEditPresenter
+
+    fun provideProjectsPresenter(): ProjectsPresenter
 }

@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import android.widget.LinearLayout.LayoutParams
 import itis.ru.kpfu.join.db.entity.Specialization
 import itis.ru.kpfu.join.utils.divideString
+import itis.ru.kpfu.join.utils.parseLevelFromInt
 import itis.ru.kpfu.join.utils.toPx
 import kotlinx.android.synthetic.main.item_specialisation.view.chip_container
 import kotlinx.android.synthetic.main.item_specialisation_edit.view.btn_edit
@@ -14,7 +15,7 @@ import kotlinx.android.synthetic.main.item_specialisation_edit.view.btn_remove
 import kotlinx.android.synthetic.main.item_specialisation_edit.view.tv_experience
 import kotlinx.android.synthetic.main.item_specialisation_edit.view.tv_experience_years
 import kotlinx.android.synthetic.main.item_specialisation_edit.view.tv_lvl
-import kotlinx.android.synthetic.main.item_specialisation_edit.view.tv_spec_name
+import kotlinx.android.synthetic.main.item_specialisation_edit.view.tv_name
 
 class SpecializationEditViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
@@ -28,17 +29,17 @@ class SpecializationEditViewHolder(itemView: View): RecyclerView.ViewHolder(item
         btn_remove.setOnClickListener { onItemRemove(adapterPosition, item) }
 
         tv_experience.text = item.experience.toString()
-        tv_lvl.text = item.knowledgeLevel
-        tv_spec_name.text = item.name
+        tv_lvl.text = parseLevelFromInt(item.knowledgeLevel)
+        tv_name.text = item.name
 
         val rem = item.experience.rem(10)
 
-        if (rem == 1 && item.experience > 20) {
-            tv_experience_years.text = "год"
+        if (rem == 1 || item.experience > 20) {
+           tv_experience_years.text = "год"
         } else if ((rem == 2 || rem == 3 || rem == 4) && item.experience < 20) {
-            tv_experience_years.text = "года"
+           tv_experience_years.text = "года"
         } else {
-            tv_experience_years.text = "лет"
+           tv_experience_years.text = "лет"
         }
     }
 

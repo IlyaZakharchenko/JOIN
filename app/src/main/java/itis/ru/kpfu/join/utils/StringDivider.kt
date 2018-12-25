@@ -10,13 +10,14 @@ fun divideString(text: String): HashSet<String> {
             word = ""
         }
     }
-
+    if(word.isNotEmpty()) result.add(word.trim())
     return result
 }
 
 fun transformToString(item: HashSet<String>): String {
     var result = "";
     item.forEach { result += "${it.trim()}, " }
+    result = result.dropLast(2)
 
     return result
 }

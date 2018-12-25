@@ -13,6 +13,7 @@
     <string name="forgot_password">Забыли пароль?</string>
     <string name="projects_toolbar">Проекты</string>
     <string name="notifications_toolbar">Уведомления</string>
+    <string name="project_toolbar">Проект</string>
     <string name="chat_toolbar">Сообщения</string>
     <string name="toolbar_title_empty" />
     <string name="restore_pass_title">Мы отправим сообщения для восстановления пароля на вашу электронную почту</string>

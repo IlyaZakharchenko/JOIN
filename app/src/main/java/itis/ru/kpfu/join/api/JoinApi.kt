@@ -1,7 +1,9 @@
 package itis.ru.kpfu.join.api
 
 import com.google.gson.JsonObject
+import io.reactivex.Completable
 import io.reactivex.Single
+import itis.ru.kpfu.join.db.entity.Project
 import itis.ru.kpfu.join.db.entity.User
 import itis.ru.kpfu.join.model.UserRegistrationForm
 import okhttp3.ResponseBody
@@ -10,6 +12,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface JoinApi {
@@ -26,7 +29,10 @@ interface JoinApi {
     @GET("/user/{id}")
     fun getUserInfo(@Header("Authorization") token: String?, @Path("id") id: Long?): Single<User>
 
-    @POST("/user/{id}/change")
+    @GET("/projects")
+    fun getProjects(@Header("Authorization") token: String?): Single<List<Project>>
+
+    @PUT("/user/{id}")
     fun changeUser(@Header("Authorization") token: String?, @Body user: User?, @Path(
             "id") id: Long?): Single<Response<Void>>
 }

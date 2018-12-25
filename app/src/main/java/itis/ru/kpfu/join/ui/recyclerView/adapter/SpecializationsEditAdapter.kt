@@ -8,7 +8,7 @@ import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.db.entity.Specialization
 import itis.ru.kpfu.join.ui.recyclerView.viewHolder.SpecializationEditViewHolder
 
-class SpecializationsEditAdapter(private var items: ArrayList<Specialization>,
+class SpecializationsEditAdapter(private var items: MutableList<Specialization>,
         private var onItemRemove: (Int, Specialization) -> Unit,
         private var onItemEdit: (Int, Specialization) -> Unit) :
         RecyclerView.Adapter<SpecializationEditViewHolder>() {

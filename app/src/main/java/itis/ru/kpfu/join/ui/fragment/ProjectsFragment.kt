@@ -6,6 +6,8 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
+import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.db.entity.Project
 import itis.ru.kpfu.join.db.entity.User
@@ -19,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_projects.toolbar_projects
 class ProjectsFragment : BaseFragment(), ProjectsView {
 
     companion object {
+
         fun newInstance(): ProjectsFragment {
             val args = Bundle()
             val fragment = ProjectsFragment()
@@ -26,7 +29,6 @@ class ProjectsFragment : BaseFragment(), ProjectsView {
             return fragment
         }
     }
-
     override val contentLayout: Int
         get() = R.layout.fragment_projects
 
@@ -45,19 +47,21 @@ class ProjectsFragment : BaseFragment(), ProjectsView {
     override val toolbar: Toolbar?
         get() = toolbar_projects
 
-    private lateinit var list: List<Project>
-
-    private lateinit var adapter: ProjectsAdapter
+    private var adapter: ProjectsAdapter? = null
 
     @InjectPresenter
     lateinit var presenter: ProjectsPresenter
 
+    @ProvidePresenter
+    fun providePresenter(): ProjectsPresenter {
+        return JoinApplication.appComponent.providePresenters().provideProjectsPresenter()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //TODO test data
-        initTestData()
         initRecyclerView()
+        presenter.getProjects()
     }
 
     override fun showProgress() {
@@ -68,34 +72,21 @@ class ProjectsFragment : BaseFragment(), ProjectsView {
         hideProgressBar()
     }
 
+    override fun setProjects(projects: List<Project>) {
+        adapter?.setItems(projects)
+    }
+
     override fun onConnectionError() {
-        Toast.makeText(activity, "Internet Connection Error", Toast.LENGTH_SHORT).show()
+        showProgressError { presenter.getProjects() }
     }
 
     override fun onError(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun initRecyclerView() {
-        adapter = ProjectsAdapter(list)
+    private fun initRecyclerView() {
+        adapter = ProjectsAdapter()
         rv_projects.adapter = adapter
         rv_projects.layoutManager = LinearLayoutManager(baseActivity)
-    }
-
-    //TODO test data
-    private fun initTestData() {
-        var project: Project
-        list = ArrayList()
-        var userList = ArrayList<User>()
-        for (j in 0..6) {
-            var user = User(username = "User$j")
-            userList.add(user)
-        }
-        for (i in 0..20) {
-            project = Project("Project Name",
-                    "Description of this undoubtably incredible and unique project, " +
-                            "requiring professional developers with all possible skills!", userList)
-            (list as ArrayList<Project>).add(project)
-        }
     }
 }

@@ -1,9 +1,6 @@
 package itis.ru.kpfu.join.ui.fragment.dialog
 
-import android.app.Dialog
-import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.drawable.Drawable.ConstantState
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
@@ -11,17 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.LinearLayout.LayoutParams
-import android.widget.Spinner
-import android.widget.TextView
 import android.widget.Toast
-import com.jakewharton.rxbinding2.view.selected
 import com.jaredrummler.materialspinner.MaterialSpinner
-import io.realm.RealmList
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.db.entity.Specialization
-import itis.ru.kpfu.join.utils.Constants
 import itis.ru.kpfu.join.utils.divideString
-import itis.ru.kpfu.join.utils.toPx
+import itis.ru.kpfu.join.utils.parseLevelFromInt
+import itis.ru.kpfu.join.utils.parseLevelFromString
 import itis.ru.kpfu.join.utils.transformToString
 import kotlinx.android.synthetic.main.dialog_add_specialization.btn_add_spec
 import kotlinx.android.synthetic.main.dialog_add_specialization.btn_cancel
@@ -55,7 +48,6 @@ class AddSpecializationDialog : DialogFragment() {
     private lateinit var itemsLvl: MutableList<String>
     private lateinit var itemsExp: MutableList<String>
 
-    private var addNew: Boolean = false
     private var position: Int? = null
     private var technologies = ArrayList<MaterialSpinner>()
 
@@ -99,17 +91,20 @@ class AddSpecializationDialog : DialogFragment() {
         spinner_exp.selectedIndex = 0
 
         if (item != null) {
-            spinner_spec.selectedIndex = itemsSpec.indexOf(item.name)
-            spinner_lvl.selectedIndex = itemsLvl.indexOf(item.knowledgeLevel)
-            spinner_exp.selectedIndex = itemsExp.indexOf(item.experience.toString())
+            spinner_spec.selectedIndex = if (itemsSpec.indexOf(item.name) > -1) itemsSpec.indexOf(item.name) else 0
+            spinner_lvl.selectedIndex = if (itemsLvl.indexOf(
+                            parseLevelFromInt(item.knowledgeLevel)) > -1) itemsLvl.indexOf(parseLevelFromInt(
+                    item.knowledgeLevel)) else 0
+            spinner_exp.selectedIndex = if (itemsExp.indexOf(item.experience.toString()) > -1) itemsExp.indexOf(
+                    item.experience.toString()) else 0
 
             val techList = item.technologies?.let { divideString(it) }
 
             techList?.forEach { str ->
+                if (itemsTech.indexOf(str) == -1) itemsTech.add(str)
                 createSpinner(itemsTech.indexOf(str))
             }
         } else {
-            addNew = true
             createSpinner(0)
         }
     }
@@ -147,12 +142,13 @@ class AddSpecializationDialog : DialogFragment() {
                     techs.add(itemsTech[spinner.selectedIndex])
                 }
             }
-            if(techs.size == 0 ){
+            if (techs.size == 0) {
                 Toast.makeText(context, "Выберите хотя бы одну технологию", Toast.LENGTH_SHORT).show()
                 return
             }
 
-            val spec = Specialization(itemsSpec[spinner_spec.selectedIndex], itemsLvl[spinner_lvl.selectedIndex],
+            val spec = Specialization(itemsSpec[spinner_spec.selectedIndex],
+                    parseLevelFromString(itemsLvl[spinner_lvl.selectedIndex]),
                     itemsExp[spinner_exp.selectedIndex].toInt(), transformToString(techs))
 
             val intent = Intent()

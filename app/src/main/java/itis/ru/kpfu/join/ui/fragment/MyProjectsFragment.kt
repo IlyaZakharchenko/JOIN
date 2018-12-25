@@ -92,9 +92,9 @@ class MyProjectsFragment : BaseFragment(), MyProjectsView {
             userList.add(user)
         }
         for (i in 0..20) {
-            project = Project("Project Name",
-                    "Description of this undoubtably incredible and unique project, " +
-                            "requiring professional developers with all possible skills!", userList)
+            project = Project(name = "Project Name",
+                   description =  "Description of this undoubtably incredible and unique project, " +
+                            "requiring professional developers with all possible skills!", participants = userList)
             (list as ArrayList<Project>).add(project)
         }
     }

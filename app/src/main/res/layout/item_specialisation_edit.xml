@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="16dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp">
+    android:paddingEnd="16dp"
+    android:paddingStart="16dp">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/all_container"
@@ -17,12 +17,14 @@
             android:id="@+id/tv_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
             <TextView
-                android:id="@+id/tv_spec_name"
+                android:id="@+id/tv_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="Android developer"
+                android:textColor="#212121"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +38,7 @@
                 android:textAlignment="textStart"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_spec_name" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_job_name" />
 
             <TextView
                 android:id="@+id/tv_lvl"
@@ -45,8 +47,8 @@
                 android:layout_marginStart="4dp"
                 android:text="Middle"
                 android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/tv_lvl_title"
-                app:layout_constraintTop_toTopOf="@+id/tv_lvl_title" />
+                app:layout_constraintStart_toEndOf="@+id/tv_job_lvl_title"
+                app:layout_constraintTop_toTopOf="@+id/tv_job_lvl_title" />
 
             <TextView
                 android:id="@+id/tv_experience_title"
@@ -56,7 +58,7 @@
                 android:text="Опыт:"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_lvl_title" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_job_lvl_title" />
 
             <TextView
                 android:id="@+id/tv_experience"
@@ -65,8 +67,8 @@
                 android:layout_marginStart="4dp"
                 android:text="2"
                 android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/tv_experience_title"
-                app:layout_constraintTop_toTopOf="@+id/tv_experience_title" />
+                app:layout_constraintStart_toEndOf="@+id/tv_job_experience_title"
+                app:layout_constraintTop_toTopOf="@+id/tv_job_experience_title" />
 
             <TextView
                 android:id="@+id/tv_experience_years"
@@ -75,8 +77,8 @@
                 android:layout_marginStart="4dp"
                 android:text="года"
                 android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/tv_experience"
-                app:layout_constraintTop_toTopOf="@+id/tv_experience" />
+                app:layout_constraintStart_toEndOf="@+id/tv_job_experience"
+                app:layout_constraintTop_toTopOf="@+id/tv_job_experience" />
         </android.support.constraint.ConstraintLayout>
 
 
@@ -84,11 +86,11 @@
             android:id="@+id/chip_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
 
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_container"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_container">
 
         </android.support.design.chip.ChipGroup>
 
@@ -98,6 +100,7 @@
         android:id="@+id/btn_remove"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="16dp"
         android:background="@color/colorGrey"
@@ -105,7 +108,6 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:paddingStart="8dp"
-        android:layout_marginBottom="8dp"
         android:text="Удалить"
         app:layout_constraintEnd_toStartOf="@+id/btn_edit"
         app:layout_constraintTop_toBottomOf="@+id/all_container" />

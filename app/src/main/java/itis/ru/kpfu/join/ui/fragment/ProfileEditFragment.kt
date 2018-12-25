@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
-import android.widget.GridLayout.Spec
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -27,7 +26,6 @@ import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 import itis.ru.kpfu.join.ui.fragment.dialog.AddSpecializationDialog
 import itis.ru.kpfu.join.ui.recyclerView.adapter.SpecializationsEditAdapter
-import itis.ru.kpfu.join.utils.Constants
 import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_make_photo
 import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_open_gallery
 import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_remove_photo
@@ -131,7 +129,7 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
         et_username.setText(user?.username)
         et_email.setText(user?.email)
         et_phone.setText(user?.phoneNumber)
-        user?.imagePath?.let {
+        user?.profileImage?.let {
             Picasso
                     .with(context)
                     .load(File(it))
@@ -157,8 +155,7 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
     }
 
     private fun initRecyclerView() {
-        val items = ArrayList<Specialization>()
-        presenter.getUser()?.specializations?.let { items.addAll(it) }
+        val items = presenter.getUser()?.getParsedSpecializations() ?: ArrayList()
 
         adapter = SpecializationsEditAdapter(items, { pos, sp -> onItemRemove(pos, sp) }
         ) { pos, sp -> onItemEdit(pos, sp) }
@@ -214,6 +211,7 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
     }
 
     override fun onEditSuccess() {
+        Toast.makeText(baseActivity, "Профиль испешно изменен", Toast.LENGTH_SHORT).show()
         (activity as? FragmentHostActivity)?.onBackPressed()
     }
 
@@ -224,10 +222,12 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
                 val items: RealmList<Specialization> = RealmList()
                 adapter?.getItems()?.let { items.addAll(it) }
 
-                val updatedUser = User(username = et_username.text.toString(), email = et_email.text.toString(),
-                        name =
-                        et_first_name.text.toString(), lastname = et_last_name.text.toString(),
-                        phoneNumber = et_phone.rawText.toString(), specializations = items)
+                val updatedUser = User(
+                        username = et_username.text?.trim().toString(),
+                        email = et_email.text?.trim().toString(),
+                        name = et_first_name.text?.trim().toString(),
+                        lastname = et_last_name.text?.trim().toString(),
+                        phoneNumber = et_phone.rawText.trim(), specializations = items)
                 presenter.updateUser(updatedUser)
             }
         }

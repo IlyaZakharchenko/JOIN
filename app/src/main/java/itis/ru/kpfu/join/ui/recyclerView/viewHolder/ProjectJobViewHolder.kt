@@ -9,29 +9,32 @@ import itis.ru.kpfu.join.db.entity.Specialization
 import itis.ru.kpfu.join.utils.divideString
 import itis.ru.kpfu.join.utils.parseLevelFromInt
 import itis.ru.kpfu.join.utils.toPx
+import kotlinx.android.synthetic.main.item_project_job.view.chip_container_job
+import kotlinx.android.synthetic.main.item_project_job.view.tv_job_experience
+import kotlinx.android.synthetic.main.item_project_job.view.tv_job_experience_years
+import kotlinx.android.synthetic.main.item_project_job.view.tv_job_lvl
+import kotlinx.android.synthetic.main.item_project_job.view.tv_job_name
 import kotlinx.android.synthetic.main.item_specialisation.view.chip_container
-import kotlinx.android.synthetic.main.item_specialisation.view.tv_experience
-import kotlinx.android.synthetic.main.item_specialisation.view.tv_experience_years
-import kotlinx.android.synthetic.main.item_specialisation.view.tv_lvl
-import kotlinx.android.synthetic.main.item_specialisation.view.tv_name
 
-class SpecializationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class ProjectJobViewHolder(view: View) : RecyclerView.ViewHolder(view){
 
-    fun bindViewHolder(item: Specialization) = with(itemView) {
+    fun bindViewHolder(item: Specialization) = with(itemView){
+
+        chip_container_job.removeAllViews()
         item.technologies?.let { initTechnologies(divideString(it)) }
 
-        tv_experience.text = item.experience.toString()
-        tv_lvl.text = parseLevelFromInt(item.knowledgeLevel)
-        tv_name.text = item.name
+        tv_job_experience.text = item.experience.toString()
+        tv_job_lvl.text = parseLevelFromInt(item.knowledgeLevel)
+        tv_job_name.text = item.name
 
         val rem = item.experience.rem(10)
 
         if (rem == 1 || item.experience > 20) {
-            tv_experience_years.text = "год"
+            tv_job_experience_years.text = "год"
         } else if ((rem == 2 || rem == 3 || rem == 4) && item.experience < 20) {
-            tv_experience_years.text = "года"
+            tv_job_experience_years.text = "года"
         } else {
-            tv_experience_years.text = "лет"
+            tv_job_experience_years.text = "лет"
         }
     }
 
@@ -42,7 +45,8 @@ class SpecializationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
             val layoutParams = LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
             layoutParams.setMargins(toPx(8, context), 0, 0, toPx(8, context))
             chip.layoutParams = layoutParams
-            chip_container.addView(chip)
+            chip_container_job.addView(chip)
         }
     }
+
 }
