@@ -9,19 +9,19 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.db.entity.Project
 import itis.ru.kpfu.join.db.entity.User
-import itis.ru.kpfu.join.mvp.presenter.ProjectsPresenter
-import itis.ru.kpfu.join.mvp.view.ProjectsView
+import itis.ru.kpfu.join.mvp.presenter.MyProjectsPresenter
+import itis.ru.kpfu.join.mvp.view.MyProjectsView
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 import itis.ru.kpfu.join.ui.recyclerView.adapter.ProjectsAdapter
 import kotlinx.android.synthetic.main.fragment_projects.rv_projects
 import kotlinx.android.synthetic.main.fragment_projects.toolbar_projects
 
-class ProjectsFragment : BaseFragment(), ProjectsView {
+class MyProjectsFragment : BaseFragment(), MyProjectsView {
 
     companion object {
-        fun newInstance(): ProjectsFragment {
+        fun newInstance(): MyProjectsFragment {
             val args = Bundle()
-            val fragment = ProjectsFragment()
+            val fragment = MyProjectsFragment()
             fragment.arguments = args
             return fragment
         }
@@ -31,7 +31,7 @@ class ProjectsFragment : BaseFragment(), ProjectsView {
         get() = R.layout.fragment_projects
 
     override val toolbarTitle: Int?
-        get() = R.string.projects_toolbar
+        get() = R.string.my_projects_toolbar
 
     override val menu: Int?
         get() = null
@@ -50,7 +50,7 @@ class ProjectsFragment : BaseFragment(), ProjectsView {
     private lateinit var adapter: ProjectsAdapter
 
     @InjectPresenter
-    lateinit var presenter: ProjectsPresenter
+    lateinit var presenter: MyProjectsPresenter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -77,7 +77,7 @@ class ProjectsFragment : BaseFragment(), ProjectsView {
     }
 
     override fun initRecyclerView() {
-        adapter = ProjectsAdapter(list)
+       adapter = ProjectsAdapter(list)
         rv_projects.adapter = adapter
         rv_projects.layoutManager = LinearLayoutManager(baseActivity)
     }

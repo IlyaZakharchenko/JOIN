@@ -32,7 +32,6 @@ class SpecializationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
         } else {
             tv_experience_years.text = "лет"
         }
-
     }
 
     private fun initTechnologies(items: HashSet<String>) = with(itemView) {
