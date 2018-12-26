@@ -10,5 +10,6 @@ data class Project(
         var name: String? = null,
         var leader: User? = null,
         var description: String? = null,
+        var userId: Long? = null,
         var participants: List<ProjectMember>? = null,
         var vacancies: List<Specialization>? = null): Serializable

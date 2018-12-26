@@ -25,6 +25,9 @@ interface JoinApi {
     @POST("/login")
     fun signIn(@Body user: User): Single<Response<JsonObject>>
 
+    @POST("/projects")
+    fun addProject(@Header("Authorization") token: String?, @Body project: Project): Single<Response<Void>>
+
     @GET("/user/{id}")
     fun getUserInfo(@Header("Authorization") token: String?, @Path("id") id: Long?): Single<User>
 

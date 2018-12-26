@@ -17,9 +17,7 @@ class ProjectsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         item.vacancies?.forEach {
             val chip = Chip(context)
-            chip.text = it.name
-            chip.chipEndPadding = 4.toFloat()
-            chip.chipStartPadding = 4.toFloat()
+            chip.chipText = it.name
             cg_vacancies.addView(chip)
         }
 

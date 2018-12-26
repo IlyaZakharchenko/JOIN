@@ -2,6 +2,7 @@ package itis.ru.kpfu.join.di.component
 
 import dagger.Subcomponent
 import itis.ru.kpfu.join.di.module.PresenterModule
+import itis.ru.kpfu.join.mvp.presenter.AddProjectPresenter
 import itis.ru.kpfu.join.mvp.presenter.FragmentHostPresenter
 import itis.ru.kpfu.join.mvp.presenter.MyProjectsPresenter
 import itis.ru.kpfu.join.mvp.presenter.ProfileEditPresenter
@@ -35,4 +36,6 @@ interface PresentersComponent {
     fun provideMyProjectPresenter(): MyProjectsPresenter
 
     fun provideUsersPresenter(): UsersPresenter
+
+    fun provideAddProjectPresenter(): AddProjectPresenter
 }
