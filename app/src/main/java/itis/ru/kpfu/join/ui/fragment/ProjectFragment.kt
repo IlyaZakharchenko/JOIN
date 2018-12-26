@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
+import android.view.View.GONE
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import itis.ru.kpfu.join.JoinApplication
@@ -97,12 +98,16 @@ class ProjectFragment : BaseFragment(), ProjectView {
         rv_project_jobs.adapter = jobsAdapter
     }
 
-    override fun setProject(item: Project) {
+    override fun setProject(item: Project, isMyProject: Boolean) {
         et_project_name.setText(item.name)
         et_project_desc.setText(item.description)
 
+        if (!isMyProject) {
+            add_member_container.visibility = GONE
+        }
+
         item.participants?.let { membersAdapter?.setMembers(it) }
-        item.vacancies?.let { jobsAdapter?.setJobs(it) }
+        item.vacancies?.let { jobsAdapter?.setJobs(it, isMyProject) }
     }
 
     override fun onConnectionError() {

@@ -1,17 +1,21 @@
 package itis.ru.kpfu.join.ui.fragment
 
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
+import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.api.model.Project
-import itis.ru.kpfu.join.model.ProjectMember
 import itis.ru.kpfu.join.mvp.presenter.MyProjectsPresenter
 import itis.ru.kpfu.join.mvp.view.MyProjectsView
+import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 import itis.ru.kpfu.join.ui.recyclerView.adapter.ProjectsAdapter
+import kotlinx.android.synthetic.main.fragment_projects.rv_projects
 import kotlinx.android.synthetic.main.fragment_projects.toolbar_projects
 
 class MyProjectsFragment : BaseFragment(), MyProjectsView {
@@ -43,19 +47,21 @@ class MyProjectsFragment : BaseFragment(), MyProjectsView {
     override val toolbar: Toolbar?
         get() = toolbar_projects
 
-    private lateinit var list: List<Project>
-
     private lateinit var adapter: ProjectsAdapter
 
     @InjectPresenter
     lateinit var presenter: MyProjectsPresenter
 
+    @ProvidePresenter
+    fun providePresenter(): MyProjectsPresenter {
+        return JoinApplication.appComponent.providePresenters().provideMyProjectPresenter()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //TODO test data
-        initTestData()
         initRecyclerView()
+        presenter.getProjects()
     }
 
     override fun showProgress() {
@@ -74,26 +80,17 @@ class MyProjectsFragment : BaseFragment(), MyProjectsView {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun initRecyclerView() {
-       /*adapter = ProjectsAdapter(list)
-        rv_projects.adapter = adapter
-        rv_projects.layoutManager = LinearLayoutManager(baseActivity)*/
+    override fun setProjects(projects: List<Project>) {
+        adapter.setItems(projects)
     }
 
-    //TODO test data
-    private fun initTestData() {
-        var project: Project
-        list = ArrayList()
-        val userList = ArrayList<ProjectMember>()
-        for (j in 0..6) {
-            val user = ProjectMember(username = "User$j")
-            userList.add(user)
-        }
-        for (i in 0..20) {
-            project = Project(name = "Project Name",
-                    description = "Description of this undoubtably incredible and unique project, " +
-                            "requiring professional developers with all possible skills!", participants = userList)
-            (list as ArrayList<Project>).add(project)
-        }
+    private fun initRecyclerView() {
+        adapter = ProjectsAdapter { onProjectClick(it) }
+        rv_projects.adapter = adapter
+        rv_projects.layoutManager = LinearLayoutManager(baseActivity)
+    }
+
+    private fun onProjectClick(id: Long) {
+        (activity as? FragmentHostActivity)?.setFragment(ProjectFragment.newInstance(id), true)
     }
 }

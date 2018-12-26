@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.api.model.Project
+import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.ui.recyclerView.viewHolder.ProjectsViewHolder
 
 /**

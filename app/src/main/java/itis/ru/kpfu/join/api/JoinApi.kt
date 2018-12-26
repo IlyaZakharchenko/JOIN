@@ -34,6 +34,9 @@ interface JoinApi {
     @GET("/projects/{id}")
     fun getProject(@Header("Authorization") token: String?, @Path("id") id: Long): Single<Project>
 
+    @GET("/user/{id}/projects")
+    fun getMyProjects(@Header("Authorization") token: String?, @Path("id") userId: Long?): Single<List<Project>>
+
     @GET("/user/search")
     fun getUsers(@Header("Authorization") token: String?): Single<List<ProjectMember>>
 

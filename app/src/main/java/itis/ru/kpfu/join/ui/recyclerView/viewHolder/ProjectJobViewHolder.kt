@@ -4,11 +4,13 @@ import android.support.design.chip.Chip
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.LinearLayout.GONE
 import android.widget.LinearLayout.LayoutParams
 import itis.ru.kpfu.join.db.entity.Specialization
 import itis.ru.kpfu.join.utils.divideString
 import itis.ru.kpfu.join.utils.parseLevelFromInt
 import itis.ru.kpfu.join.utils.toPx
+import kotlinx.android.synthetic.main.item_project_job.view.btn_send_apply
 import kotlinx.android.synthetic.main.item_project_job.view.chip_container_job
 import kotlinx.android.synthetic.main.item_project_job.view.tv_job_experience
 import kotlinx.android.synthetic.main.item_project_job.view.tv_job_experience_years
@@ -16,7 +18,7 @@ import kotlinx.android.synthetic.main.item_project_job.view.tv_job_lvl
 import kotlinx.android.synthetic.main.item_project_job.view.tv_job_name
 import kotlinx.android.synthetic.main.item_specialisation.view.chip_container
 
-class ProjectJobViewHolder(view: View) : RecyclerView.ViewHolder(view){
+class ProjectJobViewHolder(view: View, private var isMyProject: Boolean) : RecyclerView.ViewHolder(view){
 
     fun bindViewHolder(item: Specialization) = with(itemView){
 
@@ -26,6 +28,10 @@ class ProjectJobViewHolder(view: View) : RecyclerView.ViewHolder(view){
         tv_job_experience.text = item.experience.toString()
         tv_job_lvl.text = parseLevelFromInt(item.knowledgeLevel)
         tv_job_name.text = item.name
+
+        if (isMyProject) {
+            btn_send_apply.visibility = View.GONE
+        }
 
         val rem = item.experience.rem(10)
 

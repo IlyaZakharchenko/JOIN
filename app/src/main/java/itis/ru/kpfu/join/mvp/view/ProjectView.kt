@@ -5,7 +5,7 @@ import itis.ru.kpfu.join.api.model.Project
 
 interface ProjectView: MvpView {
 
-    fun setProject(item: Project)
+    fun setProject(item: Project, isMyProject: Boolean)
 
     fun onConnectionError()
 

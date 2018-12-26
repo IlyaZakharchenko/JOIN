@@ -10,9 +10,11 @@ import itis.ru.kpfu.join.ui.recyclerView.viewHolder.ProjectJobViewHolder
 class ProjectJobAdapter(private var items: List<Specialization> = ArrayList()) :
         RecyclerView.Adapter<ProjectJobViewHolder>() {
 
+    private var isMyProject = false
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectJobViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_project_job, parent, false)
-        return ProjectJobViewHolder(view)
+        return ProjectJobViewHolder(view, isMyProject)
     }
 
     override fun getItemCount(): Int {
@@ -23,7 +25,8 @@ class ProjectJobAdapter(private var items: List<Specialization> = ArrayList()) :
         holder.bindViewHolder(items[position])
     }
 
-    fun setJobs(list: List<Specialization>){
+    fun setJobs(list: List<Specialization>, isMyProject: Boolean){
+        this.isMyProject = isMyProject
         this.items = list
         notifyDataSetChanged()
     }

@@ -5,6 +5,7 @@ import dagger.Provides
 import itis.ru.kpfu.join.api.JoinApi
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.mvp.presenter.FragmentHostPresenter
+import itis.ru.kpfu.join.mvp.presenter.MyProjectsPresenter
 import itis.ru.kpfu.join.mvp.presenter.ProfilePresenter
 import itis.ru.kpfu.join.mvp.presenter.ProfileEditPresenter
 import itis.ru.kpfu.join.mvp.presenter.ProjectPresenter
@@ -50,6 +51,11 @@ class PresenterModule {
     @Provides
     fun projectsPresenter(api: JoinApi, userRepository: UserRepository): ProjectsPresenter {
         return ProjectsPresenter(api, userRepository)
+    }
+
+    @Provides
+    fun myProjectsPresenter(api: JoinApi, userRepository: UserRepository): MyProjectsPresenter {
+        return MyProjectsPresenter(api, userRepository)
     }
 
     @Provides

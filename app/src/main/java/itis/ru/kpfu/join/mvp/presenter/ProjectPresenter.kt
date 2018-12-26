@@ -20,7 +20,7 @@ class ProjectPresenter(private val api: JoinApi, private val userRepository: Use
                         .doOnSubscribe { viewState.showProgress() }
                         .doAfterTerminate { viewState.hideProgress() }
                         .subscribe({
-                            viewState.setProject(it)
+                                viewState.setProject(it, (it.leader?.id == userRepository.getUser()?.id))
                         },{
                             viewState.onConnectionError()
                         })
