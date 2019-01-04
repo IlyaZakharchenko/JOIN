@@ -7,14 +7,10 @@ import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Function4
 import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.R.string
-import itis.ru.kpfu.join.db.entity.User
-import itis.ru.kpfu.join.model.UserRegistrationForm
+import itis.ru.kpfu.join.api.model.UserRegistrationForm
 import itis.ru.kpfu.join.mvp.presenter.SignUpStepOnePresenter
 import itis.ru.kpfu.join.mvp.view.SignUpStepOneView
 import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
@@ -77,7 +73,8 @@ class SignUpStepOneFragment : BaseFragment(), SignUpStepOneView {
 
         btn_sign_up.setOnClickListener {
             presenter.onSignUpClick(
-                    UserRegistrationForm(et_username.text.toString(), et_email.text.toString(),
+                    UserRegistrationForm(et_username.text.toString(),
+                            et_email.text.toString(),
                             et_password.text.toString(), et_password_repeat.text.toString()))
         }
     }

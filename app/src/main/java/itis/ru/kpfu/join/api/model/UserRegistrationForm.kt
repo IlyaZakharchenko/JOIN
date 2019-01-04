@@ -1,4 +1,4 @@
-package itis.ru.kpfu.join.model
+package itis.ru.kpfu.join.api.model
 
 import java.io.Serializable
 

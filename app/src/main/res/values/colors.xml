@@ -9,4 +9,5 @@
     <color name="colorBottomBarUnselected">#5e5e5e</color>
     <color name="colorBlackText">#212121</color>
     <color name="colorGreyText">#61000000</color>
+    <color name="testColor">#f4425f</color>
 </resources>

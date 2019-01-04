@@ -111,7 +111,7 @@ class SignInFragment : BaseFragment(), SignInView {
         LoginManager.getInstance().registerCallback(callbackManager,
                 object : FacebookCallback<LoginResult> {
                     override fun onSuccess(result: LoginResult?) {
-                        presenter.getFacebookUserInfo(result, userRepository)
+                        presenter.getFacebookUserInfo(result)
                     }
 
                     override fun onCancel() {
@@ -149,13 +149,13 @@ class SignInFragment : BaseFragment(), SignInView {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)
-                presenter.getGoogleUserInfo(account, userRepository)
+                presenter.getGoogleUserInfo(account)
             } catch (e: ApiException) {
                 Toast.makeText(baseActivity, "Authorization via Google failed", Toast.LENGTH_SHORT).show()
             }
         } else if (!VKSdk.onActivityResult(requestCode, resultCode, data, object : VKCallback<VKAccessToken> {
                     override fun onResult(res: VKAccessToken?) {
-                        presenter.getVkUserInfo(res, userRepository)
+                        presenter.getVkUserInfo(res)
                     }
 
                     override fun onError(error: VKError?) {

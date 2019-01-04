@@ -3,6 +3,8 @@ package itis.ru.kpfu.join.mvp.presenter
 import android.widget.GridLayout.Spec
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
+import com.esafirm.imagepicker.model.Image
+import com.zxy.tiny.Tiny
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.realm.RealmList
@@ -11,6 +13,10 @@ import itis.ru.kpfu.join.db.entity.Specialization
 import itis.ru.kpfu.join.db.entity.User
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.mvp.view.ProfileEditView
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 
 @InjectViewState
 class ProfileEditPresenter(private val api: JoinApi, private val userRepository: UserRepository) :
@@ -41,6 +47,37 @@ class ProfileEditPresenter(private val api: JoinApi, private val userRepository:
                         viewState.onConnectionError()
                     }))
         }
+    }
+
+    fun changeProfileImage(image: Image) {
+
+        Tiny
+                .getInstance()
+                .source(image.path)
+                .asFile()
+                .compress { _, outFile, _ ->
+
+                    val file = File(outFile)
+                    val fBody = RequestBody.create(MediaType.parse("multipart/form-data"),
+                            file)
+                    val body = MultipartBody.Part.createFormData("file", file.name, fBody)
+
+                    compositeDisposable.add(
+                            api.changeProfileImage(userRepository.getUser()?.token, userRepository.getUser()?.id, body)
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .doOnSubscribe { viewState.showProgress() }
+                                    .doAfterTerminate { viewState.hideProgress() }
+                                    .subscribe({
+                                        it.url?.let { url ->
+                                            userRepository.changeImageProfile(url)
+                                            viewState.onImageSetSuccess(url)
+                                        }
+                                    }, {
+                                        viewState.onConnectionError()
+                                    })
+
+                    )
+                }
     }
 
     private fun hasErrors(user: User?): Boolean {
@@ -84,5 +121,10 @@ class ProfileEditPresenter(private val api: JoinApi, private val userRepository:
         }
 
         return hasError
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.dispose()
     }
 }

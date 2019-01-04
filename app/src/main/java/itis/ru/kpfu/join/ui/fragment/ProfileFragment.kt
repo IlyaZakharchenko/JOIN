@@ -3,9 +3,15 @@ package itis.ru.kpfu.join.ui.fragment
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
+import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
+import android.view.ViewTreeObserver
+import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -15,6 +21,7 @@ import com.squareup.picasso.Picasso
 import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.db.entity.Specialization
+import itis.ru.kpfu.join.db.entity.User
 import itis.ru.kpfu.join.mvp.presenter.ProfilePresenter
 import itis.ru.kpfu.join.mvp.view.ProfileView
 import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
@@ -27,6 +34,7 @@ import kotlinx.android.synthetic.main.fragment_profile.app_bar_profile
 import kotlinx.android.synthetic.main.fragment_profile.btn_edit
 import kotlinx.android.synthetic.main.fragment_profile.collapsing_toolbar
 import kotlinx.android.synthetic.main.fragment_profile.iv_profile_avatar
+import kotlinx.android.synthetic.main.fragment_profile.iv_profile_avatar_shadows
 import kotlinx.android.synthetic.main.fragment_profile.rv_specializations
 import kotlinx.android.synthetic.main.fragment_profile.toolbar_profile
 import kotlinx.android.synthetic.main.fragment_profile.tv_email
@@ -37,8 +45,12 @@ import java.io.File
 class ProfileFragment : BaseFragment(), ProfileView {
 
     companion object {
-        fun newInstance(): ProfileFragment {
+        const val PROFILE_FRAGMENT = "PROFILE_FRAGMENT"
+
+        fun newInstance(userId: Long = -1L): ProfileFragment {
             val args = Bundle()
+            args.putLong(PROFILE_FRAGMENT, userId)
+
             val fragment = ProfileFragment()
             fragment.arguments = args
             return fragment
@@ -52,7 +64,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
         get() = R.string.toolbar_title_empty
 
     override val menu: Int?
-        get() = R.menu.menu_profile
+        get() = null
 
     override val enableBackPressed: Boolean
         get() = false
@@ -66,9 +78,13 @@ class ProfileFragment : BaseFragment(), ProfileView {
     @InjectPresenter
     lateinit var presenter: ProfilePresenter
 
-    lateinit var chooseAvatarDialog: MaterialDialog
+    private lateinit var chooseAvatarDialog: MaterialDialog
+
+    private lateinit var user: User
 
     private var adapter: SpecializationsAdapter? = null
+
+    private var userId: Long? = null
 
     @ProvidePresenter
     fun providePresenter(): ProfilePresenter {
@@ -78,38 +94,50 @@ class ProfileFragment : BaseFragment(), ProfileView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        userId = arguments?.getLong(PROFILE_FRAGMENT)
+        if(userId!= -1L) {
+            (activity as? FragmentHostActivity)?.enableBackPressed(true)
+        }
+
+        user = userId?.let { presenter.getUser(it) } ?: User()
+
+        initRecyclerView()
+        initFields(user)
         initChooseAvatarDialog()
         initListeners()
-        initFields()
-        initRecyclerView()
     }
 
-    private fun initFields() {
-        val user = userRepository.getUser()
+    override fun initFields(user: User) {
+        user.email?.let { tv_email.text = it }
+        user.username?.let { tv_username.text = it }
+        tv_phone.text = if (user.phoneNumber.isNullOrEmpty()) "Не указан" else "8${user.phoneNumber}"
 
-        tv_username.text = user?.username
-        tv_email.text = user?.email
-        tv_phone.text = if (user?.phoneNumber.isNullOrEmpty()) "Не указан" else "8${user?.phoneNumber}"
+        user.profileImage?.let { setImageProfile(it) }
 
-        if (user?.name.isNullOrEmpty() || user?.lastname.isNullOrEmpty()) {
-            user?.username?.let { (activity as? FragmentHostActivity)?.setToolbarTitle(it) }
+        if (user.name.isNullOrEmpty() || user.lastname.isNullOrEmpty()) {
+            user.username?.let { (activity as? FragmentHostActivity)?.setToolbarTitle(it) }
         } else {
-            (activity as? FragmentHostActivity)?.setToolbarTitle("${user?.lastname} ${user?.name}")
+            (activity as? FragmentHostActivity)?.setToolbarTitle("${user.lastname} ${user.name}")
         }
+
+        user.specializations?.let { adapter?.setItems(it as List<Specialization>) }
     }
 
     private fun initRecyclerView() {
-        adapter = SpecializationsAdapter(presenter.getUser()?.specializations as List<Specialization>)
+        adapter = SpecializationsAdapter()
         rv_specializations.adapter = adapter
         rv_specializations.isNestedScrollingEnabled = false
         rv_specializations.layoutManager = LinearLayoutManager(baseActivity)
     }
 
     private fun initListeners() {
-        btn_edit.setOnClickListener {
-            (activity as? FragmentHostActivity)?.setFragment(ProfileEditFragment.newInstance(), true)
+        if (userId == -1L) {
+            btn_edit.visibility = View.VISIBLE
+            btn_edit.setOnClickListener {
+                (activity as? FragmentHostActivity)?.setFragment(ProfileEditFragment.newInstance(), true)
+            }
+            collapsing_toolbar.setOnClickListener { chooseAvatarDialog.show() }
         }
-        collapsing_toolbar.setOnClickListener { chooseAvatarDialog.show() }
         toolbar_profile.setOnClickListener { app_bar_profile.setExpanded(true) }
     }
 
@@ -135,6 +163,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
         chooseAvatarDialog.view.tv_dialog_open_gallery.setOnClickListener { openGallery() }
         chooseAvatarDialog.view.tv_dialog_remove_photo.setOnClickListener {
+            iv_profile_avatar_shadows.visibility = View.GONE
             iv_profile_avatar.setImageResource(0)
             chooseAvatarDialog.dismiss()
         }
@@ -147,18 +176,56 @@ class ProfileFragment : BaseFragment(), ProfileView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
             val image = ImagePicker.getImages(data)[0]
-
-            Picasso
-                    .with(context)
-                    .load(File(image.path))
-                    .resize(iv_profile_avatar.width, iv_profile_avatar.height)
-                    .centerCrop()
-                    .into(iv_profile_avatar)
-
-
+            presenter.changeProfileImage(image)
 
             chooseAvatarDialog.dismiss()
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onImageSetSuccess(url: String) {
+        setImageProfile(url)
+    }
+
+    override fun onConnectionError() {
+        Toast.makeText(baseActivity, "Internet connection error", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showProgress() {
+        showProgressBar()
+    }
+
+    override fun hideProgress() {
+        hideProgressBar()
+    }
+
+    private fun setImageProfile(url: String) {
+
+        val vto = iv_profile_avatar.viewTreeObserver
+        vto.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                iv_profile_avatar.viewTreeObserver.removeOnPreDrawListener(this)
+                val height = iv_profile_avatar.measuredHeight
+                val width = iv_profile_avatar.measuredWidth
+
+                iv_profile_avatar_shadows.visibility = View.VISIBLE
+
+                Picasso
+                        .with(context)
+                        .load(url)
+                        .resize(width, height)
+                        .placeholder(R.drawable.progress_animation)
+                        .centerCrop()
+                        .into(iv_profile_avatar)
+
+                return true
+            }
+        })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        if(userId == -1L) {
+            inflater?.inflate(R.menu.menu_profile, menu)
+        }
     }
 }

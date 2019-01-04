@@ -2,7 +2,6 @@ package itis.ru.kpfu.join.api.model
 
 import itis.ru.kpfu.join.db.entity.Specialization
 import itis.ru.kpfu.join.db.entity.User
-import itis.ru.kpfu.join.model.ProjectMember
 import java.io.Serializable
 
 data class Project(

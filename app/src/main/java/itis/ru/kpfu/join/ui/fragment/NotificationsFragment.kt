@@ -1,20 +1,17 @@
 package itis.ru.kpfu.join.ui.fragment
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
+import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.model.ProjectMember
+import itis.ru.kpfu.join.api.model.Notification
 import itis.ru.kpfu.join.mvp.presenter.NotificationsPresenter
 import itis.ru.kpfu.join.mvp.view.NotificationsView
-import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
-import itis.ru.kpfu.join.ui.recyclerView.adapter.ProjectMemberAdapter
 import kotlinx.android.synthetic.main.fragment_notifications.toolbar_notifications
-import kotlinx.android.synthetic.main.fragment_project.rv_project_members
-import kotlinx.android.synthetic.main.fragment_project.toolbar_project
 
 class NotificationsFragment : BaseFragment(), NotificationsView {
 
@@ -48,7 +45,30 @@ class NotificationsFragment : BaseFragment(), NotificationsView {
     @InjectPresenter
     lateinit var presenter: NotificationsPresenter
 
+    @ProvidePresenter
+    fun providePresenter(): NotificationsPresenter {
+        return JoinApplication.appComponent.providePresenters().provideNotificationsPresenter()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        presenter.getNotifications()
+    }
+
+    override fun setNotifications(notifications: List<Notification>) {
+        //TODO
+    }
+
+    override fun onConnectionError() {
+        showProgressError { presenter.getNotifications() }
+    }
+
+    override fun showProgress() {
+        showProgressBar()
+    }
+
+    override fun hideProgress() {
+        hideProgressBar()
     }
 }

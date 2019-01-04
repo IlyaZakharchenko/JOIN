@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.model.ProjectMember
+import itis.ru.kpfu.join.api.model.ProjectMember
 import itis.ru.kpfu.join.ui.recyclerView.viewHolder.ProjectMemberViewHolder
 
 class ProjectMemberAdapter(var items: List<ProjectMember> = ArrayList()) : RecyclerView.Adapter<ProjectMemberViewHolder>() {

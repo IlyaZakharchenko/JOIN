@@ -7,10 +7,8 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import itis.ru.kpfu.join.api.JoinApi
-import itis.ru.kpfu.join.db.entity.User
-import itis.ru.kpfu.join.model.UserRegistrationForm
+import itis.ru.kpfu.join.api.model.UserRegistrationForm
 import itis.ru.kpfu.join.mvp.view.SignUpStepTwoView
-import java.lang.ref.WeakReference
 
 @InjectViewState
 class SignUpStepTwoPresenter(private val api: JoinApi) : MvpPresenter<SignUpStepTwoView>() {

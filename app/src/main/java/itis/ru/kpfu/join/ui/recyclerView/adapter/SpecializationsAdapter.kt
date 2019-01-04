@@ -7,7 +7,7 @@ import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.db.entity.Specialization
 import itis.ru.kpfu.join.ui.recyclerView.viewHolder.SpecializationViewHolder
 
-class SpecializationsAdapter(private var items: List<Specialization>) :
+class SpecializationsAdapter(private var items: List<Specialization> = ArrayList()) :
         RecyclerView.Adapter<SpecializationViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpecializationViewHolder {
@@ -21,5 +21,10 @@ class SpecializationsAdapter(private var items: List<Specialization>) :
 
     override fun onBindViewHolder(holder: SpecializationViewHolder, position: Int) {
         holder.bindViewHolder(items[position])
+    }
+
+    fun setItems(items: List<Specialization>) {
+        this.items = items
+        notifyDataSetChanged()
     }
 }

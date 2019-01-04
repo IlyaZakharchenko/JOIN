@@ -38,9 +38,6 @@ abstract class BaseFragment : MvpAppCompatFragment() {
 
     protected val baseActivity get() = activity as BaseActivity
 
-    @Inject
-    lateinit var userRepository: UserRepository
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         JoinApplication.appComponent.inject(this)

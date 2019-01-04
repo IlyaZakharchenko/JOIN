@@ -2,6 +2,7 @@ package itis.ru.kpfu.join.ui.fragment
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.Toast
@@ -104,6 +105,24 @@ class MyProjectsFragment : BaseFragment(), MyProjectsView {
         adapter = ProjectsAdapter { onProjectClick(it) }
         rv_my_projects.adapter = adapter
         rv_my_projects.layoutManager = LinearLayoutManager(baseActivity)
+        rv_my_projects.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    fab_add_project.show()
+                }
+                super.onScrollStateChanged(recyclerView, newState)
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+
+                if (dy > 0 || dy < 0 && fab_add_project.isShown) {
+                    fab_add_project.hide()
+                }
+                super.onScrolled(recyclerView, dx, dy)
+            }
+        })
     }
 
     private fun onProjectClick(id: Long) {

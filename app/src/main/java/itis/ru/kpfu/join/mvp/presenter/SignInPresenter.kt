@@ -61,7 +61,7 @@ class SignInPresenter(private val api: JoinApi, private val userRepository: User
         compositeDisposable.dispose()
     }
 
-    fun getVkUserInfo(res: VKAccessToken?, userRepository: UserRepository) {
+    fun getVkUserInfo(res: VKAccessToken?) {
         val parameters = VKParameters.from(VKApiConst.ACCESS_TOKEN, res)
         val request = VKRequest("account.getProfileInfo", parameters)
 
@@ -86,7 +86,7 @@ class SignInPresenter(private val api: JoinApi, private val userRepository: User
         })
     }
 
-    fun getGoogleUserInfo(account: GoogleSignInAccount, userRepository: UserRepository) {
+    fun getGoogleUserInfo(account: GoogleSignInAccount) {
         val givenName = account.givenName
         val lastName = account.familyName
         val email = account.email
@@ -97,7 +97,7 @@ class SignInPresenter(private val api: JoinApi, private val userRepository: User
         viewState.signIn()
     }
 
-    fun getFacebookUserInfo(result: LoginResult?, userRepository: UserRepository) {
+    fun getFacebookUserInfo(result: LoginResult?) {
 
         GraphRequest.newMeRequest(result?.accessToken
         ) { `object`, response ->

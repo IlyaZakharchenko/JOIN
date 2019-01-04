@@ -9,4 +9,6 @@ interface UserRepository {
     fun getUser(): User?
 
     fun updateUser(user: User?)
+
+    fun changeImageProfile(url: String)
 }

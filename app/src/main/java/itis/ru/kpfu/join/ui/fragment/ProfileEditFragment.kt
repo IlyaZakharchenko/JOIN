@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -124,19 +125,12 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
     private fun initFields() {
         val user = presenter.getUser()
 
-        et_first_name.setText(user?.name)
-        et_last_name.setText(user?.lastname)
-        et_username.setText(user?.username)
-        et_email.setText(user?.email)
-        et_phone.setText(user?.phoneNumber)
-        user?.profileImage?.let {
-            Picasso
-                    .with(context)
-                    .load(File(it))
-                    .resize(iv_avatar.width,
-                            iv_avatar.height)
-                    .into(iv_avatar)
-        }
+        user?.name?.let { et_first_name.setText(it) }
+        user?.lastname?.let { et_last_name.setText(it) }
+        user?.username?.let { et_username.setText(it) }
+        user?.email?.let { et_email.setText(it) }
+        user?.phoneNumber?.let { et_phone.setText(it) }
+        user?.profileImage?.let { setImageProfile(it) }
     }
 
     private fun openGallery() {
@@ -193,12 +187,7 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
             val image = ImagePicker.getImages(data)[0]
-            Picasso
-                    .with(context)
-                    .load(File(image.path))
-                    .resize(iv_avatar.width,
-                            iv_avatar.height)
-                    .into(iv_avatar)
+            presenter.changeProfileImage(image)
 
             chooseAvatarDialog.dismiss()
         } else if (requestCode == AddSpecializationDialog.REQUEST_CODE) {
@@ -276,5 +265,33 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
         ti_username.error = null
         ti_email.error = null
         ti_phone.error = null
+    }
+
+    private fun setImageProfile(url: String) {
+
+        val vto = iv_avatar.viewTreeObserver
+        vto.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                iv_avatar.viewTreeObserver.removeOnPreDrawListener(this)
+                val height = iv_avatar.measuredHeight
+                val width = iv_avatar.measuredWidth
+
+                iv_avatar.visibility = View.VISIBLE
+
+                Picasso
+                        .with(context)
+                        .load(url)
+                        .resize(width, height)
+                        .placeholder(R.drawable.progress_animation)
+                        .centerCrop()
+                        .into(iv_avatar)
+
+                return true
+            }
+        })
+    }
+
+    override fun onImageSetSuccess(url: String) {
+        setImageProfile(url)
     }
 }

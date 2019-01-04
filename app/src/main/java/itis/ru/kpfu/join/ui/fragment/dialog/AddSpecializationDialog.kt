@@ -15,6 +15,7 @@ import itis.ru.kpfu.join.db.entity.Specialization
 import itis.ru.kpfu.join.utils.divideString
 import itis.ru.kpfu.join.utils.parseLevelFromInt
 import itis.ru.kpfu.join.utils.parseLevelFromString
+import itis.ru.kpfu.join.utils.toPx
 import itis.ru.kpfu.join.utils.transformToString
 import kotlinx.android.synthetic.main.dialog_add_specialization.btn_add_spec
 import kotlinx.android.synthetic.main.dialog_add_specialization.btn_cancel
@@ -123,6 +124,7 @@ class AddSpecializationDialog : DialogFragment() {
         spinner.layoutParams = layoutParams
         spinner.setItems(itemsTech)
         spinner.selectedIndex = selectedIndex
+        context?.let { toPx(300, it) }?.let { spinner.setDropdownHeight(it) }
 
         technologies.add(spinner)
         spinners_container.addView(spinner)

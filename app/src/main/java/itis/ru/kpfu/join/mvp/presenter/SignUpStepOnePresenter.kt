@@ -7,8 +7,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Function4
 import itis.ru.kpfu.join.api.JoinApi
-import itis.ru.kpfu.join.db.entity.User
-import itis.ru.kpfu.join.model.UserRegistrationForm
+import itis.ru.kpfu.join.api.model.UserRegistrationForm
 import itis.ru.kpfu.join.mvp.view.SignUpStepOneView
 
 @InjectViewState
@@ -33,7 +32,8 @@ class SignUpStepOnePresenter(private val api: JoinApi) : MvpPresenter<SignUpStep
                     .subscribe({
                         run {
                             viewState.onFirstStepSuccess(
-                                    UserRegistrationForm(username = form.username, email = form.email, password = form.password))
+                                    UserRegistrationForm(username = form.username,
+                                            email = form.email, password = form.password))
                         }
                     }, { viewState.onConnectionError() }))
         }

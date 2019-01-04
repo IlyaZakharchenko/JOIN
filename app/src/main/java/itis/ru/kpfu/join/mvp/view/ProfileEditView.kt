@@ -13,6 +13,8 @@ interface ProfileEditView : MvpView {
 
     fun onConnectionError()
 
+    fun onImageSetSuccess(url: String)
+
     fun onError(message : String)
 
     fun onEditSuccess()

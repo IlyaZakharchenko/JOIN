@@ -18,9 +18,9 @@ import kotlinx.android.synthetic.main.item_project_job.view.tv_job_lvl
 import kotlinx.android.synthetic.main.item_project_job.view.tv_job_name
 import kotlinx.android.synthetic.main.item_specialisation.view.chip_container
 
-class ProjectJobViewHolder(view: View, private var isMyProject: Boolean) : RecyclerView.ViewHolder(view){
+class ProjectJobViewHolder(view: View, private var isMyProject: Boolean) : RecyclerView.ViewHolder(view) {
 
-    fun bindViewHolder(item: Specialization) = with(itemView){
+    fun bindViewHolder(item: Specialization) = with(itemView) {
 
         chip_container_job.removeAllViews()
         item.technologies?.let { initTechnologies(divideString(it)) }
@@ -46,13 +46,14 @@ class ProjectJobViewHolder(view: View, private var isMyProject: Boolean) : Recyc
 
     private fun initTechnologies(items: HashSet<String>) = with(itemView) {
         items.forEach {
-            val chip = Chip(context)
-            chip.chipText = it
-            val layoutParams = LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-            layoutParams.setMargins(toPx(8, context), 0, 0, toPx(8, context))
-            chip.layoutParams = layoutParams
-            chip_container_job.addView(chip)
+            if (it.isNotEmpty()) {
+                val chip = Chip(context)
+                chip.chipText = it
+                val layoutParams = LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+                layoutParams.setMargins(toPx(8, context), 0, 0, toPx(8, context))
+                chip.layoutParams = layoutParams
+                chip_container_job.addView(chip)
+            }
         }
     }
-
 }

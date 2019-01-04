@@ -83,7 +83,7 @@ class ProjectFragment : BaseFragment(), ProjectView {
 
     private fun initListeners() {
         add_member_container.setOnClickListener {
-            (baseActivity as? FragmentHostActivity)?.setFragment(UsersFragment.newInstance(), true)
+            (baseActivity as? FragmentHostActivity)?.setFragment(UsersFragment.newInstance(projectId ?: -1), true)
         }
     }
 

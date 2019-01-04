@@ -7,6 +7,7 @@ import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.mvp.presenter.AddProjectPresenter
 import itis.ru.kpfu.join.mvp.presenter.FragmentHostPresenter
 import itis.ru.kpfu.join.mvp.presenter.MyProjectsPresenter
+import itis.ru.kpfu.join.mvp.presenter.NotificationsPresenter
 import itis.ru.kpfu.join.mvp.presenter.ProfilePresenter
 import itis.ru.kpfu.join.mvp.presenter.ProfileEditPresenter
 import itis.ru.kpfu.join.mvp.presenter.ProjectPresenter
@@ -40,8 +41,8 @@ class PresenterModule {
     }
 
     @Provides
-    fun menuPresenter(userRepository: UserRepository): ProfilePresenter {
-        return ProfilePresenter(userRepository)
+    fun menuPresenter(userRepository: UserRepository, api: JoinApi): ProfilePresenter {
+        return ProfilePresenter(userRepository, api)
     }
 
     @Provides
@@ -72,5 +73,10 @@ class PresenterModule {
     @Provides
     fun addProjectPresenter(api: JoinApi, userRepository: UserRepository): AddProjectPresenter {
         return AddProjectPresenter(api, userRepository)
+    }
+
+    @Provides
+    fun notificationsPresenter(api: JoinApi, userRepository: UserRepository): NotificationsPresenter {
+        return NotificationsPresenter(api, userRepository)
     }
 }
