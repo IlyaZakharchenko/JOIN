@@ -125,4 +125,21 @@ class ProfileEditPresenter(private val api: JoinApi, private val userRepository:
         super.onDestroy()
         compositeDisposable.dispose()
     }
+
+    fun deleteImage() {
+        compositeDisposable.add(
+                api.deleteImage(userRepository.getUser()?.token, userRepository.getUser()?.id)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe { viewState.showProgress() }
+                        .doAfterTerminate { viewState.hideProgress() }
+                        .subscribe({
+                            if (it.isSuccessful)
+                                viewState.onImageDeleteSuccess()
+                            else
+                                viewState.onError("Произошла ошибка, поробуйте позже")
+                        }, {
+                            viewState.onError(it.localizedMessage)
+                        })
+        )
+    }
 }

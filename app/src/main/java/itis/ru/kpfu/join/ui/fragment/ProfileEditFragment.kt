@@ -174,7 +174,7 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
 
         chooseAvatarDialog.view.tv_dialog_open_gallery.setOnClickListener { openGallery() }
         chooseAvatarDialog.view.tv_dialog_remove_photo.setOnClickListener {
-            iv_avatar.setImageResource(R.drawable.ic_no_avatar)
+            presenter.deleteImage()
             chooseAvatarDialog.dismiss()
         }
 
@@ -201,6 +201,11 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
     override fun onEditSuccess() {
         Toast.makeText(baseActivity, "Профиль испешно изменен", Toast.LENGTH_SHORT).show()
         (activity as? FragmentHostActivity)?.onBackPressed()
+    }
+
+    override fun onImageDeleteSuccess() {
+        Toast.makeText(baseActivity, "Фотография успешно удалена", Toast.LENGTH_SHORT).show()
+        iv_avatar.setImageResource(R.drawable.ic_no_avatar)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -292,5 +297,6 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
 
     override fun onImageSetSuccess(url: String) {
         setImageProfile(url)
+        Toast.makeText(context, "Фотография успешно изменена.", Toast.LENGTH_SHORT).show()
     }
 }

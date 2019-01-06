@@ -12,6 +12,7 @@ import itis.ru.kpfu.join.api.model.UserRegistrationForm
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
@@ -64,4 +65,7 @@ interface JoinApi {
     @PUT("/user/{id}")
     fun changeUser(@Header("Authorization") token: String?, @Body user: User?, @Path(
             "id") id: Long?): Single<Response<Void>>
+
+    @DELETE("user/{id}/profileImage")
+    fun deleteImage(@Header("Authorization") token: String?, @Path(value = "id") id: Long?): Single<Response<Void>>
 }

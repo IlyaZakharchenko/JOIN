@@ -69,6 +69,23 @@ class ProfilePresenter(private val userRepository: UserRepository, private val a
                 }
     }
 
+    fun deleteImage() {
+        compositeDisposable.add(
+                api.deleteImage(userRepository.getUser()?.token, userRepository.getUser()?.id)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe { viewState.showProgress() }
+                        .doAfterTerminate { viewState.hideProgress() }
+                        .subscribe({
+                            if (it.isSuccessful)
+                                viewState.onImageDeleteSuccess()
+                            else
+                                viewState.onError("Произошла ошибка, поробуйте позже")
+                        }, {
+                            viewState.onError(it.localizedMessage)
+                        })
+        )
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.dispose()

@@ -12,6 +12,10 @@ interface ProfileView: MvpView {
 
     fun onConnectionError()
 
+    fun onError(message: String)
+
+    fun onImageDeleteSuccess()
+
     fun showProgress()
 
     fun hideProgress()

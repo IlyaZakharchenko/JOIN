@@ -19,6 +19,8 @@ interface ProfileEditView : MvpView {
 
     fun onEditSuccess()
 
+    fun onImageDeleteSuccess()
+
     fun onEmptyName()
 
     fun onEmptySurname()

@@ -41,6 +41,7 @@ import kotlinx.android.synthetic.main.fragment_profile.toolbar_profile
 import kotlinx.android.synthetic.main.fragment_profile.tv_email
 import kotlinx.android.synthetic.main.fragment_profile.tv_phone
 import kotlinx.android.synthetic.main.fragment_profile.tv_username
+import kotlinx.android.synthetic.main.fragment_profile_edit.iv_avatar
 import java.io.File
 
 class ProfileFragment : BaseFragment(), ProfileView {
@@ -164,8 +165,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
         chooseAvatarDialog.view.tv_dialog_open_gallery.setOnClickListener { openGallery() }
         chooseAvatarDialog.view.tv_dialog_remove_photo.setOnClickListener {
-            iv_profile_avatar_shadows.visibility = View.GONE
-            iv_profile_avatar.setImageResource(0)
+            presenter.deleteImage()
             chooseAvatarDialog.dismiss()
         }
 
@@ -186,10 +186,21 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
     override fun onImageSetSuccess(url: String) {
         setImageProfile(url)
+        Toast.makeText(context, "Фотография успешно изменена.", Toast.LENGTH_SHORT).show()
     }
 
     override fun onConnectionError() {
         Toast.makeText(baseActivity, "Internet connection error", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onError(message: String) {
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onImageDeleteSuccess() {
+        Toast.makeText(baseActivity, "Фотография успешно удалена", Toast.LENGTH_SHORT).show()
+        iv_profile_avatar_shadows.visibility = View.GONE
+        iv_avatar.setImageResource(R.drawable.ic_no_avatar)
     }
 
     override fun showProgress() {
