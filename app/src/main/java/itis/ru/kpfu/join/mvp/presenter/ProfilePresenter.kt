@@ -76,8 +76,10 @@ class ProfilePresenter(private val userRepository: UserRepository, private val a
                         .doOnSubscribe { viewState.showProgress() }
                         .doAfterTerminate { viewState.hideProgress() }
                         .subscribe({
-                            if (it.isSuccessful)
+                            if (it.isSuccessful) {
                                 viewState.onImageDeleteSuccess()
+                                userRepository.changeImageProfile(null)
+                            }
                             else
                                 viewState.onError("Произошла ошибка, попробуйте позже")
                         }, {

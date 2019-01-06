@@ -4,11 +4,12 @@ import com.google.gson.JsonObject
 import io.reactivex.Single
 import itis.ru.kpfu.join.api.model.InviteForm
 import itis.ru.kpfu.join.api.model.Notification
+import itis.ru.kpfu.join.api.model.NotificationResponse
 import itis.ru.kpfu.join.api.model.ProfileImage
 import itis.ru.kpfu.join.api.model.Project
-import itis.ru.kpfu.join.db.entity.User
 import itis.ru.kpfu.join.api.model.ProjectMember
 import itis.ru.kpfu.join.api.model.UserRegistrationForm
+import itis.ru.kpfu.join.db.entity.User
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -66,6 +67,10 @@ interface JoinApi {
     fun changeUser(@Header("Authorization") token: String?, @Body user: User?, @Path(
             "id") id: Long?): Single<Response<Void>>
 
-    @DELETE("user/{id}/profileImage")
-    fun deleteImage(@Header("Authorization") token: String?, @Path(value = "id") id: Long?): Single<Response<Void>>
+    @DELETE("/user/{id}/profileImage")
+    fun deleteImage(@Header("Authorization") token: String?, @Path("id") id: Long?): Single<Response<Void>>
+
+    @POST("/notifications/{id}")
+    fun responseToNotification(@Header("Authorization") token: String?, @Body answer: NotificationResponse,
+            @Path("id") id: Long?): Single<Response<Void>>
 }

@@ -37,7 +37,7 @@ class UserRepositoryImpl : BaseRepository(), UserRepository {
         return realm.where(User::class.java).findFirst()
     }
 
-     override fun changeImageProfile(url: String) {
+     override fun changeImageProfile(url: String?) {
         val user = getUser()
         executeTransaction(Realm.Transaction {
             user?.profileImage = url

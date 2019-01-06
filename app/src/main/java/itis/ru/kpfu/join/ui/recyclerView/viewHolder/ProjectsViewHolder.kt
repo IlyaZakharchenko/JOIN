@@ -3,9 +3,7 @@ package itis.ru.kpfu.join.ui.recyclerView.viewHolder
 import android.support.design.chip.Chip
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import io.reactivex.Observable
 import itis.ru.kpfu.join.api.model.Project
-import itis.ru.kpfu.join.db.repository.UserRepository
 import kotlinx.android.synthetic.main.item_project.view.cg_vacancies
 import kotlinx.android.synthetic.main.item_project.view.tv_project_description
 import kotlinx.android.synthetic.main.item_project.view.tv_project_name

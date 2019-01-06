@@ -10,7 +10,7 @@ interface UserRepository {
 
     fun updateUser(user: User?)
 
-    fun changeImageProfile(url: String)
+    fun changeImageProfile(url: String?)
 
     fun clearUser()
 }

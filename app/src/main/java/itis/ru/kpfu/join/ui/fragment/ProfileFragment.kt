@@ -200,7 +200,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     override fun onImageDeleteSuccess() {
         Toast.makeText(baseActivity, "Фотография успешно удалена", Toast.LENGTH_SHORT).show()
         iv_profile_avatar_shadows.visibility = View.GONE
-        iv_avatar.setImageResource(R.drawable.ic_no_avatar)
+        iv_profile_avatar.setImageResource(0)
     }
 
     override fun showProgress() {
