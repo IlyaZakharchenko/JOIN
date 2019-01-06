@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.Toast
@@ -227,5 +228,15 @@ class ProfileFragment : BaseFragment(), ProfileView {
         if(userId == -1L) {
             inflater?.inflate(R.menu.menu_profile, menu)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId) {
+            R.id.menu_exit -> {
+                presenter.exit()
+                (activity as? FragmentHostActivity)?.setFragment(SignInFragment.newInstance(), false)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

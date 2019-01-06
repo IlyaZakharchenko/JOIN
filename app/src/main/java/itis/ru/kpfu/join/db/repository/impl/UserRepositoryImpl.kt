@@ -6,6 +6,13 @@ import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.db.repository.base.BaseRepository
 
 class UserRepositoryImpl : BaseRepository(), UserRepository {
+    override fun clearUser() {
+        executeTransaction(
+                Realm.Transaction {
+                    it.deleteAll()
+                }
+        )
+    }
 
     override fun updateUser(user: User?) {
         val savedUser = realm.where(User::class.java).findFirst()

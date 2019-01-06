@@ -73,4 +73,8 @@ class ProfilePresenter(private val userRepository: UserRepository, private val a
         super.onDestroy()
         compositeDisposable.dispose()
     }
+
+    fun exit() {
+        userRepository.clearUser()
+    }
 }

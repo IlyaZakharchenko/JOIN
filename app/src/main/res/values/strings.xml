@@ -44,4 +44,5 @@
     <string name="fill_field">Заполните поле</string>
     <string name="error_phone_number">Некорректный номер телефона</string>
     <string name="my_projects_toolbar">Мои проекты</string>
+    <string name="exit">Выйти</string>
 </resources>
