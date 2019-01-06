@@ -1,15 +1,12 @@
 package itis.ru.kpfu.join.mvp.presenter
 
-import android.widget.GridLayout.Spec
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.esafirm.imagepicker.model.Image
 import com.zxy.tiny.Tiny
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.realm.RealmList
 import itis.ru.kpfu.join.api.JoinApi
-import itis.ru.kpfu.join.db.entity.Specialization
 import itis.ru.kpfu.join.db.entity.User
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.mvp.view.ProfileEditView
@@ -63,7 +60,8 @@ class ProfileEditPresenter(private val api: JoinApi, private val userRepository:
                     val body = MultipartBody.Part.createFormData("file", file.name, fBody)
 
                     compositeDisposable.add(
-                            api.changeProfileImage(userRepository.getUser()?.token, userRepository.getUser()?.id, body)
+                            api.changeProfileImage(userRepository.getUser()?.token, userRepository.getUser()?.id,
+                                    body)
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .doOnSubscribe { viewState.showProgress() }
                                     .doAfterTerminate { viewState.hideProgress() }

@@ -44,7 +44,6 @@ import kotlinx.android.synthetic.main.fragment_profile_edit.ti_last_name
 import kotlinx.android.synthetic.main.fragment_profile_edit.ti_phone
 import kotlinx.android.synthetic.main.fragment_profile_edit.ti_username
 import kotlinx.android.synthetic.main.fragment_profile_edit.toolbar_profile_edit
-import java.io.File
 
 class ProfileEditFragment : BaseFragment(), ProfileEditView {
 
@@ -175,7 +174,7 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
 
         chooseAvatarDialog.view.tv_dialog_open_gallery.setOnClickListener { openGallery() }
         chooseAvatarDialog.view.tv_dialog_remove_photo.setOnClickListener {
-            iv_avatar.setImageResource(0)
+            iv_avatar.setImageResource(R.drawable.ic_no_avatar)
             chooseAvatarDialog.dismiss()
         }
 
