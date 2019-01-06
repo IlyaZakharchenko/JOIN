@@ -79,7 +79,7 @@ class ProfilePresenter(private val userRepository: UserRepository, private val a
                             if (it.isSuccessful)
                                 viewState.onImageDeleteSuccess()
                             else
-                                viewState.onError("Произошла ошибка, поробуйте позже")
+                                viewState.onError("Произошла ошибка, попробуйте позже")
                         }, {
                             viewState.onError(it.localizedMessage)
                         })

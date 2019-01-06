@@ -27,7 +27,7 @@ class ProfileEditPresenter(private val api: JoinApi, private val userRepository:
 
     fun updateUser(user: User?) {
         user?.id = userRepository.getUser()?.id
-
+        user?.profileImage = userRepository.getUser()?.profileImage
         if (!hasErrors(user)) {
             compositeDisposable.add(api
                     .changeUser(userRepository.getUser()?.token, user, user?.id)
@@ -136,7 +136,7 @@ class ProfileEditPresenter(private val api: JoinApi, private val userRepository:
                             if (it.isSuccessful)
                                 viewState.onImageDeleteSuccess()
                             else
-                                viewState.onError("Произошла ошибка, поробуйте позже")
+                                viewState.onError("Произошла ошибка, попробуйте позже")
                         }, {
                             viewState.onError(it.localizedMessage)
                         })

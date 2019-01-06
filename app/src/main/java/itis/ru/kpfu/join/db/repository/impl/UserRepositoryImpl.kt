@@ -6,6 +6,7 @@ import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.db.repository.base.BaseRepository
 
 class UserRepositoryImpl : BaseRepository(), UserRepository {
+
     override fun clearUser() {
         executeTransaction(
                 Realm.Transaction {
@@ -36,7 +37,7 @@ class UserRepositoryImpl : BaseRepository(), UserRepository {
         return realm.where(User::class.java).findFirst()
     }
 
-    override fun changeImageProfile(url: String) {
+     override fun changeImageProfile(url: String) {
         val user = getUser()
         executeTransaction(Realm.Transaction {
             user?.profileImage = url
