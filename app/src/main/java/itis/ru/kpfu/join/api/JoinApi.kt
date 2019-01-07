@@ -21,6 +21,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface JoinApi {
 
@@ -51,17 +52,28 @@ interface JoinApi {
     @GET("/user/{id}")
     fun getUserInfo(@Header("Authorization") token: String?, @Path("id") id: Long?): Single<User>
 
-    @GET("/projects")
-    fun getProjects(@Header("Authorization") token: String?): Single<List<Project>>
-
     @GET("/projects/{id}")
     fun getProject(@Header("Authorization") token: String?, @Path("id") id: Long): Single<Project>
 
     @GET("/user/{id}/projects")
     fun getMyProjects(@Header("Authorization") token: String?, @Path("id") userId: Long?): Single<List<Project>>
 
+    @GET("/projects")
+    fun getProjects(
+            @Header("Authorization") token: String?,
+            @Query("name") projectName: String? = null,
+            @Query("vacancy_name") vacancyName: String? = null,
+            @Query("knowledge_level") level: String? = null,
+            @Query("experience") exp: String? = null): Single<List<Project>>
+
     @GET("/user/search")
-    fun getUsers(@Header("Authorization") token: String?): Single<MutableList<ProjectMember>>
+    fun getUsers(
+            @Header("Authorization") token: String?,
+            @Query("project_id") projectId: Long?,
+            @Query("username") username: String? = null,
+            @Query("specialization_name") specName: String? = null,
+            @Query("knowledge_level") level: String? = null,
+            @Query("experience") exp: String? = null): Single<MutableList<ProjectMember>>
 
     @PUT("/user/{id}")
     fun changeUser(@Header("Authorization") token: String?, @Body user: User?, @Path(

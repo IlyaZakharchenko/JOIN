@@ -38,6 +38,8 @@ class ProfileEditPresenter(private val api: JoinApi, private val userRepository:
                         if (it.isSuccessful) {
                             user?.let { it1 -> userRepository.updateUser(it1) }
                             viewState.onEditSuccess()
+                        } else {
+                            viewState.onError()
                         }
                     }, {
                         it.printStackTrace()

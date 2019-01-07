@@ -7,7 +7,7 @@ import java.io.Serializable
 data class Project(
         var id: Long? = null,
         var name: String? = null,
-        var leader: User? = null,
+        var leader: ProjectMember? = null,
         var description: String? = null,
         var userId: Long? = null,
         var participants: List<ProjectMember>? = null,

@@ -263,6 +263,10 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
         Toast.makeText(baseActivity, "Требуется добавить хотя бы одну специализацию", Toast.LENGTH_SHORT).show()
     }
 
+    override fun onError() {
+        Toast.makeText(baseActivity, "Неопознанная ошибка", Toast.LENGTH_SHORT).show()
+    }
+
     private fun refreshErrors() {
         ti_first_name.error = null
         ti_last_name.error = null

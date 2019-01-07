@@ -22,13 +22,20 @@ import kotlinx.android.synthetic.main.fragment_users.rv_users
 import kotlinx.android.synthetic.main.fragment_users.search_view_users
 import kotlinx.android.synthetic.main.fragment_users.toolbar_all_users
 import android.graphics.PorterDuff
+import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.view.Gravity
 import android.view.ViewGroup.LayoutParams
 import android.widget.FrameLayout
+import itis.ru.kpfu.join.R.style
 import itis.ru.kpfu.join.utils.toPx
-import kotlinx.android.synthetic.main.fragment_users.btn_search_filter
+import kotlinx.android.synthetic.main.bottom_sheet_search_filter.btn_show_results_projects_filter
+import kotlinx.android.synthetic.main.bottom_sheet_search_filter.spinner_exp_projects_filter
+import kotlinx.android.synthetic.main.bottom_sheet_search_filter.spinner_lvl_projects_filter
+import kotlinx.android.synthetic.main.bottom_sheet_search_filter.spinner_spec_projects_filter
+import kotlinx.android.synthetic.main.fragment_users.btn_search_filter_users
+import kotlinx.android.synthetic.main.fragment_users.progress_bar_users
 
 class UsersFragment : BaseFragment(), UsersView {
 
@@ -64,9 +71,14 @@ class UsersFragment : BaseFragment(), UsersView {
         get() = toolbar_all_users
 
     private var adapter: UsersAdapter? = null
-    private var users: List<ProjectMember>? = null
     private var projectId: Long? = null
-    private var isSetted: Boolean = false
+    private var isSet: Boolean = false
+    private var bottomSheetDialog: BottomSheetDialog? = null
+    private var searchText: String? = null
+
+    private lateinit var itemsSpec: MutableList<String>
+    private lateinit var itemsLvl: MutableList<String>
+    private lateinit var itemsExp: MutableList<String>
 
     @InjectPresenter
     lateinit var presenter: UsersPresenter
@@ -86,12 +98,14 @@ class UsersFragment : BaseFragment(), UsersView {
 
         projectId = arguments?.getLong(USERS_FRAGMENT)
 
+        initBottomSheetDialog()
+        initClickListeners()
         initRecyclerView()
-        presenter.getUsers()
+        presenter.getUsers(projectId)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.menu_users, menu)
+        inflater?.inflate(R.menu.menu_search, menu)
         menu?.findItem(R.id.action_search)?.let { initSearchView(it) }
 
         super.onCreateOptionsMenu(menu, inflater)
@@ -106,51 +120,117 @@ class UsersFragment : BaseFragment(), UsersView {
 
     private fun initSearchView(item: MenuItem) {
         toolbar?.navigationIcon?.setColorFilter(ContextCompat.getColor(baseActivity, R.color.colorWhite),
-                PorterDuff.Mode.SRC_ATOP);
+                PorterDuff.Mode.SRC_ATOP)
 
         val layoutParams = FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         layoutParams.gravity = Gravity.CENTER or Gravity.END
 
         search_view_users.setMenuItem(item)
-        search_view_users.showSearch(false)
-        search_view_users.clearFocus()
         search_view_users.setHint("Поиск")
+        search_view_users.closeSearch()
         search_view_users.setOnQueryTextListener(object : MaterialSearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String): Boolean {
 
                 if (newText.isEmpty()) {
                     layoutParams.setMargins(0, 0, toPx(16, baseActivity), 0)
-                    isSetted = false
-                    btn_search_filter.layoutParams = layoutParams
-                } else if (!isSetted && !newText.isEmpty()) {
+                    isSet = false
+                    btn_search_filter_users.layoutParams = layoutParams
+
+                    bottomSheetDialog?.apply {
+                        spinner_spec_projects_filter.selectedIndex = 0
+                        spinner_lvl_projects_filter.selectedIndex = 0
+                        spinner_exp_projects_filter.selectedIndex = 0
+                    }
+                } else if (!isSet && !newText.isEmpty()) {
                     layoutParams.setMargins(0, 0, toPx(48, baseActivity), 0)
-                    isSetted = true
-                    btn_search_filter.layoutParams = layoutParams
+                    isSet = true
+                    btn_search_filter_users.layoutParams = layoutParams
                 }
 
-                searchUsers(newText)
+                searchText = newText
+                bottomSheetDialog?.let {
+                    presenter.searchUsers(
+                            projectId,
+                            searchText,
+                            itemsSpec[it.spinner_spec_projects_filter.selectedIndex],
+                            itemsExp[it.spinner_exp_projects_filter.selectedIndex],
+                            itemsLvl[it.spinner_lvl_projects_filter.selectedIndex])
+                }
                 return true
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
                 hideKeyboard()
-                searchUsers(query)
+
+                searchText = query
+                bottomSheetDialog?.let {
+                    presenter.searchUsers(
+                            projectId,
+                            searchText,
+                            itemsSpec[it.spinner_spec_projects_filter.selectedIndex],
+                            itemsExp[it.spinner_exp_projects_filter.selectedIndex],
+                            itemsLvl[it.spinner_lvl_projects_filter.selectedIndex])
+                }
                 return true
             }
         })
         search_view_users.setOnSearchViewListener(object : MaterialSearchView.SearchViewListener {
             override fun onSearchViewClosed() {
-                btn_search_filter.visibility = View.GONE
+                btn_search_filter_users.visibility = View.GONE
             }
 
             override fun onSearchViewShown() {
-                btn_search_filter.visibility = View.VISIBLE
+                btn_search_filter_users.visibility = View.VISIBLE
             }
         })
     }
 
+    private fun initClickListeners() {
+        btn_search_filter_users.setOnClickListener {
+            bottomSheetDialog?.show()
+        }
+
+        bottomSheetDialog?.btn_show_results_projects_filter?.setOnClickListener {
+            bottomSheetDialog?.let {
+                presenter.searchUsers(
+                        projectId,
+                        searchText,
+                        itemsSpec[it.spinner_spec_projects_filter.selectedIndex],
+                        itemsExp[it.spinner_exp_projects_filter.selectedIndex],
+                        itemsLvl[it.spinner_lvl_projects_filter.selectedIndex])
+            }
+
+            bottomSheetDialog?.dismiss()
+        }
+    }
+
     private fun onInviteClick(user: ProjectMember) {
         presenter.inviteUser(user, projectId)
+        adapter?.setUserInvited(user)
+    }
+
+    private fun initBottomSheetDialog() {
+        bottomSheetDialog = BottomSheetDialog(baseActivity, style.BottomSheetDialog)
+        val sheetView = activity?.layoutInflater?.inflate(R.layout.bottom_sheet_search_filter, null)
+        sheetView?.let { bottomSheetDialog?.setContentView(it) }
+
+        itemsSpec = mutableListOf("Ничего не выбрано", "Android Developer", "iOS Developer", "Backend developer",
+                "Database Developer", "Smth", "DB master", "spec1", "Designer", "Project Manager")
+        itemsLvl = mutableListOf("Ничего не выбрано", "Junior", "Middle", "Senior")
+        itemsExp = mutableListOf("Ничего не выбрано")
+
+        for (i in 0..50) {
+            itemsExp.add("$i")
+        }
+
+        bottomSheetDialog?.apply {
+            bottomSheetDialog?.spinner_spec_projects_filter?.setItems(itemsSpec)
+            bottomSheetDialog?.spinner_exp_projects_filter?.setItems(itemsExp)
+            bottomSheetDialog?.spinner_lvl_projects_filter?.setItems(itemsLvl)
+            spinner_spec_projects_filter.selectedIndex = 0
+            spinner_lvl_projects_filter.selectedIndex = 0
+            spinner_exp_projects_filter.selectedIndex = 0
+        }
     }
 
     private fun onUserClick(userId: Long) {
@@ -158,12 +238,11 @@ class UsersFragment : BaseFragment(), UsersView {
     }
 
     override fun setUsers(users: MutableList<ProjectMember>) {
-        this.users = users
         adapter?.setUsers(users)
     }
 
     override fun onConnectionError() {
-        showProgressError { presenter.getUsers() }
+        showProgressError { presenter.getUsers(projectId) }
     }
 
     override fun showProgress() {
@@ -176,17 +255,15 @@ class UsersFragment : BaseFragment(), UsersView {
 
     override fun onInviteSuccess(user: ProjectMember) {
         Snackbar.make(rv_users, "Пользователь ${user.username} приглашен в проект", Snackbar.LENGTH_SHORT).show()
-        adapter?.updateUser(user)
     }
 
-    fun searchUsers(text: String) {
-        val result = ArrayList<ProjectMember>()
+    override fun hideInnerProgress() {
+        progress_bar_users.visibility = View.GONE
+        rv_users.visibility = View.VISIBLE
+    }
 
-        users?.forEach {
-            val username = it.username?.trim() ?: ""
-            if (username.startsWith(text.trim(), true)) result.add(it)
-        }
-
-        adapter?.setUsers(result)
+    override fun showInnerProgress() {
+        progress_bar_users.visibility = View.VISIBLE
+        rv_users.visibility = View.GONE
     }
 }

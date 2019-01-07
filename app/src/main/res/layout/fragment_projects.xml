@@ -10,14 +10,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:elevation="8dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:elevation="8dp">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_projects"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            app:titleTextColor="@color/colorWhite" />
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_projects"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                app:titleTextColor="@color/colorWhite" />
+
+            <itis.ru.kpfu.join.view.MySearchView
+                android:id="@+id/search_view_projects"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/btn_search_filter_projects"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_search_filter"
+                    android:layout_gravity="end|center"
+                    android:layout_marginEnd="16dp"
+                    android:visibility="gone"/>
+            </itis.ru.kpfu.join.view.MySearchView>
+
+        </FrameLayout>
     </android.support.design.widget.AppBarLayout>
 
 
@@ -32,6 +52,16 @@
             android:layout_height="match_parent">
 
         </android.support.v7.widget.RecyclerView>
+
+        <ProgressBar
+            android:id="@+id/progress_bar_projects"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"/>
     </android.support.constraint.ConstraintLayout>
 
 </android.support.design.widget.CoordinatorLayout>

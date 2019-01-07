@@ -17,4 +17,8 @@ interface ProjectsView: MvpView {
     fun onError(message : String)
 
     fun setProjects(projects: List<Project>)
+
+    fun hideInnerProgress()
+
+    fun showInnerProgress()
 }

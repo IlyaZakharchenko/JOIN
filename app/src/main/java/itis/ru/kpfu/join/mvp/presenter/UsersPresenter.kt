@@ -16,9 +16,9 @@ class UsersPresenter(private val api: JoinApi, private val userRepository: UserR
 
     private val compositeDisposable = CompositeDisposable()
 
-    fun getUsers() {
+    fun getUsers(projectId: Long?) {
         compositeDisposable.add(
-                api.getUsers(userRepository.getUser()?.token)
+                api.getUsers(userRepository.getUser()?.token, projectId)
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnSubscribe { viewState.showProgress() }
                         .doAfterTerminate { viewState.hideProgress() }
@@ -27,6 +27,30 @@ class UsersPresenter(private val api: JoinApi, private val userRepository: UserR
                         }, {
                             viewState.onConnectionError()
                         })
+        )
+    }
+
+    fun searchUsers(projectId: Long?, username: String?, specName: String? = null, exp: String? = null,
+            lvl: String? = null) {
+
+        val spec = if (specName == "Ничего не выбрано") null else specName
+        val experience = if (exp == "Ничего не выбрано") null else exp
+        var level = if (lvl == "Ничего не выбрано") null else lvl
+
+        when (level) {
+            "Junior" -> level = "0"
+            "Middle" -> level = "1"
+            "Senior" -> level = "2"
+        }
+
+        compositeDisposable.add(
+                api.getUsers(userRepository.getUser()?.token, projectId, username, spec, level, experience)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe { viewState.showInnerProgress() }
+                        .doAfterTerminate { viewState.hideInnerProgress() }
+                        .subscribe({
+                            viewState.setUsers(it)
+                        }, { viewState.onConnectionError() })
         )
     }
 

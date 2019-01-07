@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:paddingBottom="16dp"
     android:paddingEnd="16dp"
-    android:paddingStart="16dp">
+    android:paddingStart="16dp"
+    android:background="@color/colorWhite">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/all_container"

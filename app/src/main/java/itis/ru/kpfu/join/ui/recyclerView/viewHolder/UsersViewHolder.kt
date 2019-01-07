@@ -29,11 +29,11 @@ class UsersViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         itemView.setOnClickListener { user.id?.let { it1 -> onUserClick(it1) } }
 
-        if (user.inviteIsAvailable == true) {
+        if (user.status == 1 || user.status == 2) {
+            btn_add_user.visibility = View.GONE
+        } else {
             btn_add_user.visibility = View.VISIBLE
             btn_add_user.setOnClickListener { onInviteClick(user) }
-        } else {
-            btn_add_user.visibility = View.GONE
         }
     }
 }

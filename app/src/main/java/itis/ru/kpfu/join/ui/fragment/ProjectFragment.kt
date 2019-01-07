@@ -12,6 +12,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import itis.ru.kpfu.join.JoinApplication
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.api.model.Project
+import itis.ru.kpfu.join.api.model.ProjectMember
 import itis.ru.kpfu.join.mvp.presenter.ProjectPresenter
 import itis.ru.kpfu.join.mvp.view.ProjectView
 import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
@@ -88,7 +89,7 @@ class ProjectFragment : BaseFragment(), ProjectView {
     }
 
     private fun initRecyclerViews() {
-        membersAdapter = ProjectMemberAdapter()
+        membersAdapter = ProjectMemberAdapter { onUserClick(it) }
         jobsAdapter = ProjectJobAdapter()
 
         rv_project_members.layoutManager = LinearLayoutManager(baseActivity)
@@ -96,6 +97,10 @@ class ProjectFragment : BaseFragment(), ProjectView {
 
         rv_project_jobs.layoutManager = LinearLayoutManager(baseActivity)
         rv_project_jobs.adapter = jobsAdapter
+    }
+
+    private fun onUserClick(id: Long) {
+        (activity as? FragmentHostActivity)?.setFragment(ProfileFragment.newInstance(id), true)
     }
 
     override fun setProject(item: Project, isMyProject: Boolean) {
@@ -106,7 +111,15 @@ class ProjectFragment : BaseFragment(), ProjectView {
             add_member_container.visibility = GONE
         }
 
-        item.participants?.let { membersAdapter?.setMembers(it) }
+        val allMembers = ArrayList<ProjectMember>()
+
+        item.leader?.let {
+            it.isLeader = true
+            allMembers.add(it)
+        }
+        item.participants?.let { allMembers.addAll(it) }
+
+        membersAdapter?.setMembers(allMembers)
         item.vacancies?.let { jobsAdapter?.setJobs(it, isMyProject) }
     }
 

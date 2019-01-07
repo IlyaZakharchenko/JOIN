@@ -5,5 +5,6 @@ data class ProjectMember(
         var username: String? = null,
         var email: String? = null,
         var profileImage: String? = null,
-        var inviteIsAvailable: Boolean? = true
+        var status: Int? = null,
+        var isLeader: Boolean? = false
 )

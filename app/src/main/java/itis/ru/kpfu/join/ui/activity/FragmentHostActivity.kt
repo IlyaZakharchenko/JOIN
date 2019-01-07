@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.design.internal.BottomNavigationItemView
 import android.support.design.internal.BottomNavigationMenuView
+import android.support.design.widget.BottomSheetBehavior
 import android.support.v4.app.FragmentManager
 import android.support.v7.widget.Toolbar
 import android.view.View
@@ -17,6 +18,7 @@ import itis.ru.kpfu.join.mvp.view.FragmentHostView
 import itis.ru.kpfu.join.ui.activity.base.BaseActivity
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 import kotlinx.android.synthetic.main.activity_fragment_host.bottom_nav_bar
+import kotlinx.android.synthetic.main.bottom_sheet_search_filter.bottom_sheet_projects_filter
 import javax.inject.Inject
 
 class FragmentHostActivity : BaseActivity(), FragmentHostView {

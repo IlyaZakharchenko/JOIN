@@ -18,6 +18,8 @@ import kotlinx.android.synthetic.main.item_specialisation.view.tv_name
 class SpecializationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bindViewHolder(item: Specialization) = with(itemView) {
+
+        chip_container.removeAllViews()
         item.technologies?.let { initTechnologies(divideString(it)) }
 
         tv_experience.text = item.experience.toString()
@@ -37,12 +39,14 @@ class SpecializationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
 
     private fun initTechnologies(items: HashSet<String>) = with(itemView) {
         items.forEach {
-            val chip = Chip(context)
-            chip.chipText = it
-            val layoutParams = LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-            layoutParams.setMargins(toPx(8, context), 0, 0, toPx(8, context))
-            chip.layoutParams = layoutParams
-            chip_container.addView(chip)
+            if (it.isNotEmpty()) {
+                val chip = Chip(context)
+                chip.chipText = it
+                val layoutParams = LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+                layoutParams.setMargins(toPx(8, context), 0, 0, toPx(8, context))
+                chip.layoutParams = layoutParams
+                chip_container.addView(chip)
+            }
         }
     }
 }

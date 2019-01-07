@@ -7,11 +7,11 @@ import io.reactivex.disposables.CompositeDisposable
 import itis.ru.kpfu.join.api.JoinApi
 import itis.ru.kpfu.join.api.model.Project
 import itis.ru.kpfu.join.db.repository.UserRepository
-import itis.ru.kpfu.join.mvp.view.AddPojectView
+import itis.ru.kpfu.join.mvp.view.AddProjectView
 
 @InjectViewState
 class AddProjectPresenter(private val api: JoinApi, private val userRepository: UserRepository) :
-        MvpPresenter<AddPojectView>() {
+        MvpPresenter<AddProjectView>() {
 
     private val compositeDisposable = CompositeDisposable()
 

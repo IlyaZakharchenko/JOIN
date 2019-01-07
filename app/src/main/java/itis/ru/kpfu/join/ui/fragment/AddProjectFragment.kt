@@ -14,7 +14,7 @@ import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.api.model.Project
 import itis.ru.kpfu.join.db.entity.Specialization
 import itis.ru.kpfu.join.mvp.presenter.AddProjectPresenter
-import itis.ru.kpfu.join.mvp.view.AddPojectView
+import itis.ru.kpfu.join.mvp.view.AddProjectView
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 import itis.ru.kpfu.join.ui.fragment.dialog.AddSpecializationDialog
 import itis.ru.kpfu.join.ui.recyclerView.adapter.SpecializationsEditAdapter
@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.fragment_add_project.et_project_name
 import kotlinx.android.synthetic.main.fragment_add_project.rv_add_project_jobs
 import kotlinx.android.synthetic.main.fragment_add_project.toolbar_add_project
 
-class AddProjectFragment : BaseFragment(), AddPojectView {
+class AddProjectFragment : BaseFragment(), AddProjectView {
 
     companion object {
         fun newInstance(): AddProjectFragment {

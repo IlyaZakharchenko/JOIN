@@ -7,7 +7,7 @@ import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.api.model.ProjectMember
 import itis.ru.kpfu.join.ui.recyclerView.viewHolder.ProjectMemberViewHolder
 
-class ProjectMemberAdapter(var items: List<ProjectMember> = ArrayList()) : RecyclerView.Adapter<ProjectMemberViewHolder>() {
+class ProjectMemberAdapter(var items: List<ProjectMember> = ArrayList(), var onUserClick: (Long) -> Unit) : RecyclerView.Adapter<ProjectMemberViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectMemberViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_project_member, parent, false)
@@ -19,7 +19,7 @@ class ProjectMemberAdapter(var items: List<ProjectMember> = ArrayList()) : Recyc
     }
 
     override fun onBindViewHolder(holder: ProjectMemberViewHolder, position: Int) {
-        holder.bindViewHolder(items[position])
+        holder.bindViewHolder(items[position], onUserClick)
     }
 
     fun setMembers(list: List<ProjectMember>){

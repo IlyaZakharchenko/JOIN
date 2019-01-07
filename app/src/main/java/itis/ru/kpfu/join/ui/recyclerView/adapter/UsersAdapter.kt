@@ -30,9 +30,9 @@ class UsersAdapter(
         notifyDataSetChanged()
     }
 
-    fun updateUser(user: ProjectMember) {
+    fun setUserInvited(user: ProjectMember) {
         val position = users.indexOf(user)
-        user.inviteIsAvailable = false
+        user.status = 2
         users[position] = user
         notifyItemChanged(position)
     }

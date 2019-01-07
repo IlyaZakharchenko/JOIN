@@ -14,6 +14,8 @@ class ProjectsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         tv_project_name.text = item.name
         tv_project_description.text = item.description
 
+        cg_vacancies.removeAllViews()
+
         item.vacancies?.forEach {
             if(!it.name.isNullOrEmpty()) {
                 val chip = Chip(context)

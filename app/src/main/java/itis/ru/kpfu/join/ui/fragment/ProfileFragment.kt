@@ -49,9 +49,9 @@ class ProfileFragment : BaseFragment(), ProfileView {
     companion object {
         const val PROFILE_FRAGMENT = "PROFILE_FRAGMENT"
 
-        fun newInstance(userId: Long = -1L): ProfileFragment {
+        fun newInstance(userId: Long?): ProfileFragment {
             val args = Bundle()
-            args.putLong(PROFILE_FRAGMENT, userId)
+            args.putLong(PROFILE_FRAGMENT, userId ?: -1L)
 
             val fragment = ProfileFragment()
             fragment.arguments = args
@@ -69,7 +69,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
         get() = null
 
     override val enableBackPressed: Boolean
-        get() = false
+        get() = true
 
     override val enableBottomNavBar: Boolean
         get() = true
@@ -97,8 +97,8 @@ class ProfileFragment : BaseFragment(), ProfileView {
         super.onViewCreated(view, savedInstanceState)
 
         userId = arguments?.getLong(PROFILE_FRAGMENT)
-        if(userId!= -1L) {
-            (activity as? FragmentHostActivity)?.enableBackPressed(true)
+        if (userId == presenter.getUserFromDb()?.id || userId == -1L) {
+            (activity as? FragmentHostActivity)?.enableBackPressed(false)
         }
 
         user = userId?.let { presenter.getUser(it) } ?: User()
@@ -133,7 +133,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     private fun initListeners() {
-        if (userId == -1L) {
+        if (userId == presenter.getUserFromDb()?.id || userId == -1L) {
             btn_edit.visibility = View.VISIBLE
             btn_edit.setOnClickListener {
                 (activity as? FragmentHostActivity)?.setFragment(ProfileEditFragment.newInstance(), true)
@@ -236,13 +236,13 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        if(userId == -1L) {
+        if (userId == presenter.getUserFromDb()?.id || userId == -1L) {
             inflater?.inflate(R.menu.menu_profile, menu)
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId) {
+        when (item?.itemId) {
             R.id.menu_exit -> {
                 presenter.exit()
                 (activity as? FragmentHostActivity)?.setFragment(SignInFragment.newInstance(), false)

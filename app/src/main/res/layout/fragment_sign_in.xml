@@ -103,7 +103,7 @@
         <Button
             android:id="@+id/btn_forgot_pass"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_height="25dp"
             android:layout_gravity="center"
             android:background="@null"
             android:text="@string/forgot_password"

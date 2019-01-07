@@ -22,7 +22,7 @@ class ProfilePresenter(private val userRepository: UserRepository, private val a
     private val compositeDisposable = CompositeDisposable()
 
     fun getUser(userId: Long): User? {
-        if (userId == -1L) {
+        if (userId == userRepository.getUser()?.id || userId == -1L) {
             return userRepository.getUser()
         } else {
             compositeDisposable.add(
@@ -95,5 +95,9 @@ class ProfilePresenter(private val userRepository: UserRepository, private val a
 
     fun exit() {
         userRepository.clearUser()
+    }
+
+    fun getUserFromDb(): User? {
+        return userRepository.getUser()
     }
 }
