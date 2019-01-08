@@ -29,4 +29,9 @@ class NotificationsAdapter(
         this.list = list
         notifyDataSetChanged()
     }
+
+    fun removeElement(position: Int) {
+        list.drop(position)
+        notifyDataSetChanged()
+    }
 }

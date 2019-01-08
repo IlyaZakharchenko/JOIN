@@ -2,7 +2,10 @@ package itis.ru.kpfu.join.ui.fragment
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.ViewHolder
 import android.support.v7.widget.Toolbar
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -15,6 +18,7 @@ import itis.ru.kpfu.join.mvp.view.NotificationsView
 import itis.ru.kpfu.join.ui.activity.FragmentHostActivity
 import itis.ru.kpfu.join.ui.fragment.base.BaseFragment
 import itis.ru.kpfu.join.ui.recyclerView.adapter.NotificationsAdapter
+import itis.ru.kpfu.join.ui.recyclerView.viewHolder.NotificationsViewHolder
 import kotlinx.android.synthetic.main.fragment_notifications.recyclerView
 import kotlinx.android.synthetic.main.fragment_notifications.toolbar_notifications
 
@@ -92,6 +96,14 @@ class NotificationsFragment : BaseFragment(), NotificationsView {
 
     override fun setNotifications(notifications: List<Notification>) {
         adapter?.setItems(notifications)
+    }
+
+    private fun onLongClick(id: Long?, position: Int) {
+        presenter.removeNotification(id, position)
+    }
+
+    override fun onDeleteSuccess(position: Int) {
+        adapter?.removeElement(position)
     }
 
     override fun onConnectionError() {

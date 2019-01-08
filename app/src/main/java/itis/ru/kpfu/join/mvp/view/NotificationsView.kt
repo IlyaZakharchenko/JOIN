@@ -15,4 +15,6 @@ interface NotificationsView: MvpView {
     fun showProgress()
 
     fun hideProgress()
+
+    fun onDeleteSuccess(position: Int)
 }

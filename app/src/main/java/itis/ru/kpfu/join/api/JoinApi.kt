@@ -85,4 +85,7 @@ interface JoinApi {
     @POST("/notifications/{id}")
     fun responseToNotification(@Header("Authorization") token: String?, @Body answer: NotificationResponse,
             @Path("id") id: Long?): Single<Response<Void>>
+
+    @DELETE("/notifications/{id}")
+    fun deleteNotification(@Header("Authorization") token: String?, @Path("id") id: Long?): Single<Response<Void>>
 }

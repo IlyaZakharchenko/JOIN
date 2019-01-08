@@ -50,4 +50,20 @@ class NotificationsPresenter(private val api: JoinApi, private val userRepositor
                         })
         )
     }
+
+    fun removeNotification(id: Long?, position: Int) {
+        compositeDisposable.add(
+                api
+                        .deleteNotification(userRepository.getUser()?.token, id)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            if (it.isSuccessful)
+                                viewState.onDeleteSuccess(position)
+                            else
+                                viewState.onConnectionError()
+                        }, {
+                            viewState.onConnectionError()
+                        })
+        )
+    }
 }
