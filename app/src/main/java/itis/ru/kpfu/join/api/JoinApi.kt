@@ -75,6 +75,9 @@ interface JoinApi {
             @Query("knowledge_level") level: String? = null,
             @Query("experience") exp: String? = null): Single<MutableList<ProjectMember>>
 
+    @GET("/specialization/name")
+    fun getSpecializations( @Header("Authorization") token: String?): Single<MutableList<String>>
+
     @PUT("/user/{id}")
     fun changeUser(@Header("Authorization") token: String?, @Body user: User?, @Path(
             "id") id: Long?): Single<Response<Void>>

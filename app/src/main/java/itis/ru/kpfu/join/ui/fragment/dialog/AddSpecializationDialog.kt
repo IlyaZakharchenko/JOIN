@@ -68,11 +68,11 @@ class AddSpecializationDialog : DialogFragment() {
     }
 
     private fun initItems() {
-        itemsSpec = mutableListOf("Ничего не выбрано", "Android Developer", "iOS Developer", "Backend developer",
-                "Database Developer", "Smth", "DB master", "spec1", "Designer", "Project Manager")
-        itemsTech = mutableListOf("Ничего не выбрано", "Android", "Kotlin", "Ios", "Ruby", "Rx", "Java", "Python",
-                "C#", "C++", "Oracle", "C", "Postgress", "MySQL", "MVP", "MVVM", "Dependency Injection", "API",
-                "Technology1", "Technology2", "Technology3", "Technology4")
+        itemsSpec = mutableListOf("Ничего не выбрано", "iOS Developer", "Android Developer", "Java Developer",
+                "Designer", "Project Manager", "C# Developer", "RoR Developer", "Python Developer",
+                "Frontend Developer", "Backend Developer", "SMM Manager", "System Administrator")
+        itemsTech = mutableListOf("Ничего не выбрано", "Swift", "Objective C", "Java", "Kotlin", "Sketch", "Spring",
+                "Python", "C#", "PostgreSQL", "SQL", "Zoom", "Pivotal tracker")
         itemsLvl = mutableListOf("Ничего не выбрано", "Junior", "Middle", "Senior")
         itemsExp = mutableListOf("Ничего не выбрано")
 

@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.fragment_project.et_project_name
 import kotlinx.android.synthetic.main.fragment_project.rv_project_jobs
 import kotlinx.android.synthetic.main.fragment_project.rv_project_members
 import kotlinx.android.synthetic.main.fragment_project.toolbar_project
+import kotlinx.android.synthetic.main.fragment_project.tv_project_empty_vacancies
 
 class ProjectFragment : BaseFragment(), ProjectView {
 
@@ -121,6 +122,8 @@ class ProjectFragment : BaseFragment(), ProjectView {
 
         membersAdapter?.setMembers(allMembers)
         item.vacancies?.let { jobsAdapter?.setJobs(it, isMyProject) }
+
+        tv_project_empty_vacancies.visibility = if(item.vacancies?.size == 0) View.VISIBLE else View.GONE
     }
 
     override fun onConnectionError() {

@@ -131,8 +131,22 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_jobs_title"
-                        tools:listitem="@layout/item_project_job"/>
+                        app:layout_constraintTop_toBottomOf="@+id/tv_jobs_title" />
+
+                    <TextView
+                        android:id="@+id/tv_project_empty_vacancies"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Нет доступных вакансий"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="16sp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_jobs_title"/>
 
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.CardView>
