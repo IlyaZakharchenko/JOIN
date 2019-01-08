@@ -10,7 +10,7 @@ class UserRepositoryImpl : BaseRepository(), UserRepository {
     override fun clearUser() {
         executeTransaction(
                 Realm.Transaction {
-                    it.deleteAll()
+                    it.delete(User::class.java)
                 }
         )
     }

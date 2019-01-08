@@ -101,15 +101,15 @@ class ProjectsFragment : BaseFragment(), ProjectsView {
         val sheetView = activity?.layoutInflater?.inflate(R.layout.bottom_sheet_search_filter, null)
         sheetView?.let { bottomSheetDialog?.setContentView(it) }
 
-        itemsSpec = mutableListOf("Ничего не выбрано", "Android Developer", "iOS Developer", "Backend developer",
-                "Database Developer", "Smth", "DB master", "spec1", "Designer", "Project Manager")
+        itemsSpec = mutableListOf("Ничего не выбрано", "iOS Developer", "Android Developer", "Java Developer",
+                "Designer", "Project Manager", "C# Developer", "RoR Developer", "Python Developer",
+                "Frontend Developer", "Backend Developer", "SMM Manager", "System Administrator")
         itemsLvl = mutableListOf("Ничего не выбрано", "Junior", "Middle", "Senior")
         itemsExp = mutableListOf("Ничего не выбрано")
 
         for (i in 0..50) {
             itemsExp.add("$i")
         }
-
 
         bottomSheetDialog?.apply {
             bottomSheetDialog?.spinner_spec_projects_filter?.setItems(itemsSpec)
