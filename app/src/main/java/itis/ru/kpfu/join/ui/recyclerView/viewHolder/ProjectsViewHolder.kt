@@ -26,23 +26,4 @@ class ProjectsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         itemView.setOnClickListener { item.id?.let { it1 -> onClick(it1) } }
     }
-
-   /* private fun initUsers(userList: List<User>) = with(itemView) {
-        for (i in 0..userList.lastIndex) {
-            var it = userList[i]
-            var layoutParams = LinearLayout.LayoutParams(48, 48)
-            val avatarCIV = ImageView(context)
-            if (i != 0) {
-                layoutParams.marginStart = -24
-            }
-            avatarCIV.layoutParams = layoutParams
-            avatarCIV.setProfileImage(R.drawable.ic_no_avatar)
-            Picasso
-                    .with(context)
-                    .load(R.drawable.ic_no_avatar)
-                    .resize(layoutParams.width, layoutParams.height)
-                    .into(avatarCIV)
-            image_container.addView(avatarCIV)
-        }
-    }*/
 }

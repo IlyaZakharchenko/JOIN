@@ -45,6 +45,9 @@ interface JoinApi {
     @POST("/user/invite")
     fun inviteToProject(@Header("Authorization") token: String?, @Body form: InviteForm?): Single<Response<Void>>
 
+    @POST("/projects/join")
+    fun joinProject(@Header("Authorization") token: String?, @Body form: InviteForm?): Single<Response<Void>>
+
     @GET("/user/{id}/notifications")
     fun getNotifications(@Header("Authorization") token: String?, @Path(
             "id") userId: Long?): Single<List<Notification>>

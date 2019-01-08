@@ -8,11 +8,13 @@ import itis.ru.kpfu.join.api.model.Project
 @StateStrategyType(OneExecutionStateStrategy::class)
 interface ProjectView: MvpView {
 
-    fun setProject(item: Project, isMyProject: Boolean)
+    fun setProject(item: Project, isMyProject: Boolean, isInProject: Boolean)
 
     fun onConnectionError()
 
     fun showProgress()
 
     fun hideProgress()
+
+    fun onApplySuccess()
 }

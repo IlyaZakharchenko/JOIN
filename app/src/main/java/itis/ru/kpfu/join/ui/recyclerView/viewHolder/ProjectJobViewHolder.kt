@@ -4,7 +4,6 @@ import android.support.design.chip.Chip
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.LinearLayout.GONE
 import android.widget.LinearLayout.LayoutParams
 import itis.ru.kpfu.join.db.entity.Specialization
 import itis.ru.kpfu.join.utils.divideString
@@ -16,11 +15,13 @@ import kotlinx.android.synthetic.main.item_project_job.view.tv_job_experience
 import kotlinx.android.synthetic.main.item_project_job.view.tv_job_experience_years
 import kotlinx.android.synthetic.main.item_project_job.view.tv_job_lvl
 import kotlinx.android.synthetic.main.item_project_job.view.tv_job_name
-import kotlinx.android.synthetic.main.item_specialisation.view.chip_container
 
-class ProjectJobViewHolder(view: View, private var isMyProject: Boolean) : RecyclerView.ViewHolder(view) {
+class ProjectJobViewHolder(
+        view: View,
+        private var isMyProject: Boolean,
+        private var isInProject: Boolean) : RecyclerView.ViewHolder(view) {
 
-    fun bindViewHolder(item: Specialization) = with(itemView) {
+    fun bindViewHolder(item: Specialization, onApply: () -> Unit) = with(itemView) {
 
         chip_container_job.removeAllViews()
         item.technologies?.let { initTechnologies(divideString(it)) }
@@ -29,7 +30,12 @@ class ProjectJobViewHolder(view: View, private var isMyProject: Boolean) : Recyc
         tv_job_lvl.text = parseLevelFromInt(item.knowledgeLevel)
         tv_job_name.text = item.name
 
-        if (isMyProject) {
+        btn_send_apply.setOnClickListener {
+            onApply()
+            btn_send_apply.visibility = View.GONE
+        }
+
+        if (isMyProject or isInProject) {
             btn_send_apply.visibility = View.GONE
         }
 

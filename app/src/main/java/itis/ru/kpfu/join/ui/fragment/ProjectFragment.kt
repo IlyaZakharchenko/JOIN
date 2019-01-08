@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.View.GONE
+import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import itis.ru.kpfu.join.JoinApplication
@@ -86,11 +87,12 @@ class ProjectFragment : BaseFragment(), ProjectView {
         add_member_container.setOnClickListener {
             (baseActivity as? FragmentHostActivity)?.setFragment(UsersFragment.newInstance(projectId ?: -1), true)
         }
+
     }
 
     private fun initRecyclerViews() {
         membersAdapter = ProjectMemberAdapter { onUserClick(it) }
-        jobsAdapter = ProjectJobAdapter()
+        jobsAdapter = ProjectJobAdapter {onApply()}
 
         rv_project_members.layoutManager = LinearLayoutManager(baseActivity)
         rv_project_members.adapter = membersAdapter
@@ -103,7 +105,15 @@ class ProjectFragment : BaseFragment(), ProjectView {
         (activity as? FragmentHostActivity)?.setFragment(ProfileFragment.newInstance(id), true)
     }
 
-    override fun setProject(item: Project, isMyProject: Boolean) {
+    private fun onApply() {
+        presenter.sendApply(projectId)
+    }
+
+    override fun onApplySuccess() {
+        Toast.makeText(context, "Заявка успешно подана", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun setProject(item: Project, isMyProject: Boolean, isInProject: Boolean) {
         et_project_name.setText(item.name)
         et_project_desc.setText(item.description)
 
@@ -120,7 +130,7 @@ class ProjectFragment : BaseFragment(), ProjectView {
         item.participants?.let { allMembers.addAll(it) }
 
         membersAdapter?.setMembers(allMembers)
-        item.vacancies?.let { jobsAdapter?.setJobs(it, isMyProject) }
+        item.vacancies?.let { jobsAdapter?.setJobs(it, isMyProject, isInProject) }
     }
 
     override fun onConnectionError() {
