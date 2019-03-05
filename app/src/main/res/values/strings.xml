@@ -21,7 +21,7 @@
     <string name="restore_pass_title">Мы отправим сообщения для восстановления пароля на вашу электронную почту</string>
     <string name="restore_password">Восстановить пароль</string>
     <string name="repeat">Повторить</string>
-    <string name="download_error">Произошла ошибка при загрузке</string>
+    <string name="download_error">Произошла ошибка при загрузке данных</string>
     <string name="profile">Гаязов Дамир</string>
     <string name="password_repeat">Повторите пароль</string>
     <string name="confirmation_code">Код подтверждения</string>
@@ -45,4 +45,11 @@
     <string name="error_phone_number">Некорректный номер телефона</string>
     <string name="my_projects_toolbar">Мои проекты</string>
     <string name="exit">Выйти</string>
+    <string name="cancel">Отмена</string>
+    <string name="ok">Ок</string>
+    <string name="make_photo">Сделать фото</string>
+    <string name="open_gallery">Открыть галерею</string>
+    <string name="dialog_exit_title">Вы действительно хотите выйти?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
 </resources>

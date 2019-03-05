@@ -6,7 +6,20 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:dialogTheme">@style/Dialog</item>
+        <item name="android:textColorPrimary">@color/colorMain</item>
+        <item name="android:textColorTertiary">@color/colorTertiary</item>
+        <item name="android:textColorHint">@color/colorHint</item>
+        <item name="android:textColorHighlight">@color/colorSecondary</item>
     </style>
+
+    <style name="Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowMinWidthMajor">60%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+        <item name="colorControlNormal">@color/colorWhite</item>
+    </style>
+
 
     <style name="CollapsedAppBar" parent="@android:style/TextAppearance.Medium">
         <item name="android:textSize">24sp</item>
@@ -27,5 +40,4 @@
     <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
         <item name="behavior_peekHeight">500dp</item>
     </style>
-
 </resources>

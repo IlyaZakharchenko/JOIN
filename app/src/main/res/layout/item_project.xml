@@ -4,8 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="8dp"
-    android:background="@color/colorWhite">
+    android:paddingTop="16dp"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:background="?attr/selectableItemBackground">
 
     <TextView
         android:id="@+id/tv_project_name"
@@ -38,12 +40,18 @@
         android:layout_below="@id/tv_project_description"
         android:layout_height="wrap_content">
 
+        <android.support.design.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="asd"
+            style="@style/Widget.MaterialComponents.Chip.Entry"/>
+
     </android.support.design.chip.ChipGroup>
 
     <View
         android:layout_width="match_parent"
         android:layout_below="@id/cg_vacancies"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider" />
 </RelativeLayout>
