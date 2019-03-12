@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.activity_fragment_host.main_container
 import kotlinx.android.synthetic.main.layout_progress.fragment_progress
 import kotlinx.android.synthetic.main.layout_progress_error.*
 
-abstract class BaseFragment : MvpAppCompatFragment() {
+abstract class BaseFragment : MvpAppCompatFragment(), BaseView {
 
     protected abstract val contentLayout: Int
 
@@ -44,8 +44,6 @@ abstract class BaseFragment : MvpAppCompatFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        hideProgressBar()
-        hideProgressError()
 
         (activity as? FragmentHostActivity)?.setToolbar(toolbar)
         (activity as? FragmentHostActivity)?.setToolbarTitle(toolbarTitle)
@@ -59,34 +57,23 @@ abstract class BaseFragment : MvpAppCompatFragment() {
         this.menu?.let { inflater?.inflate(it, menu) }
     }
 
-    fun showProgressBar() {
-        hideKeyboard()
-        (activity as? FragmentHostActivity)?.fragment_progress?.visibility = View.VISIBLE
-        (activity as? FragmentHostActivity)?.main_container?.visibility = View.GONE
+    override fun hideKeyboard() {
+        (activity as? FragmentHostActivity)?.hideKeyboard()
     }
 
-    fun hideProgressBar() {
-        (activity as? FragmentHostActivity)?.fragment_progress?.visibility = View.GONE
-        (activity as? FragmentHostActivity)?.main_container?.visibility = View.VISIBLE
+    override fun showErrorDialog(text: Int) {
+        (activity as? FragmentHostActivity)?.showErrorDialog(text)
     }
 
-    fun showProgressError(action: () -> Unit) {
-        (activity as? FragmentHostActivity)?.fragment_progress?.visibility = View.GONE
-        (activity as? FragmentHostActivity)?.fragment_progress_error?.visibility = View.VISIBLE
-
-        (activity as? FragmentHostActivity)?.btn_retry?.setOnClickListener {
-            hideProgressError()
-            action()
-        }
+    override fun showErrorDialog(text: String) {
+        (activity as? FragmentHostActivity)?.showErrorDialog(text)
     }
 
-    fun hideProgressError() {
-        (activity as? FragmentHostActivity)?.fragment_progress_error?.visibility = View.GONE
-        (activity as? FragmentHostActivity)?.main_container?.visibility = View.VISIBLE
+    override fun hideWaitDialog() {
+        (activity as? FragmentHostActivity)?.hideWaitDialog()
     }
 
-    fun hideKeyboard() {
-        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
+    override fun showWaitDialog() {
+        (activity as? FragmentHostActivity)?.showWaitDialog()
     }
 }

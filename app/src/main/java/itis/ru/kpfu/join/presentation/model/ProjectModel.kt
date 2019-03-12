@@ -1,13 +1,13 @@
-package itis.ru.kpfu.join.network.pojo
+package itis.ru.kpfu.join.presentation.model
 
 import itis.ru.kpfu.join.db.entity.Specialization
 import java.io.Serializable
 
-data class Project(
+data class ProjectModel(
         var id: Long? = null,
         var name: String? = null,
-        var leader: ProjectMember? = null,
+        var leader: ProjectMemberModel? = null,
         var description: String? = null,
         var userId: Long? = null,
-        var participants: List<ProjectMember>? = null,
+        var participants: List<ProjectMemberModel>? = null,
         var vacancies: List<Specialization>? = null): Serializable

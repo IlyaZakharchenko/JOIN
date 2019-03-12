@@ -2,65 +2,63 @@ package itis.ru.kpfu.join.presentation.ui.auth.signup.steptwo
 
 import android.os.CountDownTimer
 import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import itis.ru.kpfu.join.network.request.JoinApi
-import itis.ru.kpfu.join.network.pojo.UserRegistrationForm
+import itis.ru.kpfu.join.network.request.JoinApiRequest
+import itis.ru.kpfu.join.presentation.model.RegistrationFormModel
+import itis.ru.kpfu.join.presentation.base.BasePresenter
+import itis.ru.kpfu.join.presentation.model.ConfirmEmailFormModel
+import itis.ru.kpfu.join.presentation.util.exceptionprocessor.ExceptionProcessor
 import javax.inject.Inject
 
 @InjectViewState
-class SignUpStepTwoPresenter @Inject constructor() : MvpPresenter<SignUpStepTwoView>() {
+class SignUpStepTwoPresenter @Inject constructor() : BasePresenter<SignUpStepTwoView>() {
 
     @Inject
-    lateinit var api: JoinApi
-
-    private val compositeDisposable = CompositeDisposable()
+    lateinit var apiRequest: JoinApiRequest
+    @Inject
+    lateinit var exceptionProcessor: ExceptionProcessor
 
     private var timer: CountDownTimer? = null
 
     private var timeLeft: Long = 15
 
-    fun finishRegistration(user: UserRegistrationForm) {
-        compositeDisposable.add(api
+    fun finishRegistration(user: RegistrationFormModel) {
+        apiRequest
                 .signUp(user)
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { viewState.showProgress() }
-                .doAfterTerminate { viewState.hideProgress() }
-                .subscribe(
-                        {
-                            run {
-                                if (it.code() == 200) {
-                                    viewState.onRegistrationSuccess()
-                                } else {
-                                    viewState.onCodeInvalid()
-                                }
-                            }
-                        }, { viewState.onConnectionError() })
-        )
+                .doOnSubscribe { viewState.showWaitDialog() }
+                .doAfterTerminate { viewState.hideWaitDialog() }
+                .subscribe({
+                    viewState.setSignInFragment()
+                }, {
+                    viewState.showErrorDialog(exceptionProcessor.processException(it))
+                })
+                .disposeWhenDestroy()
     }
 
     fun checkButtonState(code: Observable<CharSequence>) {
-        compositeDisposable.add(code
+        code
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { viewState.buttonEnabled(it.trim().length == 16) })
+                .subscribe { viewState.setButtonEnabled(it.trim().length == 16) }
+                .disposeWhenDestroy()
     }
 
-    fun resendCode(email: String) {
-        compositeDisposable.add(api
-                .confirmEmail(email.trim())
+    fun resendCode(email: String?) {
+        apiRequest
+                .confirmEmail(ConfirmEmailFormModel(email?.trim()))
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    viewState.showWaitDialog()
+                    viewState.hideKeyboard()
+                }
+                .doAfterTerminate { viewState.hideWaitDialog() }
                 .subscribe({
-                    run {
-                        startCounter()
-                    }
-                }, { viewState.onConnectionError() }))
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        compositeDisposable.dispose()
+                    startCounter()
+                }, {
+                    viewState.showErrorDialog(exceptionProcessor.processException(it))
+                })
+                .disposeWhenDestroy()
     }
 
     fun startCounter() {

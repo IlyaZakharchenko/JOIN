@@ -1,13 +1,13 @@
 package itis.ru.kpfu.join.presentation.ui.main.profile
 
 import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
 import com.zxy.tiny.Tiny
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import itis.ru.kpfu.join.network.request.JoinApi
+import itis.ru.kpfu.join.network.request.JoinApiRequest
 import itis.ru.kpfu.join.db.entity.User
 import itis.ru.kpfu.join.db.repository.UserRepository
+import itis.ru.kpfu.join.presentation.base.BasePresenter
+import itis.ru.kpfu.join.presentation.util.exceptionprocessor.ExceptionProcessor
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -15,38 +15,50 @@ import java.io.File
 import javax.inject.Inject
 
 @InjectViewState
-class ProfilePresenter @Inject constructor() : MvpPresenter<ProfileView>() {
+class ProfilePresenter @Inject constructor() : BasePresenter<ProfileView>() {
 
     companion object {
-        private const val PROFILE_CHOOSE_IMAGE_REQUEST_CODE = 0
-        private const val PROFILE_CHOOSE_IMAGE_LIMIT = 1
+        private const val PROFILE_CHOOSE_PHOTO_REQUEST_CODE = 0
+        private const val PROFILE_CHOOSE_PHOTO_LIMIT = 1
     }
 
     @Inject
     lateinit var userRepository: UserRepository
     @Inject
-    lateinit var api: JoinApi
+    lateinit var apiRequest: JoinApiRequest
+    @Inject
+    lateinit var exceptionProcessor: ExceptionProcessor
 
-    private val compositeDisposable = CompositeDisposable()
+    fun onRetry(userId: Long?) {
+        getUser(userId)
+    }
 
-    fun getUser(userId: Long): User? {
+    fun getUser(userId: Long?): User? {
         if (userId == userRepository.getUser()?.id || userId == -1L) {
             return userRepository.getUser()
         } else {
-            compositeDisposable.add(
-                    api.getUserInfo(userRepository.getUser()?.token, userId)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .doOnSubscribe { viewState.showProgress() }
-                            .doAfterTerminate { viewState.hideProgress() }
-                            .subscribe({ viewState.initFields(it) }, { viewState.onConnectionError() })
-            )
+            apiRequest.getUserInfo(userRepository.getUser()?.token, userId)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe {
+                        viewState.hideCollapsingToolbar()
+                        viewState.hideRetry()
+                        viewState.showProgress()
+                    }
+                    .doAfterTerminate { viewState.hideProgress() }
+                    .subscribe({
+                        viewState.showCollapsingToolbar()
+                        viewState.initFields(it)
+                    }, {
+                        viewState.showRetry(exceptionProcessor.processException(it))
+                    })
+                    .disposeWhenDestroy()
         }
 
         return null
     }
 
-    fun onPhotoChange(path: String, requestCode: Int) {
-        if (requestCode == PROFILE_CHOOSE_IMAGE_REQUEST_CODE) {
+    fun onChoosePhotoResult(path: String, requestCode: Int) {
+        if (requestCode == PROFILE_CHOOSE_PHOTO_REQUEST_CODE) {
             Tiny
                     .getInstance()
                     .source(path)
@@ -58,33 +70,27 @@ class ProfilePresenter @Inject constructor() : MvpPresenter<ProfileView>() {
                                 file)
                         val body = MultipartBody.Part.createFormData("file", file.name, fBody)
 
-                        compositeDisposable.add(
-                                api.changeProfileImage(userRepository.getUser()?.token, userRepository.getUser()?.id, body)
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .doOnSubscribe { viewState.showProgress() }
-                                        .doAfterTerminate { viewState.hideProgress() }
-                                        .subscribe({
-                                            it.url?.let { url ->
-                                                userRepository.changeImageProfile(url)
-                                                viewState.setChangedPhotoProfile(url)
-                                            }
-                                        }, {
-                                            viewState.onConnectionError()
-                                        })
 
-                        )
+                        apiRequest.changeProfileImage(userRepository.getUser()?.token, userRepository.getUser()?.id, body)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .doOnSubscribe { viewState.showWaitDialog() }
+                                .doAfterTerminate { viewState.hideWaitDialog() }
+                                .subscribe({
+                                    it.url?.let { url ->
+                                        userRepository.changeImageProfile(url)
+                                        viewState.setChangedPhotoProfile(url)
+                                    }
+                                }, {
+                                    viewState.showErrorDialog(exceptionProcessor.processException(it))
+                                })
+                                .disposeWhenDestroy()
 
                     }
         }
     }
 
-    fun onChooseProfilePhoto() {
-        viewState.showChooseImageDialog(PROFILE_CHOOSE_IMAGE_REQUEST_CODE, PROFILE_CHOOSE_IMAGE_LIMIT)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        compositeDisposable.dispose()
+    fun onChoosePhoto() {
+        viewState.showChooseImageDialog(PROFILE_CHOOSE_PHOTO_REQUEST_CODE, PROFILE_CHOOSE_PHOTO_LIMIT)
     }
 
     fun exit() {

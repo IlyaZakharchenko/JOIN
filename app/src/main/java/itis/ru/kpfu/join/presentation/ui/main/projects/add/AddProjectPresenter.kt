@@ -1,39 +1,50 @@
 package itis.ru.kpfu.join.presentation.ui.main.projects.add
 
 import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import itis.ru.kpfu.join.network.request.JoinApi
-import itis.ru.kpfu.join.network.pojo.Project
+import itis.ru.kpfu.join.db.entity.Specialization
+import itis.ru.kpfu.join.network.request.JoinApiRequest
+import itis.ru.kpfu.join.presentation.model.ProjectModel
 import itis.ru.kpfu.join.db.repository.UserRepository
+import itis.ru.kpfu.join.presentation.base.BasePresenter
+import itis.ru.kpfu.join.presentation.util.exceptionprocessor.ExceptionProcessor
 import javax.inject.Inject
 
 @InjectViewState
-class AddProjectPresenter @Inject constructor() : MvpPresenter<AddProjectView>() {
+class AddProjectPresenter @Inject constructor() : BasePresenter<AddProjectView>() {
+
+    companion object {
+        private const val ADD_SPEC_REQUEST_CODE = 1
+    }
 
     @Inject
-    lateinit var api: JoinApi
+    lateinit var apiRequest: JoinApiRequest
     @Inject
     lateinit var userRepository: UserRepository
+    @Inject
+    lateinit var exceptionProcessor: ExceptionProcessor
 
-    private val compositeDisposable = CompositeDisposable()
-
-    fun saveProject(project: Project) {
+    fun saveProject(project: ProjectModel) {
         project.userId = userRepository.getUser()?.id
 
         if (!hasErrors(project)) {
-            compositeDisposable.add(
-                    api.addProject(userRepository.getUser()?.token, project)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .doOnSubscribe { viewState.showProgress() }
-                            .doAfterTerminate { viewState.hideProgress() }
-                            .subscribe({ viewState.onSaveSuccess() }, { viewState.onConnectionError() })
-            )
+            apiRequest.addProject(userRepository.getUser()?.token, project)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe {
+                        viewState.showWaitDialog()
+                        viewState.hideKeyboard()
+                    }
+                    .doAfterTerminate { viewState.hideWaitDialog() }
+                    .subscribe({
+                        viewState.onSaveSuccess()
+                    }, {
+                        viewState.showErrorDialog(exceptionProcessor.processException(it))
+                    })
+                    .disposeWhenDestroy()
         }
     }
 
-    private fun hasErrors(project: Project): Boolean {
+    private fun hasErrors(project: ProjectModel): Boolean {
         var hasErrors = false
 
         if (project.name.isNullOrEmpty()) {
@@ -50,8 +61,26 @@ class AddProjectPresenter @Inject constructor() : MvpPresenter<AddProjectView>()
         return hasErrors
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        compositeDisposable.dispose()
+    fun onAddSpec() {
+        viewState.showAddSpecDialog(ADD_SPEC_REQUEST_CODE, -1, null)
     }
+
+    fun onEditSpec(position: Int, spec: Specialization?) {
+        viewState.showAddSpecDialog(ADD_SPEC_REQUEST_CODE, position, spec)
+    }
+
+    fun onAddSpecResult(spec: Specialization, position: Int, requestCode: Int) {
+        if (requestCode == ADD_SPEC_REQUEST_CODE) {
+            if (position == -1) {
+                viewState.addSpec(spec)
+            } else {
+                viewState.updateSpec(position, spec)
+            }
+        }
+    }
+
+    fun onRemoveSpec(position: Int) {
+        viewState.removeSpec(position)
+    }
+
 }

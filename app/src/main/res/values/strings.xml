@@ -13,7 +13,7 @@
     <string name="forgot_password">Забыли пароль?</string>
     <string name="projects_toolbar">Проекты</string>
     <string name="notifications_toolbar">Уведомления</string>
-    <string name="project_toolbar">Проект</string>
+    <string name="project_details_toolbar">Детали</string>
     <string name="chat_toolbar">Сообщения</string>
     <string name="toolbar_title_empty" />
     <string name="toolbar_add_project">Новый проект</string>
@@ -30,10 +30,6 @@
     <string name="btn_edit">Редактировать</string>
     <string name="do_sign_up">Зарегистрироваться</string>
     <string name="email_confirm_title">Для того, чтобы подтвердить вашу почту, введите код, который мы отправили вам на почту</string>
-    <string name="error_password_should_be_equals">Пароли должны совпадать</string>
-    <string name="error_username">Имя пользователя должно содержать как минимум 6 символов</string>
-    <string name="error_email">Некорректная почта</string>
-    <string name="error_password">Пароль должен содержать как минимум 7 символов</string>
     <string name="settings">Настройки</string>
     <string name="type_your_message">Введите ваше сообщение</string>
     <string name="no_messages_yet">Ваш список сообщений пуст</string>
@@ -52,4 +48,18 @@
     <string name="dialog_exit_title">Вы действительно хотите выйти?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+
+    <!--Exceptions-->
+    <string name="exception_incorrect_data">Некорректно заполнены поля</string>
+    <string name="exception_no_connection">Отсутствует интернет соединение</string>
+    <string name="exception_not_authorized">Для выполнения данного действия требуется авторизация</string>
+    <string name="exception_time_out">Сервер просыпается&#8230;&#8230;&#8230;</string>
+    <string name="exception_unexpected">Неизвестная ошибка</string>
+
+    <!--Errors-->
+    <string name="error">Ошибка</string>
+    <string name="error_email">Недопустимая электронная почта</string>
+    <string name="error_password">Недопустый пароль(должен содержать как минимум 7 символов) </string>
+    <string name="error_password_should_be_equals">Пароли должны совпадать</string>
+    <string name="error_username">Имя пользователя должно содержать как минимум 6 символов</string>
 </resources>

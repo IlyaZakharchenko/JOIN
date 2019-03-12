@@ -5,18 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.network.pojo.Dialog
+import itis.ru.kpfu.join.presentation.model.DialogModel
 import kotlinx.android.synthetic.main.item_dialog.view.*
 
 class DialogsAdapter : RecyclerView.Adapter<DialogsAdapter.DialogViewHolder>() {
 
-    var items: List<Dialog> = emptyList()
+    var items: List<DialogModel> = emptyList()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
-    var onChatClick: ((Dialog) -> Unit)? = null
+    var onChatClick: ((DialogModel) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DialogViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.item_dialog, parent, false)
@@ -31,13 +31,13 @@ class DialogsAdapter : RecyclerView.Adapter<DialogsAdapter.DialogViewHolder>() {
         return items.size
     }
 
-    private fun getItem(position: Int): Dialog {
+    private fun getItem(position: Int): DialogModel {
         return items[position]
     }
 
     inner class DialogViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindViewHolder(item: Dialog, onItemClick: ((Dialog) -> Unit)?) = with(itemView) {
+        fun bindViewHolder(item: DialogModel, onItemClick: ((DialogModel) -> Unit)?) = with(itemView) {
             setOnClickListener { onItemClick?.invoke(item) }
 
             dialog_last_message.text = item.lastMessage?.text

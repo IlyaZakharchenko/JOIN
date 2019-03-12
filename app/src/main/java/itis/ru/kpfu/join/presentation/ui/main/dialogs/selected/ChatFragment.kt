@@ -7,12 +7,11 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.network.pojo.Dialog
-import itis.ru.kpfu.join.network.pojo.TextMessage
+import itis.ru.kpfu.join.presentation.model.DialogModel
+import itis.ru.kpfu.join.presentation.model.TextMessageModel
 import itis.ru.kpfu.join.presentation.adapter.MessagesAdapter
 import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
-import itis.ru.kpfu.join.utils.Constants
 import kotlinx.android.synthetic.main.fragment_chat.rv_messages
 import kotlinx.android.synthetic.main.fragment_chat.toolbar_chat
 import javax.inject.Inject
@@ -21,9 +20,11 @@ import javax.inject.Provider
 class ChatFragment : BaseFragment(), ChatView {
 
     companion object {
-        fun newInstance(dialog: Dialog): ChatFragment {
+        private const val DIALOG = "dialog"
+
+        fun newInstance(dialog: DialogModel): ChatFragment {
             val args = Bundle()
-            args.putSerializable(Constants.DIALOG, dialog)
+            args.putSerializable(DIALOG, dialog)
 
             val fragment = ChatFragment()
             fragment.arguments = args
@@ -64,7 +65,7 @@ class ChatFragment : BaseFragment(), ChatView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val dialog = arguments?.getSerializable(Constants.DIALOG) as Dialog
+        val dialog = arguments?.getSerializable(DIALOG) as DialogModel
         dialog.dialogName?.let { (activity as? FragmentHostActivity)?.setToolbarTitle(it) }
 
         initRecyclerView()
@@ -76,13 +77,13 @@ class ChatFragment : BaseFragment(), ChatView {
         rv_messages.layoutManager = LinearLayoutManager(baseActivity)
     }
 
-    private fun initMessages(): List<TextMessage> {
+    private fun initMessages(): List<TextMessageModel> {
         return arrayListOf(
-                TextMessage("Привет", "11:12", "staff", null),
-                TextMessage("Привет", "11:12", null, "staff"),
-                TextMessage(null, "Вчера", "staff", null),
-                TextMessage("Как дела?", "11:12", "staff", null),
-                TextMessage("Норм?", "11:12", null, "staff")
+                TextMessageModel("Привет", "11:12", "staff", null),
+                TextMessageModel("Привет", "11:12", null, "staff"),
+                TextMessageModel(null, "Вчера", "staff", null),
+                TextMessageModel("Как дела?", "11:12", "staff", null),
+                TextMessageModel("Норм?", "11:12", null, "staff")
         )
     }
 }

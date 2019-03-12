@@ -1,7 +1,6 @@
 package itis.ru.kpfu.join.presentation.ui.auth.signin
 
 import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
 import com.facebook.GraphRequest
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -12,54 +11,57 @@ import com.vk.sdk.api.VKRequest
 import com.vk.sdk.api.VKRequest.VKRequestListener
 import com.vk.sdk.api.VKResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import itis.ru.kpfu.join.network.request.JoinApi
+import itis.ru.kpfu.join.network.request.JoinApiRequest
 import itis.ru.kpfu.join.db.entity.User
 import itis.ru.kpfu.join.db.repository.UserRepository
+import itis.ru.kpfu.join.presentation.base.BasePresenter
+import itis.ru.kpfu.join.presentation.model.SignInFormModel
+import itis.ru.kpfu.join.presentation.util.Validator
+import itis.ru.kpfu.join.presentation.util.exceptionprocessor.ExceptionProcessor
 import javax.inject.Inject
 
 @InjectViewState
-class SignInPresenter @Inject constructor() : MvpPresenter<SignInView>() {
+class SignInPresenter @Inject constructor() : BasePresenter<SignInView>() {
 
     @Inject
-    lateinit var api: JoinApi
+    lateinit var apiRequest: JoinApiRequest
     @Inject
     lateinit var userRepository: UserRepository
-
-
-    private val compositeDisposable = CompositeDisposable()
+    @Inject
+    lateinit var exceptionProcessor: ExceptionProcessor
 
     fun signIn(email: String, password: String) {
-        compositeDisposable.add(api
-                .signIn(User(email = email.trim(), password = password.trim()))
+        if (!Validator.isEmailValid(email)) {
+            viewState.setEmailErrorEnabled(true)
+            return
+        } else if (!Validator.isPasswordValid(password)) {
+            viewState.setPasswordErrorEnabled(true)
+            return
+        } else {
+            viewState.setPasswordErrorEnabled(false)
+            viewState.setEmailErrorEnabled(false)
+        }
+
+        var token: String? = null
+        apiRequest
+                .signIn(SignInFormModel(email, password))
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { viewState.showProgress() }
-                .doAfterTerminate { viewState.hideProgress() }
-                .subscribe({
-                    if (it.code() == 200) {
-                        val id = it.body()?.get("user_id")?.asLong
-                        val token = it.headers().get("Authorization")
-
-                        compositeDisposable.add(api.getUserInfo(token, id)
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .doOnSubscribe { viewState.showProgress() }
-                                .subscribe({
-                                    it.token = token
-
-                                    userRepository.addUser(it)
-                                    viewState.signIn()
-                                }, { viewState.onConnectionError() }))
-                    } else {
-                        viewState.onSignInError()
-                    }
+                .doOnSubscribe {
+                    viewState.showWaitDialog()
+                    viewState.hideKeyboard()
+                }
+                .doAfterTerminate { viewState.hideWaitDialog() }
+                .flatMap {
+                    token = "Bearer ${it.token}"
+                    apiRequest.getUserInfo(token, it.userId)
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ user ->
+                    userRepository.addUser(user.apply { this.token = token })
+                    viewState.setAllProjectsFragment()
                 }, {
-                    viewState.onConnectionError()
-                }))
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        compositeDisposable.dispose()
+                    viewState.showErrorDialog(exceptionProcessor.processException(it))
+                }).disposeWhenDestroy()
     }
 
     fun getVkUserInfo(res: VKAccessToken?) {
@@ -79,12 +81,16 @@ class SignInPresenter @Inject constructor() : MvpPresenter<SignInView>() {
                     val user = User(name = firstName, lastname = lastName)
                     userRepository.addUser(user)
 
-                    viewState.signIn()
+                    viewState.setAllProjectsFragment()
                 } catch (e: Exception) {
-                    viewState.onConnectionError()
+                    viewState.showErrorDialog(exceptionProcessor.processException(e))
                 }
             }
         })
+    }
+
+    fun onRestorePassword() {
+        viewState.setRestorePasswordFragment()
     }
 
     fun getGoogleUserInfo(account: GoogleSignInAccount?) {
@@ -95,7 +101,7 @@ class SignInPresenter @Inject constructor() : MvpPresenter<SignInView>() {
         val user = User(name = givenName, lastname = lastName, email = email)
         userRepository.addUser(user)
 
-        viewState.signIn()
+        viewState.setAllProjectsFragment()
     }
 
     fun getFacebookUserInfo(result: LoginResult?) {
@@ -109,11 +115,11 @@ class SignInPresenter @Inject constructor() : MvpPresenter<SignInView>() {
             val user = User(name = firstName, lastname = lastName, email = email)
             userRepository.addUser(user)
 
-            viewState.signIn()
+            viewState.setAllProjectsFragment()
         }.executeAsync()
     }
 
-    fun onCreateAccountClick() {
-        viewState.openSignUpFragment()
+    fun onCreateAccount() {
+        viewState.setSignUpFragment()
     }
 }

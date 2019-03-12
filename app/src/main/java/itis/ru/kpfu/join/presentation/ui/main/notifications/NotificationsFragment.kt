@@ -7,15 +7,15 @@ import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.network.pojo.Notification
+import itis.ru.kpfu.join.presentation.model.NotificationModel
 import itis.ru.kpfu.join.network.pojo.NotificationResponse
 import itis.ru.kpfu.join.presentation.adapter.NotificationsAdapter
 import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
 import itis.ru.kpfu.join.presentation.ui.main.profile.ProfileFragment
 import itis.ru.kpfu.join.presentation.ui.main.projects.details.ProjectDetailsFragment
-import kotlinx.android.synthetic.main.fragment_notifications.recyclerView
-import kotlinx.android.synthetic.main.fragment_notifications.toolbar_notifications
+import kotlinx.android.synthetic.main.fragment_notifications.*
+import kotlinx.android.synthetic.main.layout_progress_error.*
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -92,27 +92,29 @@ class NotificationsFragment : BaseFragment(), NotificationsView {
         (activity as? FragmentHostActivity)?.setFragment(ProfileFragment.newInstance(id), true)
     }
 
-    override fun setNotifications(notifications: List<Notification>) {
+    override fun setNotifications(notifications: List<NotificationModel>) {
         adapter?.setItems(notifications)
-    }
-
-    private fun onLongClick(id: Long?, position: Int) {
-        presenter.removeNotification(id, position)
     }
 
     override fun onDeleteSuccess(position: Int) {
         adapter?.removeElement(position)
     }
 
-    override fun onConnectionError() {
-        showProgressError { presenter.getNotifications() }
+    override fun showRetry(errorText: String) {
+        retry.visibility = View.VISIBLE
+        retry_title.text = errorText
+        btn_retry.setOnClickListener { presenter.onRetry() }
+    }
+
+    override fun hideRetry() {
+        retry.visibility = View.GONE
     }
 
     override fun showProgress() {
-        showProgressBar()
+        progress.visibility = View.VISIBLE
     }
 
     override fun hideProgress() {
-        hideProgressBar()
+        progress.visibility = View.GONE
     }
 }

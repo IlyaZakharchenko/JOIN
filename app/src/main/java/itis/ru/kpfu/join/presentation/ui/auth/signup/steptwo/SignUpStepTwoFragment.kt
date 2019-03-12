@@ -8,11 +8,10 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.network.pojo.UserRegistrationForm
+import itis.ru.kpfu.join.presentation.model.RegistrationFormModel
 import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
 import itis.ru.kpfu.join.presentation.ui.auth.signin.SignInFragment
-import itis.ru.kpfu.join.utils.Constants
 import kotlinx.android.synthetic.main.fragment_sign_up_step_two.btn_sign_up
 import kotlinx.android.synthetic.main.fragment_sign_up_step_two.et_confirmation_code
 import kotlinx.android.synthetic.main.fragment_sign_up_step_two.ti_confirmation_code
@@ -24,10 +23,11 @@ import javax.inject.Provider
 class SignUpStepTwoFragment: BaseFragment(), SignUpStepTwoView {
 
     companion object {
+        private const val USER = "user"
 
-        fun newInstance(user: UserRegistrationForm): SignUpStepTwoFragment {
+        fun newInstance(user: RegistrationFormModel): SignUpStepTwoFragment {
             val args = Bundle()
-            args.putSerializable(Constants.USER, user)
+            args.putSerializable(USER, user)
 
             val fragment = SignUpStepTwoFragment()
             fragment.arguments = args
@@ -64,7 +64,7 @@ class SignUpStepTwoFragment: BaseFragment(), SignUpStepTwoView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val user = arguments?.getSerializable(Constants.USER) as UserRegistrationForm
+        val user = arguments?.getSerializable(USER) as RegistrationFormModel
 
         presenter.checkButtonState(RxTextView.textChanges(et_confirmation_code))
         presenter.startCounter()
@@ -76,25 +76,13 @@ class SignUpStepTwoFragment: BaseFragment(), SignUpStepTwoView {
         }
     }
 
-    override fun showProgress() {
-        showProgressBar()
-    }
-
-    override fun hideProgress() {
-        hideProgressBar()
-    }
-
-    override fun buttonEnabled(state: Boolean) {
+    override fun setButtonEnabled(state: Boolean) {
         btn_sign_up.isEnabled = state
         ti_confirmation_code.error = null
     }
 
-    override fun onConnectionError() {
-        Toast.makeText(activity, "Internet Connection Error", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onRegistrationSuccess() {
-        Toast.makeText(activity, "Registration Successful", Toast.LENGTH_SHORT).show()
+    override fun setSignInFragment() {
+        Toast.makeText(activity, "Регистрация успешна", Toast.LENGTH_SHORT).show()
         (activity as? FragmentHostActivity)?.clearFragmentsStack()
         (activity as? FragmentHostActivity)?.setFragment(SignInFragment.newInstance(), false)
     }
@@ -112,9 +100,5 @@ class SignUpStepTwoFragment: BaseFragment(), SignUpStepTwoView {
     override fun onResume() {
         presenter.resumeTimer()
         super.onResume()
-    }
-
-    override fun onCodeInvalid() {
-        ti_confirmation_code.error = "Неверный код"
     }
 }

@@ -1,25 +1,24 @@
 package itis.ru.kpfu.join.presentation.ui.auth.signin
 
 import com.arellomobile.mvp.MvpView
+import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
+import itis.ru.kpfu.join.presentation.base.BaseView
 
-@StateStrategyType(OneExecutionStateStrategy::class)
-interface SignInView: MvpView {
+interface SignInView : BaseView {
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun setSignUpFragment()
 
-    fun initClickListeners()
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun setAllProjectsFragment()
 
-    fun showProgress()
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun setRestorePasswordFragment()
 
-    fun hideProgress()
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun setEmailErrorEnabled(enabled: Boolean)
 
-    fun onConnectionError()
-
-    fun showResult(result: String)
-
-    fun openSignUpFragment()
-
-    fun signIn()
-
-    fun onSignInError()
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun setPasswordErrorEnabled(enabled: Boolean)
 }

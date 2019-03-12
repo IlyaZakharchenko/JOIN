@@ -25,13 +25,14 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
                     android:text="Специализация"
-                    android:textColor="@color/colorBlackText" />
+                    android:textColor="@color/colorMain" />
 
                 <com.jaredrummler.materialspinner.MaterialSpinner
                     android:id="@+id/spinner_spec"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:ms_dropdown_height="300dp" />
+                    app:ms_dropdown_height="300dp"
+                    android:textColor="@color/colorTertiary"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -39,13 +40,14 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
                     android:text="Уровень"
-                    android:textColor="@color/colorBlackText" />
+                    android:textColor="@color/colorMain" />
 
                 <com.jaredrummler.materialspinner.MaterialSpinner
                     android:id="@+id/spinner_lvl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:ms_dropdown_height="300dp" />
+                    app:ms_dropdown_height="300dp"
+                    android:textColor="@color/colorTertiary"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -53,13 +55,14 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
                     android:text="Опыт(лет)"
-                    android:textColor="@color/colorBlackText" />
+                    android:textColor="@color/colorMain" />
 
                 <com.jaredrummler.materialspinner.MaterialSpinner
                     android:id="@+id/spinner_exp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:ms_dropdown_height="300dp" />
+                    app:ms_dropdown_height="300dp"
+                    android:textColor="@color/colorTertiary"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -67,7 +70,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
                     android:text="Технологии"
-                    android:textColor="@color/colorBlackText" />
+                    android:textColor="@color/colorMain" />
 
             </LinearLayout>
 
@@ -102,6 +105,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_toLeftOf="@id/btn_save"
                 android:background="@color/colorGrey"
+                android:textColor="@color/colorMain"
                 android:paddingEnd="8dp"
                 android:paddingStart="8dp"
                 android:text="Отмена" />

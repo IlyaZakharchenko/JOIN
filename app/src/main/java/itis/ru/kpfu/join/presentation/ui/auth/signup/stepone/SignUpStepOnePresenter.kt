@@ -1,74 +1,77 @@
 package itis.ru.kpfu.join.presentation.ui.auth.signup.stepone
 
 import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Function4
-import itis.ru.kpfu.join.network.request.JoinApi
-import itis.ru.kpfu.join.network.pojo.UserRegistrationForm
+import itis.ru.kpfu.join.network.request.JoinApiRequest
+import itis.ru.kpfu.join.presentation.model.RegistrationFormModel
+import itis.ru.kpfu.join.presentation.base.BasePresenter
+import itis.ru.kpfu.join.presentation.model.ConfirmEmailFormModel
+import itis.ru.kpfu.join.presentation.util.exceptionprocessor.ExceptionProcessor
 import javax.inject.Inject
 
 @InjectViewState
-class SignUpStepOnePresenter @Inject constructor() : MvpPresenter<SignUpStepOneView>() {
+class SignUpStepOnePresenter @Inject constructor() : BasePresenter<SignUpStepOneView>() {
 
     @Inject
-    lateinit var api: JoinApi
+    lateinit var apiRequest: JoinApiRequest
+    @Inject
+    lateinit var exceptionProcessor: ExceptionProcessor
 
-    private var compositeDisposable = CompositeDisposable()
-
-    override fun onDestroy() {
-        super.onDestroy()
-        compositeDisposable.dispose()
-    }
-
-    fun onSignUpClick(form: UserRegistrationForm) {
+    fun onSignUpClick(form: RegistrationFormModel) {
 
         if (!hasErrors(form)) {
-            compositeDisposable.add(api
-                    .confirmEmail(form.email.trim())
+            apiRequest
+                    .confirmEmail(ConfirmEmailFormModel(form.email?.trim()))
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe { viewState.showProgress() }
-                    .doAfterTerminate { viewState.hideProgress() }
+                    .doOnSubscribe {
+                        viewState.showWaitDialog()
+                        viewState.hideKeyboard()
+                    }
+                    .doAfterTerminate { viewState.hideWaitDialog() }
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        run {
-                            viewState.onFirstStepSuccess(
-                                    UserRegistrationForm(username = form.username,
-                                            email = form.email, password = form.password))
-                        }
-                    }, { viewState.onConnectionError() }))
+                        viewState.setSignUpStepTwoFragment(RegistrationFormModel(
+                                username = form.username,
+                                email = form.email,
+                                password = form.password)
+                        )
+                    }, {
+                        viewState.showErrorDialog(exceptionProcessor.processException(it))
+                    })
+                    .disposeWhenDestroy()
         }
     }
 
     fun checkButtonState(username: Observable<CharSequence>, email: Observable<CharSequence>,
                          pass: Observable<CharSequence>, passAgain: Observable<CharSequence>) {
 
-        compositeDisposable.add(Observable.combineLatest(username, email, pass, passAgain,
+        Observable.combineLatest(username, email, pass, passAgain,
                 Function4<CharSequence, CharSequence, CharSequence, CharSequence, Boolean> { t1, t2, t3, t4 ->
                     t1.isNotEmpty() && t2.isNotEmpty() && t3.isNotEmpty() && t4.isNotEmpty()
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { viewState.buttonEnabled(it) })
+                .subscribe { viewState.setButtonEnabled(it) }
+                .disposeWhenDestroy()
     }
 
-    private fun hasErrors(form: UserRegistrationForm): Boolean {
+    private fun hasErrors(form: RegistrationFormModel): Boolean {
         var hasError = false
 
-        if (form.username.trim().length < 6) {
+        if (form.username?.trim()?.length ?: 0 < 6) {
             viewState.onInvalidUsername()
             hasError = true
         }
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(form.email.trim()).matches()) {
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(form.email?.trim()).matches()) {
             viewState.onInvalidEmail()
             hasError = true
         }
-        if (form.password.trim().length < 7) {
+        if (form.password?.trim()?.length ?: 0 < 7) {
             viewState.onInvalidPassword()
             hasError = true
         }
-        if (form.password.trim() != form.passwordAgain.trim()) {
+        if (form.password?.trim() != form.passwordAgain?.trim()) {
             viewState.onPasswordsNotEquals()
             hasError = true
         }

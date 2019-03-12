@@ -1,21 +1,16 @@
 package itis.ru.kpfu.join.presentation.ui.main.profile
 
-import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CollapsingToolbarLayout
+import android.support.design.widget.CoordinatorLayout
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewTreeObserver
+import android.view.*
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.esafirm.imagepicker.features.ImagePicker
-import com.esafirm.imagepicker.features.ReturnMode.NONE
 import com.squareup.picasso.Picasso
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.db.entity.Specialization
@@ -26,20 +21,8 @@ import itis.ru.kpfu.join.presentation.base.BaseFragment
 import itis.ru.kpfu.join.presentation.dialog.ChooseImageDialog
 import itis.ru.kpfu.join.presentation.ui.main.profile.edit.ProfileEditFragment
 import itis.ru.kpfu.join.presentation.ui.auth.signin.SignInFragment
-import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_make_photo
-import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_open_gallery
-import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_remove_photo
-import kotlinx.android.synthetic.main.fragment_profile.app_bar_profile
-import kotlinx.android.synthetic.main.fragment_profile.btn_edit
-import kotlinx.android.synthetic.main.fragment_profile.collapsing_toolbar
-import kotlinx.android.synthetic.main.fragment_profile.iv_profile_avatar
-import kotlinx.android.synthetic.main.fragment_profile.iv_profile_avatar_shadows
-import kotlinx.android.synthetic.main.fragment_profile.rv_specializations
-import kotlinx.android.synthetic.main.fragment_profile.toolbar_profile
-import kotlinx.android.synthetic.main.fragment_profile.tv_email
-import kotlinx.android.synthetic.main.fragment_profile.tv_phone
-import kotlinx.android.synthetic.main.fragment_profile.tv_username
-import java.io.File
+import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.layout_progress_error.*
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -135,7 +118,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
             btn_edit.setOnClickListener {
                 (activity as? FragmentHostActivity)?.setFragment(ProfileEditFragment.newInstance(), true)
             }
-            collapsing_toolbar.setOnClickListener { presenter.onChooseProfilePhoto() }
+            collapsing_toolbar.setOnClickListener { presenter.onChoosePhoto() }
         }
         toolbar_profile.setOnClickListener { app_bar_profile.setExpanded(true) }
     }
@@ -144,7 +127,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
         super.onAttachFragment(childFragment)
         if (childFragment is ChooseImageDialog) {
             childFragment.photoListener = { imagePaths, requestCode ->
-                presenter.onPhotoChange(imagePaths[0], requestCode)
+                presenter.onChoosePhotoResult(imagePaths[0], requestCode)
             }
         }
     }
@@ -154,26 +137,30 @@ class ProfileFragment : BaseFragment(), ProfileView {
         Toast.makeText(context, "Фотография успешно изменена.", Toast.LENGTH_SHORT).show()
     }
 
-    override fun onConnectionError() {
-        Toast.makeText(baseActivity, "Internet connection error", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onError(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onImageDeleteSuccess() {
-        Toast.makeText(baseActivity, "Фотография успешно удалена", Toast.LENGTH_SHORT).show()
-        iv_profile_avatar_shadows.visibility = View.GONE
-        iv_profile_avatar.setImageResource(0)
-    }
-
     override fun showProgress() {
-        showProgressBar()
+        progress.visibility = View.VISIBLE
     }
 
     override fun hideProgress() {
-        hideProgressBar()
+        progress.visibility = View.GONE
+    }
+
+    override fun showRetry(errorText: String) {
+        retry.visibility = View.VISIBLE
+        retry_title.text = errorText
+        btn_retry.setOnClickListener { presenter.onRetry(userId) }
+    }
+
+    override fun hideRetry() {
+        retry.visibility = View.GONE
+    }
+
+    override fun hideCollapsingToolbar() {
+        iv_profile_avatar.visibility = View.GONE
+    }
+
+    override fun showCollapsingToolbar() {
+        iv_profile_avatar.visibility = View.VISIBLE
     }
 
     private fun setImageProfile(url: String) {

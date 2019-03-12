@@ -15,11 +15,11 @@ import javax.inject.Provider
 
 class FragmentHostActivity : BaseActivity(), FragmentHostView {
 
-    @Inject
-    lateinit var presenterProvider: Provider<FragmentHostPresenter>
-
     @InjectPresenter
     lateinit var presenter: FragmentHostPresenter
+
+    @Inject
+    lateinit var presenterProvider: Provider<FragmentHostPresenter>
 
     @ProvidePresenter
     fun providePresenter(): FragmentHostPresenter = presenterProvider.get()
@@ -42,12 +42,14 @@ class FragmentHostActivity : BaseActivity(), FragmentHostView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        if(savedInstanceState == null) {
+            presenter.checkLogin()
+        }
+
         bottom_nav_bar.setOnNavigationItemSelectedListener {
             presenter.onBottomNavBarClick(it.itemId)
             true
         }
-        presenter.checkLogin()
-
     }
 
     override fun setFragment(fragment: BaseFragment, addToBackStack: Boolean) {

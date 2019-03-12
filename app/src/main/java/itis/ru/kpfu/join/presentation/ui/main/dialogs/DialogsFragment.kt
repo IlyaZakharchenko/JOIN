@@ -8,8 +8,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.R.drawable
-import itis.ru.kpfu.join.network.pojo.Dialog
-import itis.ru.kpfu.join.network.pojo.TextMessage
+import itis.ru.kpfu.join.presentation.model.DialogModel
+import itis.ru.kpfu.join.presentation.model.TextMessageModel
 import itis.ru.kpfu.join.presentation.adapter.DialogsAdapter
 import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
@@ -73,25 +73,25 @@ class DialogsFragment : BaseFragment(), DialogsView {
         rv_dialogs.layoutManager = LinearLayoutManager(baseActivity)
     }
 
-    private fun initDialogs(): List<Dialog> {
+    private fun initDialogs(): List<DialogModel> {
         return arrayListOf(
-                Dialog("Project THE BEST", drawable.rx_logo,
-                        TextMessage(text = "lastMessage", to = "staff",
+                DialogModel("ProjectModel THE BEST", drawable.rx_logo,
+                        TextMessageModel(text = "lastMessage", to = "staff",
                                 dateSend = "12:12")),
-                Dialog("Project IPHONE 11", drawable.kotlin_logo,
-                        TextMessage(text = "lastMessage", dateSend = "20:23")),
-                Dialog("Project SMTH", drawable.icon_vk,
-                        TextMessage(text = "lastMessage", to = "staff",
+                DialogModel("ProjectModel IPHONE 11", drawable.kotlin_logo,
+                        TextMessageModel(text = "lastMessage", dateSend = "20:23")),
+                DialogModel("ProjectModel SMTH", drawable.icon_vk,
+                        TextMessageModel(text = "lastMessage", to = "staff",
                                 dateSend = "19:12")),
-                Dialog("Project HZ", drawable.icon_twitter,
-                        TextMessage(text = "lastMessage", dateSend = "15:00")),
-                Dialog("Project V", drawable.junit_logo,
-                        TextMessage(text = "lastMessage", to = "staff",
+                DialogModel("ProjectModel HZ", drawable.icon_twitter,
+                        TextMessageModel(text = "lastMessage", dateSend = "15:00")),
+                DialogModel("ProjectModel V", drawable.junit_logo,
+                        TextMessageModel(text = "lastMessage", to = "staff",
                                 dateSend = "18:12"))
         ).shuffled()
     }
 
-    private fun onChatClick(dialog: Dialog) {
+    private fun onChatClick(dialog: DialogModel) {
         (activity as? FragmentHostActivity)?.setFragment(ChatFragment.newInstance(dialog), true)
     }
 }

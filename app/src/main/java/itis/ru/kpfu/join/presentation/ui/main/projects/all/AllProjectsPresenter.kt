@@ -1,38 +1,34 @@
 package itis.ru.kpfu.join.presentation.ui.main.projects.all
 
 import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import itis.ru.kpfu.join.network.request.JoinApi
+import itis.ru.kpfu.join.network.request.JoinApiRequest
 import itis.ru.kpfu.join.db.repository.UserRepository
+import itis.ru.kpfu.join.presentation.base.BasePresenter
+import itis.ru.kpfu.join.presentation.util.exceptionprocessor.ExceptionProcessor
 import javax.inject.Inject
 
 @InjectViewState
-class AllProjectsPresenter @Inject constructor() :
-        MvpPresenter<AllProjectsView>() {
+class AllProjectsPresenter @Inject constructor() : BasePresenter<AllProjectsView>() {
 
     @Inject
-    lateinit var api: JoinApi
+    lateinit var apiRequest: JoinApiRequest
     @Inject
     lateinit var userRepository: UserRepository
+    @Inject
+    lateinit var exceptionProcessor: ExceptionProcessor
 
-    private val compositeDisposable = CompositeDisposable()
-
-    fun getProjects() {
-        compositeDisposable.add(
-                api.getProjects(userRepository.getUser()?.token)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSubscribe { viewState.showProgress() }
-                        .doAfterTerminate { viewState.hideProgress() }
-                        .subscribe({
-                            viewState.setProjects(it)
-                        }, { viewState.onConnectionError() })
-        )
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+        getProjects()
     }
 
-    fun searchProjects(projectName: String?, specName: String? = null, exp: String? = null,
-                       lvl: String? = null) {
+    fun onRetry() {
+        getProjects()
+    }
+
+    fun onSearch(projectName: String?, specName: String? = null, exp: String? = null,
+                 lvl: String? = null) {
 
         val spec = if (specName == "Ничего не выбрано") null else specName
         val experience = if (exp == "Ничего не выбрано") null else exp
@@ -44,19 +40,31 @@ class AllProjectsPresenter @Inject constructor() :
             "Senior" -> level = "2"
         }
 
-        compositeDisposable.add(
-                api.getProjects(userRepository.getUser()?.token, projectName, spec, level, experience)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSubscribe { viewState.showInnerProgress() }
-                        .doAfterTerminate { viewState.hideInnerProgress() }
-                        .subscribe({
-                            viewState.setProjects(it)
-                        }, { viewState.onConnectionError() })
-        )
+        apiRequest.getProjects(userRepository.getUser()?.token, projectName, spec, level, experience)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { viewState.showProgress() }
+                .doAfterTerminate { viewState.hideProgress() }
+                .subscribe({
+                    viewState.setProjects(it)
+                }, {
+                    viewState.showErrorDialog(exceptionProcessor.processException(it))
+                })
+                .disposeWhenDestroy()
+
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        compositeDisposable.dispose()
+    private fun getProjects() {
+        apiRequest.getProjects(userRepository.getUser()?.token)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    viewState.hideRetry()
+                    viewState.showProgress()
+                }
+                .doAfterTerminate { viewState.hideProgress() }
+                .subscribe({
+                    viewState.setProjects(it)
+                }, {
+                    viewState.showRetry(exceptionProcessor.processException(it))
+                }).disposeWhenDestroy()
     }
 }

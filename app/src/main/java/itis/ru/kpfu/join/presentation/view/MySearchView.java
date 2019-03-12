@@ -1,10 +1,8 @@
-package itis.ru.kpfu.join.view;
+package itis.ru.kpfu.join.presentation.view;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -28,17 +26,17 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.miguelcatalan.materialsearchview.SearchAdapter;
 import com.miguelcatalan.materialsearchview.utils.AnimationUtil;
-import itis.ru.kpfu.join.utils.DimensionKt;
+
 import java.lang.reflect.Field;
-import java.util.List;
+
+import itis.ru.kpfu.join.presentation.util.DimensionKt;
 
 public class MySearchView extends FrameLayout implements Filter.FilterListener {
 
@@ -186,6 +184,8 @@ public class MySearchView extends FrameLayout implements Filter.FilterListener {
         mBackBtn = (ImageButton) mSearchLayout.findViewById(com.miguelcatalan.materialsearchview.R.id.action_up_btn);
         mVoiceBtn = (ImageButton) mSearchLayout
                 .findViewById(com.miguelcatalan.materialsearchview.R.id.action_voice_btn);
+
+
         mEmptyBtn = (ImageButton) mSearchLayout
                 .findViewById(com.miguelcatalan.materialsearchview.R.id.action_empty_btn);
         mTintView = mSearchLayout.findViewById(com.miguelcatalan.materialsearchview.R.id.transparent_view);
@@ -308,13 +308,7 @@ public class MySearchView extends FrameLayout implements Filter.FilterListener {
     }
 
     private boolean isVoiceAvailable() {
-        if (isInEditMode()) {
-            return true;
-        }
-        PackageManager pm = getContext().getPackageManager();
-        List<ResolveInfo> activities = pm.queryIntentActivities(
-                new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
-        return activities.size() == 0;
+        return true;
     }
 
     public void hideKeyboard(View view) {

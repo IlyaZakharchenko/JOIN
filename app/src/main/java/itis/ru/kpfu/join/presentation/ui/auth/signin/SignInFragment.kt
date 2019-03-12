@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -22,21 +23,15 @@ import com.vk.sdk.VKScope
 import com.vk.sdk.VKSdk
 import com.vk.sdk.VKServiceActivity
 import com.vk.sdk.api.VKError
+import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
 import itis.ru.kpfu.join.presentation.ui.main.projects.all.AllProjectsFragment
 import itis.ru.kpfu.join.presentation.ui.auth.restorepassword.RestorePassFragment
 import itis.ru.kpfu.join.presentation.ui.auth.signup.stepone.SignUpStepOneFragment
-import kotlinx.android.synthetic.main.fragment_sign_in.btn_create_account
-import kotlinx.android.synthetic.main.fragment_sign_in.btn_forgot_pass
-import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in
-import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_facebook
-import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_google
-import kotlinx.android.synthetic.main.fragment_sign_in.btn_sign_in_vk
-import kotlinx.android.synthetic.main.fragment_sign_in.et_email
-import kotlinx.android.synthetic.main.fragment_sign_in.et_password
-import kotlinx.android.synthetic.main.fragment_sign_in.toolbar_sign_in
+import kotlinx.android.synthetic.main.fragment_sign_in.*
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -92,13 +87,15 @@ class SignInFragment : BaseFragment(), SignInView {
         initClickListeners()
     }
 
-    override fun initClickListeners() {
-        btn_create_account.setOnClickListener { presenter.onCreateAccountClick() }
+    private fun initClickListeners() {
+        btn_create_account.setOnClickListener {
+            presenter.onCreateAccount()
+        }
         btn_sign_in.setOnClickListener {
-            presenter.signIn(et_email.text.toString(), et_password.text.toString())
+            presenter.signIn(et_email.text.toString().trim(), et_password.text.toString().trim())
         }
         btn_forgot_pass.setOnClickListener {
-            (activity as? FragmentHostActivity)?.setFragment(RestorePassFragment.newInstance(), true)
+            presenter.onRestorePassword()
         }
     }
 
@@ -167,31 +164,23 @@ class SignInFragment : BaseFragment(), SignInView {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun showProgress() {
-        showProgressBar()
-    }
-
-    override fun hideProgress() {
-        hideProgressBar()
-    }
-
-    override fun onConnectionError() {
-        Toast.makeText(activity, "Internet Connection Error", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun signIn() {
+    override fun setAllProjectsFragment() {
         (activity as FragmentHostActivity).setFragment(AllProjectsFragment.newInstance(), false)
     }
 
-    override fun showResult(result: String) {
-        Toast.makeText(baseActivity, result, Toast.LENGTH_LONG).show()
-    }
-
-    override fun openSignUpFragment() {
+    override fun setSignUpFragment() {
         (activity as? FragmentHostActivity)?.setFragment(SignUpStepOneFragment.newInstance(), true)
     }
 
-    override fun onSignInError() {
-        Snackbar.make(btn_create_account, "Неверные данные авторизации", Snackbar.LENGTH_LONG).show()
+    override fun setRestorePasswordFragment() {
+        (activity as? FragmentHostActivity)?.setFragment(RestorePassFragment.newInstance(), true)
+    }
+
+    override fun setEmailErrorEnabled(enabled: Boolean) {
+        ti_email.error = if (enabled) getString(R.string.error_email) else null
+    }
+
+    override fun setPasswordErrorEnabled(enabled: Boolean) {
+        ti_password.error = if (enabled) getString(R.string.error_password) else null
     }
 }

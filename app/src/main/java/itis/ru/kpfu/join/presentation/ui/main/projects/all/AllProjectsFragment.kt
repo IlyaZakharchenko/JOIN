@@ -11,26 +11,22 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.widget.FrameLayout
-import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.miguelcatalan.materialsearchview.MaterialSearchView
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.network.pojo.Project
+import itis.ru.kpfu.join.presentation.model.ProjectModel
 import itis.ru.kpfu.join.presentation.adapter.ProjectsAdapter
 import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
 import itis.ru.kpfu.join.presentation.ui.main.projects.details.ProjectDetailsFragment
-import itis.ru.kpfu.join.utils.toPx
+import itis.ru.kpfu.join.presentation.util.toPx
 import kotlinx.android.synthetic.main.bottom_sheet_search_filter.btn_show_results_projects_filter
 import kotlinx.android.synthetic.main.bottom_sheet_search_filter.spinner_exp_projects_filter
 import kotlinx.android.synthetic.main.bottom_sheet_search_filter.spinner_lvl_projects_filter
 import kotlinx.android.synthetic.main.bottom_sheet_search_filter.spinner_spec_projects_filter
-import kotlinx.android.synthetic.main.fragment_all_projects.btn_search_filter_projects
-import kotlinx.android.synthetic.main.fragment_all_projects.progress_bar_projects
-import kotlinx.android.synthetic.main.fragment_all_projects.rv_projects
-import kotlinx.android.synthetic.main.fragment_all_projects.search_view_projects
-import kotlinx.android.synthetic.main.fragment_all_projects.toolbar_projects
+import kotlinx.android.synthetic.main.fragment_all_projects.*
+import kotlinx.android.synthetic.main.layout_progress_error.*
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -96,7 +92,6 @@ class AllProjectsFragment : BaseFragment(), AllProjectsView {
         initBottomSheetDialog()
         initRecyclerView()
         initClickListeners()
-        presenter.getProjects()
     }
 
     private fun initBottomSheetDialog() {
@@ -105,7 +100,7 @@ class AllProjectsFragment : BaseFragment(), AllProjectsView {
         sheetView?.let { bottomSheetDialog?.setContentView(it) }
 
         itemsSpec = mutableListOf("Ничего не выбрано", "iOS Developer", "Android Developer", "Java Developer",
-                "Designer", "Project Manager", "C# Developer", "RoR Developer", "Python Developer",
+                "Designer", "ProjectModel Manager", "C# Developer", "RoR Developer", "Python Developer",
                 "Frontend Developer", "Backend Developer", "SMM Manager", "System Administrator")
         itemsLvl = mutableListOf("Ничего не выбрано", "Junior", "Middle", "Senior")
         itemsExp = mutableListOf("Ничего не выбрано")
@@ -132,7 +127,7 @@ class AllProjectsFragment : BaseFragment(), AllProjectsView {
 
         bottomSheetDialog?.btn_show_results_projects_filter?.setOnClickListener {
             bottomSheetDialog?.let {
-                presenter.searchProjects(
+                presenter.onSearch(
                         searchText,
                         itemsSpec[it.spinner_spec_projects_filter.selectedIndex],
                         itemsExp[it.spinner_exp_projects_filter.selectedIndex],
@@ -178,7 +173,7 @@ class AllProjectsFragment : BaseFragment(), AllProjectsView {
 
                 searchText = newText
                 bottomSheetDialog?.let {
-                    presenter.searchProjects(
+                    presenter.onSearch(
                             searchText,
                             itemsSpec[it.spinner_spec_projects_filter.selectedIndex],
                             itemsExp[it.spinner_exp_projects_filter.selectedIndex],
@@ -193,7 +188,7 @@ class AllProjectsFragment : BaseFragment(), AllProjectsView {
 
                 searchText = query
                 bottomSheetDialog?.let {
-                    presenter.searchProjects(
+                    presenter.onSearch(
                             searchText,
                             itemsSpec[it.spinner_spec_projects_filter.selectedIndex],
                             itemsExp[it.spinner_exp_projects_filter.selectedIndex],
@@ -214,33 +209,25 @@ class AllProjectsFragment : BaseFragment(), AllProjectsView {
     }
 
     override fun showProgress() {
-        showProgressBar()
+        progress.visibility = View.VISIBLE
     }
 
     override fun hideProgress() {
-        hideProgressBar()
+        progress.visibility = View.GONE
     }
 
-    override fun setProjects(projects: List<Project>) {
+    override fun showRetry(errorText: String) {
+        retry.visibility = View.VISIBLE
+        retry_title.text = errorText
+        btn_retry.setOnClickListener { presenter.onRetry() }
+    }
+
+    override fun hideRetry() {
+        retry.visibility = View.GONE
+    }
+
+    override fun setProjects(projects: List<ProjectModel>) {
         adapter.items = projects
-    }
-
-    override fun onConnectionError() {
-        showProgressError { presenter.getProjects() }
-    }
-
-    override fun onError(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun hideInnerProgress() {
-        rv_projects.visibility = View.VISIBLE
-        progress_bar_projects.visibility = View.GONE
-    }
-
-    override fun showInnerProgress() {
-        rv_projects.visibility = View.GONE
-        progress_bar_projects.visibility = View.VISIBLE
     }
 
     private fun initRecyclerView() {
@@ -252,6 +239,4 @@ class AllProjectsFragment : BaseFragment(), AllProjectsView {
     private fun onProjectClick(id: Long) {
         (activity as? FragmentHostActivity)?.setFragment(ProjectDetailsFragment.newInstance(id), true)
     }
-
-
 }

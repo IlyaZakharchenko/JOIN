@@ -9,21 +9,16 @@ import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.network.pojo.Project
-import itis.ru.kpfu.join.network.pojo.ProjectMember
+import itis.ru.kpfu.join.presentation.model.ProjectModel
+import itis.ru.kpfu.join.presentation.model.ProjectMemberModel
 import itis.ru.kpfu.join.presentation.adapter.ProjectJobAdapter
 import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
 import itis.ru.kpfu.join.presentation.ui.main.users.UsersFragment
 import itis.ru.kpfu.join.presentation.recyclerView.adapter.ProjectMemberAdapter
 import itis.ru.kpfu.join.presentation.ui.main.profile.ProfileFragment
-import kotlinx.android.synthetic.main.fragment_project_details.add_member_container
-import kotlinx.android.synthetic.main.fragment_project_details.et_project_desc
-import kotlinx.android.synthetic.main.fragment_project_details.et_project_name
-import kotlinx.android.synthetic.main.fragment_project_details.rv_project_jobs
-import kotlinx.android.synthetic.main.fragment_project_details.rv_project_members
-import kotlinx.android.synthetic.main.fragment_project_details.toolbar_project
-import kotlinx.android.synthetic.main.fragment_project_details.tv_project_empty_vacancies
+import kotlinx.android.synthetic.main.fragment_project_details.*
+import kotlinx.android.synthetic.main.layout_progress_error.*
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -46,7 +41,7 @@ class ProjectDetailsFragment : BaseFragment(), ProjectDetailsView {
         get() = R.layout.fragment_project_details
 
     override val toolbarTitle: Int?
-        get() = R.string.project_toolbar
+        get() = R.string.project_details_toolbar
 
     override val menu: Int?
         get() = null
@@ -93,7 +88,7 @@ class ProjectDetailsFragment : BaseFragment(), ProjectDetailsView {
 
     private fun initRecyclerViews() {
         membersAdapter = ProjectMemberAdapter { onUserClick(it) }
-        jobsAdapter = ProjectJobAdapter {onApply()}
+        jobsAdapter = ProjectJobAdapter { onApply() }
 
         rv_project_members.layoutManager = LinearLayoutManager(baseActivity)
         rv_project_members.adapter = membersAdapter
@@ -114,7 +109,7 @@ class ProjectDetailsFragment : BaseFragment(), ProjectDetailsView {
         Toast.makeText(context, "Заявка успешно подана", Toast.LENGTH_SHORT).show()
     }
 
-    override fun setProject(item: Project, isMyProject: Boolean, isInProject: Boolean) {
+    override fun setProject(item: ProjectModel, isMyProject: Boolean, isInProject: Boolean) {
         et_project_name.setText(item.name)
         et_project_desc.setText(item.description)
 
@@ -122,7 +117,7 @@ class ProjectDetailsFragment : BaseFragment(), ProjectDetailsView {
             add_member_container.visibility = GONE
         }
 
-        val allMembers = ArrayList<ProjectMember>()
+        val allMembers = ArrayList<ProjectMemberModel>()
 
         item.leader?.let {
             it.isLeader = true
@@ -133,18 +128,25 @@ class ProjectDetailsFragment : BaseFragment(), ProjectDetailsView {
         membersAdapter?.setMembers(allMembers)
         item.vacancies?.let { jobsAdapter?.setJobs(it, isMyProject, isInProject) }
 
-        tv_project_empty_vacancies.visibility = if(item.vacancies?.size == 0) View.VISIBLE else View.GONE
-    }
-
-    override fun onConnectionError() {
-        showProgressError { projectId?.let { presenter.getProject(it) } }
+        tv_project_empty_vacancies.visibility = if (item.vacancies?.size == 0) View.VISIBLE else View.GONE
     }
 
     override fun showProgress() {
-        showProgressBar()
+        progress.visibility = View.VISIBLE
     }
 
     override fun hideProgress() {
-        hideProgressBar()
+        progress.visibility = View.GONE
     }
+
+    override fun showRetry(errorText: String) {
+        retry.visibility = View.VISIBLE
+        retry_title.text = errorText
+        btn_retry.setOnClickListener { projectId?.let { it1 -> presenter.onRetry(it1) } }
+    }
+
+    override fun hideRetry() {
+        retry.visibility = View.GONE
+    }
+
 }

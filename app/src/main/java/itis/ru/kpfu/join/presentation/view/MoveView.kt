@@ -1,12 +1,10 @@
-package itis.ru.kpfu.join.view
+package itis.ru.kpfu.join.presentation.view
 
-import android.app.Activity
 import android.content.Context
 import android.support.design.widget.FloatingActionButton
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import android.widget.ImageView
 
 class MoveView : FloatingActionButton {
 

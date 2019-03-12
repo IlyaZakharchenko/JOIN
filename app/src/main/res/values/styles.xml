@@ -17,7 +17,8 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowMinWidthMajor">60%</item>
         <item name="android:windowMinWidthMinor">90%</item>
-        <item name="colorControlNormal">@color/colorWhite</item>
+        <item name="colorControlNormal">@color/colorTertiary</item>
+        <item name="android:background">@drawable/dialog_background</item>
     </style>
 
 

@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.db.entity.Specialization
-import itis.ru.kpfu.join.utils.divideString
-import itis.ru.kpfu.join.utils.parseLevelFromInt
-import itis.ru.kpfu.join.utils.toPx
+import itis.ru.kpfu.join.presentation.util.divideString
+import itis.ru.kpfu.join.presentation.util.parseLevelFromInt
+import itis.ru.kpfu.join.presentation.util.toPx
 import kotlinx.android.synthetic.main.item_project_job.view.*
 
 class ProjectJobAdapter(

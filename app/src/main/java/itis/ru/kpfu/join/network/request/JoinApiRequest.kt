@@ -1,15 +1,20 @@
 package itis.ru.kpfu.join.network.request
 
 import com.google.gson.JsonObject
+import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
-import itis.ru.kpfu.join.network.pojo.InviteForm
-import itis.ru.kpfu.join.network.pojo.Notification
+import itis.ru.kpfu.join.presentation.model.InviteFormModel
+import itis.ru.kpfu.join.presentation.model.NotificationModel
 import itis.ru.kpfu.join.network.pojo.NotificationResponse
 import itis.ru.kpfu.join.network.pojo.ProfileImage
-import itis.ru.kpfu.join.network.pojo.Project
-import itis.ru.kpfu.join.network.pojo.ProjectMember
-import itis.ru.kpfu.join.network.pojo.UserRegistrationForm
+import itis.ru.kpfu.join.presentation.model.ProjectModel
+import itis.ru.kpfu.join.presentation.model.ProjectMemberModel
+import itis.ru.kpfu.join.presentation.model.RegistrationFormModel
 import itis.ru.kpfu.join.db.entity.User
+import itis.ru.kpfu.join.network.pojo.UserInfoResponse
+import itis.ru.kpfu.join.presentation.model.ConfirmEmailFormModel
+import itis.ru.kpfu.join.presentation.model.SignInFormModel
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -23,16 +28,16 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface JoinApi {
+interface JoinApiRequest {
 
     @POST("/registration")
-    fun signUp(@Body user: UserRegistrationForm): Single<Response<Void>>
+    fun signUp(@Body registrationFormModel: RegistrationFormModel): Completable
 
     @POST("/registration/email_confirmation")
-    fun confirmEmail(@Body email: String): Single<Response<Void>>
+    fun confirmEmail(@Body confirmEmailFormModel: ConfirmEmailFormModel): Completable
 
     @POST("/login")
-    fun signIn(@Body user: User): Single<Response<JsonObject>>
+    fun signIn(@Body signInFormModel: SignInFormModel): Observable<UserInfoResponse>
 
     @Multipart
     @POST("/user/{id}/upload")
@@ -40,26 +45,26 @@ interface JoinApi {
             "id") id: Long?, @Part image: MultipartBody.Part): Single<ProfileImage>
 
     @POST("/projects")
-    fun addProject(@Header("Authorization") token: String?, @Body project: Project): Single<Response<Void>>
+    fun addProject(@Header("Authorization") token: String?, @Body projectModel: ProjectModel): Completable
 
     @POST("/user/invite")
-    fun inviteToProject(@Header("Authorization") token: String?, @Body form: InviteForm?): Single<Response<Void>>
+    fun inviteToProject(@Header("Authorization") token: String?, @Body formModel: InviteFormModel?): Completable
 
     @POST("/projects/join")
-    fun joinProject(@Header("Authorization") token: String?, @Body form: InviteForm?): Single<Response<Void>>
+    fun joinProject(@Header("Authorization") token: String?, @Body formModel: InviteFormModel?): Completable
 
     @GET("/user/{id}/notifications")
     fun getNotifications(@Header("Authorization") token: String?, @Path(
-            "id") userId: Long?): Single<List<Notification>>
+            "id") userId: Long?): Single<List<NotificationModel>>
 
     @GET("/user/{id}")
-    fun getUserInfo(@Header("Authorization") token: String?, @Path("id") id: Long?): Single<User>
+    fun getUserInfo(@Header("Authorization") token: String?, @Path("id") id: Long?): Observable<User>
 
     @GET("/projects/{id}")
-    fun getProject(@Header("Authorization") token: String?, @Path("id") id: Long): Single<Project>
+    fun getProject(@Header("Authorization") token: String?, @Path("id") id: Long): Single<ProjectModel>
 
     @GET("/user/{id}/projects")
-    fun getMyProjects(@Header("Authorization") token: String?, @Path("id") userId: Long?): Single<List<Project>>
+    fun getMyProjects(@Header("Authorization") token: String?, @Path("id") userId: Long?): Single<List<ProjectModel>>
 
     @GET("/projects")
     fun getProjects(
@@ -67,7 +72,7 @@ interface JoinApi {
             @Query("name") projectName: String? = null,
             @Query("vacancy_name") vacancyName: String? = null,
             @Query("knowledge_level") level: String? = null,
-            @Query("experience") exp: String? = null): Single<List<Project>>
+            @Query("experience") exp: String? = null): Single<List<ProjectModel>>
 
     @GET("/user/search")
     fun getUsers(
@@ -76,22 +81,19 @@ interface JoinApi {
             @Query("username") username: String? = null,
             @Query("specialization_name") specName: String? = null,
             @Query("knowledge_level") level: String? = null,
-            @Query("experience") exp: String? = null): Single<MutableList<ProjectMember>>
+            @Query("experience") exp: String? = null): Single<MutableList<ProjectMemberModel>>
 
     @GET("/specialization/name")
     fun getSpecializations( @Header("Authorization") token: String?): Single<MutableList<String>>
 
     @PUT("/user/{id}")
     fun changeUser(@Header("Authorization") token: String?, @Body user: User?, @Path(
-            "id") id: Long?): Single<Response<Void>>
-
-    @DELETE("/user/{id}/profileImage")
-    fun deleteImage(@Header("Authorization") token: String?, @Path("id") id: Long?): Single<Response<Void>>
+            "id") id: Long?): Completable
 
     @POST("/notifications/{id}")
     fun responseToNotification(@Header("Authorization") token: String?, @Body answer: NotificationResponse,
-            @Path("id") id: Long?): Single<Response<Void>>
+            @Path("id") id: Long?): Completable
 
     @DELETE("/notifications/{id}")
-    fun deleteNotification(@Header("Authorization") token: String?, @Path("id") id: Long?): Single<Response<Void>>
+    fun deleteNotification(@Header("Authorization") token: String?, @Path("id") id: Long?): Completable
 }

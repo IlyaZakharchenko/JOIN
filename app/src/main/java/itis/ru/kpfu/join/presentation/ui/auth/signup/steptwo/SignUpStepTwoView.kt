@@ -1,23 +1,19 @@
 package itis.ru.kpfu.join.presentation.ui.auth.signup.steptwo
 
 import com.arellomobile.mvp.MvpView
+import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
+import itis.ru.kpfu.join.presentation.base.BaseView
 
-@StateStrategyType(OneExecutionStateStrategy::class)
-interface SignUpStepTwoView: MvpView {
+interface SignUpStepTwoView: BaseView {
 
-    fun showProgress()
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun setSignInFragment()
 
-    fun hideProgress()
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun setButtonEnabled(state: Boolean)
 
-    fun onConnectionError()
-
-    fun onCodeInvalid()
-
-    fun onRegistrationSuccess()
-
-    fun buttonEnabled(state: Boolean)
-
+    @StateStrategyType(AddToEndSingleStrategy::class)
     fun updateSendAgainMessage(text: String, isClickable: Boolean)
 }

@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.network.pojo.ProjectMember
+import itis.ru.kpfu.join.presentation.model.ProjectMemberModel
 import kotlinx.android.synthetic.main.item_user.view.*
 
 class UsersAdapter(
-        private var users: MutableList<ProjectMember>,
-        private val onInviteClick: (ProjectMember) -> Unit,
+        private var users: MutableList<ProjectMemberModel>,
+        private val onInviteClick: (ProjectMemberModel) -> Unit,
         private val onUserClick: (Long) -> Unit) : RecyclerView.Adapter<UsersAdapter.UsersViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder {
@@ -27,12 +27,12 @@ class UsersAdapter(
         holder.bindViewHolder(users[position], onInviteClick, onUserClick)
     }
 
-    fun setUsers(list: MutableList<ProjectMember>) {
+    fun setUsers(list: MutableList<ProjectMemberModel>) {
         this.users = list
         notifyDataSetChanged()
     }
 
-    fun setUserInvited(user: ProjectMember) {
+    fun setUserInvited(user: ProjectMemberModel) {
         val position = users.indexOf(user)
         user.status = 2
         users[position] = user
@@ -42,8 +42,8 @@ class UsersAdapter(
     inner class UsersViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bindViewHolder(
-                user: ProjectMember,
-                onInviteClick: (ProjectMember) -> Unit,
+                user: ProjectMemberModel,
+                onInviteClick: (ProjectMemberModel) -> Unit,
                 onUserClick: (Long) -> Unit) = with(itemView) {
 
             civ_user.setImageResource(R.drawable.ic_no_avatar)

@@ -1,8 +1,7 @@
 package itis.ru.kpfu.join.presentation.ui.main.profile.edit
 
-import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
@@ -11,8 +10,6 @@ import android.view.ViewTreeObserver
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.esafirm.imagepicker.features.ImagePicker
-import com.esafirm.imagepicker.features.ReturnMode.NONE
 import com.squareup.picasso.Picasso
 import io.realm.RealmList
 import itis.ru.kpfu.join.R
@@ -23,9 +20,7 @@ import itis.ru.kpfu.join.presentation.adapter.SpecializationsEditAdapter
 import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
 import itis.ru.kpfu.join.presentation.dialog.AddSpecializationDialog
-import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_make_photo
-import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_open_gallery
-import kotlinx.android.synthetic.main.dialog_choose_avatar.view.tv_dialog_remove_photo
+import itis.ru.kpfu.join.presentation.dialog.ChooseImageDialog
 import kotlinx.android.synthetic.main.fragment_profile_edit.btn_add_spec
 import kotlinx.android.synthetic.main.fragment_profile_edit.et_email
 import kotlinx.android.synthetic.main.fragment_profile_edit.et_first_name
@@ -46,6 +41,8 @@ import javax.inject.Provider
 class ProfileEditFragment : BaseFragment(), ProfileEditView {
 
     companion object {
+        private const val ADD_SPEC_DIALOG_TAG = "add spec dialog tag"
+        private const val CHOOSE_IMAGE_DIALOG_TAG = "choose image dialog tag"
 
         fun newInstance(): ProfileEditFragment {
             val args = Bundle()
@@ -75,49 +72,25 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
 
     @InjectPresenter
     lateinit var presenter: ProfileEditPresenter
-
     @Inject
     lateinit var presenterProvider: Provider<ProfileEditPresenter>
-
-   // lateinit var chooseAvatarDialog: MaterialDialog
-
-    private var adapter: SpecializationsEditAdapter? = null
+    @Inject
+    lateinit var adapter: SpecializationsEditAdapter
 
     @ProvidePresenter
     fun providePresenter(): ProfileEditPresenter = presenterProvider.get()
 
-    override fun showProgress() {
-        showProgressBar()
-    }
-
-    override fun hideProgress() {
-        hideProgressBar()
-    }
-
-    override fun onConnectionError() {
-        Toast.makeText(activity, "Internet Connection Error", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onError(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initDialogs()
         initRecyclerView()
         initFields()
         initListeners()
     }
 
     private fun initListeners() {
-        iv_avatar.setOnClickListener { /*chooseAvatarDialog.show()*/ }
-        btn_add_spec.setOnClickListener {
-            val addSpecializationDialog = AddSpecializationDialog.newInstance(null, -1)
-            addSpecializationDialog.setTargetFragment(this, AddSpecializationDialog.REQUEST_CODE)
-            addSpecializationDialog.show(baseActivity.supportFragmentManager, AddSpecializationDialog.SPECIALIZATION)
-        }
+        iv_avatar.setOnClickListener { presenter.onChoosePhoto() }
+        btn_add_spec.setOnClickListener { presenter.onAddSpec() }
     }
 
     private fun initFields() {
@@ -131,70 +104,30 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
         user?.profileImage?.let { setImageProfile(it) }
     }
 
-    private fun openGallery() {
-        ImagePicker.create(this)
-                .returnMode(NONE)
-                .folderMode(true)
-                .toolbarFolderTitle("Выберите папку")
-                .toolbarImageTitle("Выберите фотографию")
-                .toolbarArrowColor(Color.WHITE)
-                .showCamera(false)
-                .multi()
-                .limit(1)
-                .theme(R.style.AppTheme)
-                .enableLog(false)
-                .start()
-    }
-
     private fun initRecyclerView() {
-        val items = presenter.getUser()?.getParsedSpecializations() ?: ArrayList()
+        adapter.items = presenter.getUser()?.getParsedSpecializations() ?: ArrayList()
+        adapter.onItemEdit = { position, spec -> presenter.onEditSpec(position, spec) }
+        adapter.onItemRemove = { position -> presenter.onRemoveSpec(position) }
 
-        adapter = SpecializationsEditAdapter(items, { pos, sp -> onItemRemove(pos, sp) }
-        ) { pos, sp -> onItemEdit(pos, sp) }
         rv_specializations_edit.adapter = adapter
         rv_specializations_edit.isNestedScrollingEnabled = false
         rv_specializations_edit.layoutManager = LinearLayoutManager(baseActivity)
     }
 
-    private fun onItemRemove(position: Int, item: Specialization) {
-        adapter?.removeItem(position)
-    }
-
-    private fun onItemEdit(position: Int, item: Specialization) {
-        val addSpecializationDialog = AddSpecializationDialog.newInstance(item, position)
-        addSpecializationDialog.setTargetFragment(this, AddSpecializationDialog.REQUEST_CODE)
-        addSpecializationDialog.show(baseActivity.supportFragmentManager, AddSpecializationDialog.SPECIALIZATION);
-    }
-
-    private fun initDialogs() {
-       /* chooseAvatarDialog = MaterialDialog.Builder(baseActivity)
-                .customView(R.layout.dialog_choose_avatar, false)
-                .build()
-
-        chooseAvatarDialog.view.tv_dialog_open_gallery.setOnClickListener { openGallery() }
-        chooseAvatarDialog.view.tv_dialog_remove_photo.setOnClickListener {
-            presenter.deleteImage()
-            chooseAvatarDialog.dismiss()
+    override fun onAttachFragment(childFragment: Fragment?) {
+        super.onAttachFragment(childFragment)
+        if (childFragment is AddSpecializationDialog) {
+            childFragment.onSave = { spec, position, requestCode ->
+                presenter.onAddSpecResult(spec, position, requestCode)
+            }
+        } else if (childFragment is ChooseImageDialog) {
+            childFragment.photoListener = { imagePaths, requestCode ->
+                presenter.onChoosePhotoResult(imagePaths[0], requestCode) }
         }
-
-        chooseAvatarDialog.view.tv_dialog_make_photo.setOnClickListener {
-            ImagePicker.cameraOnly().start(this)
-        }*/
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
-            val image = ImagePicker.getImages(data)[0]
-            presenter.changeProfileImage(image)
-
-            //chooseAvatarDialog.dismiss()
-        } else if (requestCode == AddSpecializationDialog.REQUEST_CODE) {
-            val result = data?.getSerializableExtra(AddSpecializationDialog.RESULT_SPEC) as Specialization
-            val position = data.getIntExtra(AddSpecializationDialog.RESULT_POS, -1)
-
-            if (position == -1) adapter?.addItem(result) else adapter?.updateItem(position, result)
-        }
-        super.onActivityResult(requestCode, resultCode, data)
+    override fun onError(message: String) {
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onEditSuccess() {
@@ -212,7 +145,8 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
             R.id.profile_edit_save -> {
                 refreshErrors()
                 val items: RealmList<Specialization> = RealmList()
-                adapter?.getItems()?.let { items.addAll(it) }
+                adapter.items.let { items.addAll(it) }
+                adapter.items = items
 
                 val updatedUser = User(
                         username = et_username.text?.trim().toString(),
@@ -220,7 +154,7 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
                         name = et_first_name.text?.trim().toString(),
                         lastname = et_last_name.text?.trim().toString(),
                         phoneNumber = et_phone.rawText.trim(), specializations = items)
-                presenter.updateUser(updatedUser)
+                presenter.onUpdateUser(updatedUser)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -302,4 +236,29 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
         setImageProfile(url)
         Toast.makeText(context, "Фотография успешно изменена.", Toast.LENGTH_SHORT).show()
     }
+
+    override fun updateSpec(position: Int, spec: Specialization) {
+        adapter.updateItem(position, spec)
+    }
+
+    override fun addSpec(spec: Specialization) {
+        adapter.addItem(spec)
+    }
+
+    override fun removeSpec(position: Int) {
+        adapter.removeItem(position)
+    }
+
+    override fun showAddSpecDialog(requestCode: Int, position: Int, spec: Specialization?) {
+        AddSpecializationDialog
+                .getInstance(requestCode, position, spec)
+                .show(childFragmentManager, ADD_SPEC_DIALOG_TAG)
+    }
+
+    override fun showChooseImageDialog(requestCode: Int, imagesLimit: Int) {
+        ChooseImageDialog
+                .getInstance(requestCode, imagesLimit)
+                .show(childFragmentManager, CHOOSE_IMAGE_DIALOG_TAG)
+    }
+
 }

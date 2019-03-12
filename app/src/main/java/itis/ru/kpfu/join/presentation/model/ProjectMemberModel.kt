@@ -1,6 +1,6 @@
-package itis.ru.kpfu.join.network.pojo
+package itis.ru.kpfu.join.presentation.model
 
-data class ProjectMember(
+data class ProjectMemberModel(
         var id: Long? = null,
         var username: String? = null,
         var email: String? = null,

@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.network.pojo.ProjectMember
+import itis.ru.kpfu.join.presentation.model.ProjectMemberModel
 import kotlinx.android.synthetic.main.item_project_member.view.*
 
 class ProjectMemberAdapter(
-        var items: List<ProjectMember> = ArrayList(),
+        var items: List<ProjectMemberModel> = ArrayList(),
         var onUserClick: (Long) -> Unit) : RecyclerView.Adapter<ProjectMemberAdapter.ProjectMemberViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectMemberViewHolder {
@@ -26,14 +26,14 @@ class ProjectMemberAdapter(
         holder.bindViewHolder(items[position], onUserClick)
     }
 
-    fun setMembers(list: List<ProjectMember>) {
+    fun setMembers(list: List<ProjectMemberModel>) {
         this.items = list
         notifyDataSetChanged()
     }
 
     inner class ProjectMemberViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bindViewHolder(user: ProjectMember, onUserClick: (Long) -> Unit) = with(itemView) {
+        fun bindViewHolder(user: ProjectMemberModel, onUserClick: (Long) -> Unit) = with(itemView) {
 
             if (user.isLeader == true) iv_is_leader.visibility = View.VISIBLE else iv_is_leader.visibility = View.GONE
 

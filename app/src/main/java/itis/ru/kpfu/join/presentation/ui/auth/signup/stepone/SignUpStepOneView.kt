@@ -1,28 +1,29 @@
 package itis.ru.kpfu.join.presentation.ui.auth.signup.stepone
 
-import com.arellomobile.mvp.MvpView
+import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
-import itis.ru.kpfu.join.network.pojo.UserRegistrationForm
+import itis.ru.kpfu.join.presentation.model.RegistrationFormModel
+import itis.ru.kpfu.join.presentation.base.BaseView
 
-@StateStrategyType(OneExecutionStateStrategy::class)
-interface SignUpStepOneView: MvpView {
 
-    fun showProgress()
+interface SignUpStepOneView: BaseView {
 
-    fun hideProgress()
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun setSignUpStepTwoFragment(user: RegistrationFormModel)
 
-    fun onConnectionError()
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun setButtonEnabled(enabled: Boolean)
 
-    fun onFirstStepSuccess(user: UserRegistrationForm)
-
-    fun buttonEnabled(enabled: Boolean)
-
+    @StateStrategyType(AddToEndSingleStrategy::class)
     fun onPasswordsNotEquals()
 
+    @StateStrategyType(AddToEndSingleStrategy::class)
     fun onInvalidUsername()
 
+    @StateStrategyType(AddToEndSingleStrategy::class)
     fun onInvalidEmail()
 
+    @StateStrategyType(AddToEndSingleStrategy::class)
     fun onInvalidPassword()
 }

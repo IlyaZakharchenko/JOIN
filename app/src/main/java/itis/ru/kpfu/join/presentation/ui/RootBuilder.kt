@@ -8,6 +8,6 @@ import itis.ru.kpfu.join.presentation.ui.MainBuilder
 @Module
 abstract class RootBuilder {
 
-    @ContributesAndroidInjector(modules = [MainBuilder::class, FragmentHostModule::class])
+    @ContributesAndroidInjector(modules = [FragmentHostModule::class])
     abstract fun buildFragmentHostActivity(): FragmentHostActivity
 }

@@ -1,7 +1,7 @@
 package itis.ru.kpfu.join.presentation.ui.main.projects.add
 
-import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
@@ -10,7 +10,7 @@ import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.network.pojo.Project
+import itis.ru.kpfu.join.presentation.model.ProjectModel
 import itis.ru.kpfu.join.db.entity.Specialization
 import itis.ru.kpfu.join.presentation.adapter.SpecializationsEditAdapter
 import itis.ru.kpfu.join.presentation.base.BaseFragment
@@ -26,6 +26,8 @@ import javax.inject.Provider
 class AddProjectFragment : BaseFragment(), AddProjectView {
 
     companion object {
+        private const val TAG_ADD_JOBS_DIALOG = "tag add jobs dialog"
+
         fun newInstance(): AddProjectFragment {
             val args = Bundle()
             val fragment = AddProjectFragment()
@@ -52,13 +54,14 @@ class AddProjectFragment : BaseFragment(), AddProjectView {
     override val toolbar: Toolbar?
         get() = toolbar_add_project
 
-    private var adapter: SpecializationsEditAdapter? = null
-
     @InjectPresenter
     lateinit var presenter: AddProjectPresenter
 
     @Inject
     lateinit var presenterProvider: Provider<AddProjectPresenter>
+
+    @Inject
+    lateinit var adapter: SpecializationsEditAdapter
 
     @ProvidePresenter
     fun providePresenter(): AddProjectPresenter = presenterProvider.get()
@@ -71,46 +74,22 @@ class AddProjectFragment : BaseFragment(), AddProjectView {
     }
 
     private fun initRecyclerView() {
-        adapter = SpecializationsEditAdapter(ArrayList(), { p, s -> onItemRemove(p, s) },
-                { p, s -> onItemEdit(p, s) })
+        adapter.onItemEdit = { position, spec -> presenter.onEditSpec(position, spec) }
+        adapter.onItemRemove = { position -> presenter.onRemoveSpec(position) }
 
         rv_add_project_jobs.adapter = adapter
         rv_add_project_jobs.layoutManager = LinearLayoutManager(baseActivity)
     }
 
     private fun initClickListeners() {
-        btn_add_job.setOnClickListener {
-            val addSpecializationDialog = AddSpecializationDialog.newInstance(null, -1)
-            addSpecializationDialog.setTargetFragment(this, AddSpecializationDialog.REQUEST_CODE)
-            addSpecializationDialog.show(baseActivity.supportFragmentManager, AddSpecializationDialog.SPECIALIZATION)
-        }
-    }
-
-    private fun onItemEdit(position: Int, spec: Specialization) {
-        val addSpecializationDialog = AddSpecializationDialog.newInstance(spec, position)
-        addSpecializationDialog.setTargetFragment(this, AddSpecializationDialog.REQUEST_CODE)
-        addSpecializationDialog.show(baseActivity.supportFragmentManager, AddSpecializationDialog.SPECIALIZATION);
-    }
-
-    private fun onItemRemove(position: Int, spec: Specialization) {
-        adapter?.removeItem(position)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == AddSpecializationDialog.REQUEST_CODE) {
-            val result = data?.getSerializableExtra(AddSpecializationDialog.RESULT_SPEC) as Specialization
-            val position = data.getIntExtra(AddSpecializationDialog.RESULT_POS, -1)
-
-            if (position == -1) adapter?.addItem(result) else adapter?.updateItem(position, result)
-        }
-        super.onActivityResult(requestCode, resultCode, data)
+        btn_add_job.setOnClickListener { presenter.onAddSpec() }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.profile_edit_save -> {
-                val project = Project(name = et_project_name.text?.trim().toString(),
-                        description = et_project_desc.text?.trim().toString(), vacancies = adapter?.getItems())
+                val project = ProjectModel(name = et_project_name.text?.trim().toString(),
+                        description = et_project_desc.text?.trim().toString(), vacancies = adapter.items)
 
                 presenter.saveProject(project)
             }
@@ -118,21 +97,18 @@ class AddProjectFragment : BaseFragment(), AddProjectView {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onAttachFragment(childFragment: Fragment?) {
+        super.onAttachFragment(childFragment)
+        if (childFragment is AddSpecializationDialog) {
+            childFragment.onSave = { spec, position, requestCode ->
+                presenter.onAddSpecResult(spec, position, requestCode)
+            }
+        }
+    }
+
     override fun onSaveSuccess() {
         Toast.makeText(baseActivity, "Проект успешно создан", Toast.LENGTH_SHORT).show()
         baseActivity.onBackPressed()
-    }
-
-    override fun onConnectionError() {
-        Toast.makeText(baseActivity, "Internet connection error", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun showProgress() {
-        showProgressBar()
-    }
-
-    override fun hideProgress() {
-        hideProgressBar()
     }
 
     override fun onNameEmpty() {
@@ -145,5 +121,21 @@ class AddProjectFragment : BaseFragment(), AddProjectView {
 
     override fun onJobsEmpty() {
         Toast.makeText(baseActivity, "Добавьте хотя бы одну вакансию", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun updateSpec(position: Int, spec: Specialization) {
+        adapter.updateItem(position, spec)
+    }
+
+    override fun addSpec(spec: Specialization) {
+        adapter.addItem(spec)
+    }
+
+    override fun removeSpec(position: Int) {
+        adapter.removeItem(position)
+    }
+
+    override fun showAddSpecDialog(requestCode: Int, position: Int, spec: Specialization?) {
+        AddSpecializationDialog.getInstance(requestCode, position, spec).show(childFragmentManager, TAG_ADD_JOBS_DIALOG)
     }
 }

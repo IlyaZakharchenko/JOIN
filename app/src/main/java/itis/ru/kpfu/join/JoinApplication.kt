@@ -10,9 +10,7 @@ import io.fabric.sdk.android.Fabric
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.rx.RealmObservableFactory
-import itis.ru.kpfu.join.dagger.AppComponent
-import itis.ru.kpfu.join.dagger.DaggerAppComponent
-import itis.ru.kpfu.join.dagger.modules.AppContextModule
+import itis.ru.kpfu.join.di.DaggerAppComponent
 
 class JoinApplication : DaggerApplication() {
 

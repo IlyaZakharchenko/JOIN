@@ -9,11 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.network.pojo.Notification
+import itis.ru.kpfu.join.presentation.model.NotificationModel
 import kotlinx.android.synthetic.main.item_notification.view.*
 
 class NotificationsAdapter(
-        private var list: List<Notification> = ArrayList(),
+        private var list: List<NotificationModel> = ArrayList(),
         private var onAccept: (Long) -> Unit,
         private var onDecline: (Long) -> Unit,
         private var onProjectClick: (Long) -> Unit,
@@ -30,7 +30,7 @@ class NotificationsAdapter(
         holder.bindViewHolder(list[position], onAccept, onDecline, onProjectClick, onUsernameClick)
     }
 
-    fun setItems(list: List<Notification>) {
+    fun setItems(list: List<NotificationModel>) {
         this.list = list
         notifyDataSetChanged()
     }
@@ -42,7 +42,7 @@ class NotificationsAdapter(
 
     inner class NotificationsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindViewHolder(item: Notification, onAccept: (Long) -> Unit, onDecline: (Long) -> Unit,
+        fun bindViewHolder(item: NotificationModel, onAccept: (Long) -> Unit, onDecline: (Long) -> Unit,
                            onProjectClick: (Long) -> Unit, onUsernameClick: (Long) -> Unit) = with(itemView) {
             lateinit var message: SpannableString
             val startUser: Int

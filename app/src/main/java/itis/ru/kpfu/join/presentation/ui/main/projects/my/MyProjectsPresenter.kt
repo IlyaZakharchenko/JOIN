@@ -1,35 +1,40 @@
 package itis.ru.kpfu.join.presentation.ui.main.projects.my
 
 import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import itis.ru.kpfu.join.network.request.JoinApi
+import itis.ru.kpfu.join.network.request.JoinApiRequest
 import itis.ru.kpfu.join.db.repository.UserRepository
+import itis.ru.kpfu.join.presentation.base.BasePresenter
+import itis.ru.kpfu.join.presentation.util.exceptionprocessor.ExceptionProcessor
 import javax.inject.Inject
 
 @InjectViewState
-class MyProjectsPresenter @Inject constructor() : MvpPresenter<MyProjectsView>() {
+class MyProjectsPresenter @Inject constructor() : BasePresenter<MyProjectsView>() {
 
     @Inject
-    lateinit var api: JoinApi
+    lateinit var apiRequest: JoinApiRequest
     @Inject
     lateinit var userRepository: UserRepository
+    @Inject
+    lateinit var exceptionProcessor: ExceptionProcessor
 
-    private val compositeDisposable = CompositeDisposable()
-
-    fun getProjects() {
-        compositeDisposable.add(
-                api.getMyProjects(userRepository.getUser()?.token, userRepository.getUser()?.id)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSubscribe { viewState.showProgress() }
-                        .doAfterTerminate { viewState.hideProgress() }
-                        .subscribe({ viewState.setProjects(it) }, { viewState.onConnectionError() })
-        )
+    fun onRetry() {
+        getProjects()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        compositeDisposable.dispose()
+    fun getProjects() {
+        apiRequest.getMyProjects(userRepository.getUser()?.token, userRepository.getUser()?.id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    viewState.showProgress()
+                    viewState.hideRetry()
+                }
+                .doAfterTerminate { viewState.hideProgress() }
+                .subscribe({
+                    viewState.setProjects(it)
+                }, {
+                    viewState.showRetry(exceptionProcessor.processException(it))
+                })
+                .disposeWhenDestroy()
     }
 }

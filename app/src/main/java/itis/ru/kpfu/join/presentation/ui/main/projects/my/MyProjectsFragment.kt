@@ -9,16 +9,14 @@ import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.network.pojo.Project
+import itis.ru.kpfu.join.presentation.model.ProjectModel
 import itis.ru.kpfu.join.presentation.adapter.ProjectsAdapter
 import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
 import itis.ru.kpfu.join.presentation.ui.main.projects.add.AddProjectFragment
 import itis.ru.kpfu.join.presentation.ui.main.projects.details.ProjectDetailsFragment
-import kotlinx.android.synthetic.main.fragment_my_projects.fab_add_project
-import kotlinx.android.synthetic.main.fragment_my_projects.my_projects_container
-import kotlinx.android.synthetic.main.fragment_my_projects.rv_my_projects
-import kotlinx.android.synthetic.main.fragment_my_projects.toolbar_my_projects
+import kotlinx.android.synthetic.main.fragment_my_projects.*
+import kotlinx.android.synthetic.main.layout_progress_error.*
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -83,22 +81,25 @@ class MyProjectsFragment : BaseFragment(), MyProjectsView {
     }
 
     override fun showProgress() {
-        showProgressBar()
+        progress.visibility = View.VISIBLE
     }
 
     override fun hideProgress() {
-        hideProgressBar()
+        progress.visibility = View.GONE
     }
 
-    override fun onConnectionError() {
-        showProgressError { presenter.getProjects() }
+    override fun showRetry(errorText: String) {
+        retry.visibility = View.VISIBLE
+        retry_title.text = errorText
+        btn_retry.setOnClickListener { presenter.onRetry() }
     }
 
-    override fun onError(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+    override fun hideRetry() {
+        retry.visibility = View.GONE
     }
 
-    override fun setProjects(projects: List<Project>) {
+
+    override fun setProjects(projects: List<ProjectModel>) {
         adapter.items = projects
     }
 

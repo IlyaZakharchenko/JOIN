@@ -1,24 +1,24 @@
 package itis.ru.kpfu.join.presentation.ui.main.projects.all
 
-import com.arellomobile.mvp.MvpView
-import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy
+import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
-import itis.ru.kpfu.join.network.pojo.Project
+import itis.ru.kpfu.join.presentation.model.ProjectModel
+import itis.ru.kpfu.join.presentation.base.BaseView
 
-@StateStrategyType(OneExecutionStateStrategy::class)
-interface AllProjectsView: MvpView {
+interface AllProjectsView: BaseView {
 
+    @StateStrategyType(AddToEndSingleStrategy::class)
     fun showProgress()
 
+    @StateStrategyType(AddToEndSingleStrategy::class)
     fun hideProgress()
 
-    fun onConnectionError()
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun showRetry(errorText: String)
 
-    fun onError(message : String)
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun hideRetry()
 
-    fun setProjects(projects: List<Project>)
-
-    fun hideInnerProgress()
-
-    fun showInnerProgress()
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun setProjects(projects: List<ProjectModel>)
 }

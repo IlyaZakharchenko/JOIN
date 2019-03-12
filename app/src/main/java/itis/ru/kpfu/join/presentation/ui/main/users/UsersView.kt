@@ -1,24 +1,28 @@
 package itis.ru.kpfu.join.presentation.ui.main.users
 
-import com.arellomobile.mvp.MvpView
+import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
-import itis.ru.kpfu.join.network.pojo.ProjectMember
+import itis.ru.kpfu.join.presentation.model.ProjectMemberModel
+import itis.ru.kpfu.join.presentation.base.BaseView
 
-@StateStrategyType(OneExecutionStateStrategy::class)
-interface UsersView: MvpView {
+interface UsersView: BaseView {
 
-    fun setUsers(users: MutableList<ProjectMember>)
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun setUsers(users: MutableList<ProjectMemberModel>)
 
-    fun onConnectionError()
-
+    @StateStrategyType(AddToEndSingleStrategy::class)
     fun showProgress()
 
+    @StateStrategyType(AddToEndSingleStrategy::class)
     fun hideProgress()
 
-    fun onInviteSuccess(user: ProjectMember)
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun onInviteSuccess(user: ProjectMemberModel)
 
-    fun hideInnerProgress()
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun showRetry(errorText: String)
 
-    fun showInnerProgress()
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun hideRetry()
 }

@@ -1,7 +1,5 @@
 package itis.ru.kpfu.join.presentation.adapter
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.support.design.chip.Chip
 import android.support.design.chip.ChipDrawable
 import android.support.v7.widget.RecyclerView
@@ -9,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import itis.ru.kpfu.join.R
-import itis.ru.kpfu.join.network.pojo.Project
+import itis.ru.kpfu.join.presentation.model.ProjectModel
 import kotlinx.android.synthetic.main.item_project.view.*
 
 /**
@@ -17,7 +15,7 @@ import kotlinx.android.synthetic.main.item_project.view.*
  */
 class ProjectsAdapter : RecyclerView.Adapter<ProjectsAdapter.ProjectsViewHolder>() {
 
-    var items: List<Project> = emptyList()
+    var items: List<ProjectModel> = emptyList()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -38,7 +36,7 @@ class ProjectsAdapter : RecyclerView.Adapter<ProjectsAdapter.ProjectsViewHolder>
 
     inner class ProjectsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindViewHolder(item: Project, onClick: ((Long) -> Unit)?) = with(itemView) {
+        fun bindViewHolder(item: ProjectModel, onClick: ((Long) -> Unit)?) = with(itemView) {
             tv_project_name.text = item.name
             tv_project_description.text = item.description
 

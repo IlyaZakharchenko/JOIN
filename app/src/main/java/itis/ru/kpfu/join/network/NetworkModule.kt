@@ -3,8 +3,8 @@ package itis.ru.kpfu.join.network
 import dagger.Module
 import dagger.Provides
 import io.reactivex.schedulers.Schedulers
-import itis.ru.kpfu.join.network.request.JoinApi
-import itis.ru.kpfu.join.utils.Constants
+import itis.ru.kpfu.join.network.request.JoinApiRequest
+import itis.ru.kpfu.join.network.request.JoinApiRequestDecorator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -15,6 +15,10 @@ import javax.inject.Singleton
 
 @Module
 class NetworkModule {
+
+    companion object {
+        private const val BASE_URL = "https://joinandroid.herokuapp.com/"
+    }
 
     @Singleton
     @Provides
@@ -40,14 +44,15 @@ class NetworkModule {
         return Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(Constants.BASE_URL)
+                .baseUrl(BASE_URL)
                 .client(httpClient)
                 .build()
     }
 
     @Singleton
     @Provides
-    fun provideJoinApi(retrofit: Retrofit): JoinApi {
-        return retrofit.create(JoinApi::class.java)
+    fun provideJoinApi(retrofit: Retrofit): JoinApiRequest {
+        val apiRequest = retrofit.create(JoinApiRequest::class.java)
+        return JoinApiRequestDecorator(apiRequest)
     }
 }

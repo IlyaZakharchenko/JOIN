@@ -3,7 +3,9 @@ package itis.ru.kpfu.join.presentation.ui
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import itis.ru.kpfu.join.R
+import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.db.repository.impl.UserRepositoryImpl
+import itis.ru.kpfu.join.presentation.base.BasePresenter
 import itis.ru.kpfu.join.presentation.ui.main.dialogs.DialogsFragment
 import itis.ru.kpfu.join.presentation.ui.main.projects.my.MyProjectsFragment
 import itis.ru.kpfu.join.presentation.ui.main.profile.ProfileFragment
@@ -13,11 +15,7 @@ import itis.ru.kpfu.join.presentation.ui.auth.signin.SignInFragment
 import javax.inject.Inject
 
 @InjectViewState
-class FragmentHostPresenter @Inject constructor() : MvpPresenter<FragmentHostView>() {
-
-   /* @Inject
-    lateinit var userRepository: UserRepository*/
-    val userRepository = UserRepositoryImpl()
+class FragmentHostPresenter @Inject constructor(var userRepository: UserRepository) : BasePresenter<FragmentHostView>() {
 
     private val projectsFragment = AllProjectsFragment.newInstance()
     private val myProjectsFragment = MyProjectsFragment.newInstance()

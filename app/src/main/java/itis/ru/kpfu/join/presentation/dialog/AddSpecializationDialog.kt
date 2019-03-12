@@ -1,6 +1,5 @@
 package itis.ru.kpfu.join.presentation.dialog
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
@@ -12,11 +11,11 @@ import android.widget.Toast
 import com.jaredrummler.materialspinner.MaterialSpinner
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.db.entity.Specialization
-import itis.ru.kpfu.join.utils.divideString
-import itis.ru.kpfu.join.utils.parseLevelFromInt
-import itis.ru.kpfu.join.utils.parseLevelFromString
-import itis.ru.kpfu.join.utils.toPx
-import itis.ru.kpfu.join.utils.transformToString
+import itis.ru.kpfu.join.presentation.util.divideString
+import itis.ru.kpfu.join.presentation.util.parseLevelFromInt
+import itis.ru.kpfu.join.presentation.util.parseLevelFromString
+import itis.ru.kpfu.join.presentation.util.toPx
+import itis.ru.kpfu.join.presentation.util.transformToString
 import kotlinx.android.synthetic.main.dialog_add_specialization.btn_add_spec
 import kotlinx.android.synthetic.main.dialog_add_specialization.btn_cancel
 import kotlinx.android.synthetic.main.dialog_add_specialization.btn_save
@@ -28,21 +27,20 @@ import kotlinx.android.synthetic.main.dialog_add_specialization.spinners_contain
 class AddSpecializationDialog : DialogFragment() {
 
     companion object {
-        const val SPECIALIZATION = "dialog_add_specialization"
-        const val REQUEST_CODE = 1123
-        const val RESULT_SPEC = "result"
-        const val RESULT_POS = "position"
+        private const val REQUEST_CODE = "request code"
+        private const val SPECIALIZATION = "specialization"
+        private const val POSITION = "position"
 
-        fun newInstance(item: Specialization?, position: Int): AddSpecializationDialog {
-            val args = Bundle()
-            args.putSerializable(RESULT_SPEC, item)
-            args.putInt(RESULT_POS, position)
-
-            val fragment = AddSpecializationDialog()
-            fragment.arguments = args
-            return fragment
+        fun getInstance(requestCode: Int, position: Int, spec: Specialization?) = AddSpecializationDialog().also {
+            it.arguments = Bundle().apply {
+                putInt(REQUEST_CODE, requestCode)
+                putInt(POSITION, position)
+                putSerializable(SPECIALIZATION, spec)
+            }
         }
     }
+
+    var onSave: ((Specialization, Int, Int) -> Unit)? = null
 
     private lateinit var itemsSpec: MutableList<String>
     private lateinit var itemsTech: MutableList<String>
@@ -50,6 +48,10 @@ class AddSpecializationDialog : DialogFragment() {
     private lateinit var itemsExp: MutableList<String>
 
     private var position: Int? = null
+    private var requestCode: Int? = null
+
+    private var spec: Specialization? = null
+
     private var technologies = ArrayList<MaterialSpinner>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -59,17 +61,18 @@ class AddSpecializationDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val item = arguments?.getSerializable(RESULT_SPEC) as Specialization?
-        position = arguments?.getInt(RESULT_POS)
+        spec = arguments?.getSerializable(SPECIALIZATION) as Specialization?
+        position = arguments?.getInt(POSITION)
+        requestCode = arguments?.getInt(REQUEST_CODE)
 
         initItems()
-        initSpinners(item)
+        initSpinners(spec)
         initListeners()
     }
 
     private fun initItems() {
         itemsSpec = mutableListOf("Ничего не выбрано", "iOS Developer", "Android Developer", "Java Developer",
-                "Designer", "Project Manager", "C# Developer", "RoR Developer", "Python Developer",
+                "Designer", "ProjectModel Manager", "C# Developer", "RoR Developer", "Python Developer",
                 "Frontend Developer", "Backend Developer", "SMM Manager", "System Administrator")
         itemsTech = mutableListOf("Ничего не выбрано", "Swift", "Objective C", "Java", "Kotlin", "Sketch", "Spring",
                 "Python", "C#", "PostgreSQL", "SQL", "Zoom", "Pivotal tracker")
@@ -153,12 +156,8 @@ class AddSpecializationDialog : DialogFragment() {
                     parseLevelFromString(itemsLvl[spinner_lvl.selectedIndex]),
                     itemsExp[spinner_exp.selectedIndex].toInt(), transformToString(techs))
 
-            val intent = Intent()
-            intent.putExtra(RESULT_SPEC, spec)
-            intent.putExtra(RESULT_POS, position)
 
-            targetFragment?.onActivityResult(targetRequestCode, REQUEST_CODE,
-                    intent)
+            onSave?.invoke(spec, position ?: -1, requestCode ?: -1)
             dialog.dismiss()
         }
     }

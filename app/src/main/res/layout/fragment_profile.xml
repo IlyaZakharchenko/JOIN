@@ -56,27 +56,34 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <Button
                 android:id="@+id/btn_edit"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="16dp"
                 android:background="@drawable/button_state"
                 android:text="@string/btn_edit"
                 android:textColor="@color/colorWhite"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
+                android:id="@+id/card_view_info"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="0dp"
-                app:cardElevation="2dp">
+                android:layout_marginTop="16dp"
+                app:cardElevation="2dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_edit">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -152,11 +159,15 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:id="@+id/card_view_spec"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 app:cardCornerRadius="0dp"
-                app:cardElevation="2dp">
+                app:cardElevation="2dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card_view_info">
 
                 <LinearLayout
                     android:id="@+id/specializations_container"
@@ -181,9 +192,22 @@
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
-        </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
 
     </android.support.v4.widget.NestedScrollView>
 
+
+    <include layout="@layout/layout_progress"
+        android:id="@+id/progress"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginTop="?actionBarSize"
+        />
+
+    <include layout="@layout/layout_progress_error"
+        android:id="@+id/retry"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginTop="?actionBarSize"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -3,7 +3,8 @@
     android:id="@+id/fragment_progress"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="visible">
+    android:visibility="gone"
+    android:background="@color/colorWhite">
 
     <ProgressBar
         android:id="@+id/progress_dialog_progress"

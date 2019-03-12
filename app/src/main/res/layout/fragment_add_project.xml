@@ -150,7 +150,6 @@
 
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.CardView>
-
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
 

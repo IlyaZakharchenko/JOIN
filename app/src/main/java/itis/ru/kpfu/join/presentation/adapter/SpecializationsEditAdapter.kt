@@ -8,15 +8,21 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.db.entity.Specialization
-import itis.ru.kpfu.join.utils.divideString
-import itis.ru.kpfu.join.utils.parseLevelFromInt
-import itis.ru.kpfu.join.utils.toPx
+import itis.ru.kpfu.join.presentation.util.divideString
+import itis.ru.kpfu.join.presentation.util.parseLevelFromInt
+import itis.ru.kpfu.join.presentation.util.toPx
 import kotlinx.android.synthetic.main.item_specialisation_edit.view.*
 
-class SpecializationsEditAdapter(private var items: MutableList<Specialization>,
-        private var onItemRemove: (Int, Specialization) -> Unit,
-        private var onItemEdit: (Int, Specialization) -> Unit) :
-        RecyclerView.Adapter<SpecializationsEditAdapter.SpecializationEditViewHolder>() {
+class SpecializationsEditAdapter : RecyclerView.Adapter<SpecializationsEditAdapter.SpecializationEditViewHolder>() {
+
+    var items: MutableList<Specialization> = mutableListOf()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    var onItemRemove: ((Int) -> Unit)? = null
+    var onItemEdit: ((Int, Specialization) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpecializationEditViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_specialisation_edit, parent, false)
@@ -46,20 +52,16 @@ class SpecializationsEditAdapter(private var items: MutableList<Specialization>,
         notifyItemInserted(itemCount - 1)
     }
 
-    fun getItems(): List<Specialization> {
-        return items
-    }
-    
-    inner class SpecializationEditViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class SpecializationEditViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindViewHolder(item: Specialization, onItemRemove: (Int, Specialization) -> Unit,
-                           onItemEdit: (Int, Specialization) -> Unit)= with(itemView) {
+        fun bindViewHolder(item: Specialization, onItemRemove: ((Int) -> Unit)?,
+                           onItemEdit: ((Int, Specialization) -> Unit)?) = with(itemView) {
 
             chip_container.removeAllViews()
             item.technologies?.let { initTechnologies(divideString(it)) }
 
-            btn_edit.setOnClickListener { onItemEdit(adapterPosition, item) }
-            btn_remove.setOnClickListener { onItemRemove(adapterPosition, item) }
+            btn_edit.setOnClickListener { onItemEdit?.invoke(adapterPosition, item) }
+            btn_remove.setOnClickListener { onItemRemove?.invoke(adapterPosition) }
 
             tv_experience.text = item.experience.toString()
             tv_lvl.text = parseLevelFromInt(item.knowledgeLevel)

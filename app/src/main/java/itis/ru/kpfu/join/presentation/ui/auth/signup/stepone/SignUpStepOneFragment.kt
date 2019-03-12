@@ -9,7 +9,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.R.string
-import itis.ru.kpfu.join.network.pojo.UserRegistrationForm
+import itis.ru.kpfu.join.presentation.model.RegistrationFormModel
 import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
 import itis.ru.kpfu.join.presentation.ui.auth.signup.steptwo.SignUpStepTwoFragment
@@ -74,21 +74,13 @@ class SignUpStepOneFragment : BaseFragment(), SignUpStepOneView {
 
         btn_sign_up.setOnClickListener {
             presenter.onSignUpClick(
-                    UserRegistrationForm(et_username.text.toString(),
+                    RegistrationFormModel(et_username.text.toString(),
                             et_email.text.toString(),
                             et_password.text.toString(), et_password_repeat.text.toString()))
         }
     }
 
-    override fun showProgress() {
-        showProgressBar()
-    }
-
-    override fun hideProgress() {
-        hideProgressBar()
-    }
-
-    override fun onFirstStepSuccess(user: UserRegistrationForm) {
+    override fun setSignUpStepTwoFragment(user: RegistrationFormModel) {
         ti_username.error = null
         ti_email.error = null
         ti_password.error = null
@@ -97,11 +89,7 @@ class SignUpStepOneFragment : BaseFragment(), SignUpStepOneView {
         (activity as? FragmentHostActivity)?.setFragment(SignUpStepTwoFragment.newInstance(user), true)
     }
 
-    override fun onConnectionError() {
-        Toast.makeText(activity, "Internet Connection Error", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun buttonEnabled(enabled: Boolean) {
+    override fun setButtonEnabled(enabled: Boolean) {
         btn_sign_up.isEnabled = enabled
     }
 

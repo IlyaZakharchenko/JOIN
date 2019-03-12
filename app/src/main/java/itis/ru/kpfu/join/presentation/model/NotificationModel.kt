@@ -1,12 +1,13 @@
-package itis.ru.kpfu.join.network.pojo
+package itis.ru.kpfu.join.presentation.model
 
 import itis.ru.kpfu.join.db.entity.User
+import itis.ru.kpfu.join.presentation.model.ProjectModel
 import java.util.Date
 
-data class Notification(
+data class NotificationModel(
         val id: Long? = null,
         val type: Int? = null,
         val user: User? = null,
-        val project: Project? = null,
+        val project: ProjectModel? = null,
         val date: Date? = null
 )

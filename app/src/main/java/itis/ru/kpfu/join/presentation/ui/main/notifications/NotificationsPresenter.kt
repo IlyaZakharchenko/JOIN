@@ -1,36 +1,46 @@
 package itis.ru.kpfu.join.presentation.ui.main.notifications
 
 import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import itis.ru.kpfu.join.network.request.JoinApi
+import itis.ru.kpfu.join.network.request.JoinApiRequest
 import itis.ru.kpfu.join.network.pojo.NotificationResponse
 import itis.ru.kpfu.join.db.repository.UserRepository
-import itis.ru.kpfu.join.presentation.ui.main.notifications.NotificationsView
+import itis.ru.kpfu.join.presentation.base.BasePresenter
+import itis.ru.kpfu.join.presentation.util.exceptionprocessor.ExceptionProcessor
 import javax.inject.Inject
 
 @InjectViewState
-class NotificationsPresenter @Inject constructor() : MvpPresenter<NotificationsView>() {
+class NotificationsPresenter @Inject constructor() : BasePresenter<NotificationsView>() {
 
     @Inject
-    lateinit var api: JoinApi
+    lateinit var apiRequest: JoinApiRequest
     @Inject
     lateinit var userRepository: UserRepository
+    @Inject
+    lateinit var exceptionProcessor: ExceptionProcessor
 
     private val compositeDisposable = CompositeDisposable()
 
+    fun onRetry() {
+        getNotifications()
+    }
+
     fun getNotifications() {
-        compositeDisposable.add(
-                api
-                        .getNotifications(userRepository.getUser()?.token, userRepository.getUser()?.id)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSubscribe { viewState.showProgress() }
-                        .doAfterTerminate { viewState.hideProgress() }
-                        .subscribe({
-                            viewState.setNotifications(it)
-                        }, { viewState.onConnectionError() })
-        )
+        apiRequest
+                .getNotifications(userRepository.getUser()?.token, userRepository.getUser()?.id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    viewState.showProgress()
+                    viewState.hideRetry()
+                }
+                .doAfterTerminate { viewState.hideProgress() }
+                .subscribe({
+                    viewState.setNotifications(it)
+                }, {
+                    viewState.showRetry(exceptionProcessor.processException(it))
+                })
+                .disposeWhenDestroy()
     }
 
     override fun onDestroy() {
@@ -39,36 +49,16 @@ class NotificationsPresenter @Inject constructor() : MvpPresenter<NotificationsV
     }
 
     fun responseToNotification(id: Long, response: NotificationResponse) {
-        compositeDisposable.add(
-                api
-                        .responseToNotification(userRepository.getUser()?.token, response, id)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSubscribe { viewState.showProgress() }
-                        .doAfterTerminate { viewState.hideProgress() }
-                        .subscribe({
-                            if (it.isSuccessful)
-                                getNotifications()
-                            else
-                                viewState.onConnectionError()
-                        }, {
-                            viewState.onConnectionError()
-                        })
-        )
-    }
-
-    fun removeNotification(id: Long?, position: Int) {
-        compositeDisposable.add(
-                api
-                        .deleteNotification(userRepository.getUser()?.token, id)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            if (it.isSuccessful)
-                                viewState.onDeleteSuccess(position)
-                            else
-                                viewState.onConnectionError()
-                        }, {
-                            viewState.onConnectionError()
-                        })
-        )
+        apiRequest
+                .responseToNotification(userRepository.getUser()?.token, response, id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { viewState.showWaitDialog() }
+                .doAfterTerminate { viewState.hideWaitDialog() }
+                .subscribe({
+                    getNotifications()
+                }, {
+                    viewState.showErrorDialog(exceptionProcessor.processException(it))
+                })
+                .disposeWhenDestroy()
     }
 }

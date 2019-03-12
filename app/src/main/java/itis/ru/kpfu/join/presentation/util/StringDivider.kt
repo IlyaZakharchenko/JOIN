@@ -1,4 +1,4 @@
-package itis.ru.kpfu.join.utils
+package itis.ru.kpfu.join.presentation.util
 
 fun divideString(text: String): HashSet<String> {
     val result = HashSet<String>()
