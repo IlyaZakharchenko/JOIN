@@ -3,8 +3,8 @@ package itis.ru.kpfu.join.presentation.ui.main.notifications
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import itis.ru.kpfu.join.network.request.JoinApiRequest
-import itis.ru.kpfu.join.network.pojo.NotificationResponse
+import itis.ru.kpfu.join.data.network.request.JoinApiRequest
+import itis.ru.kpfu.join.data.network.pojo.NotificationResponse
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.presentation.base.BasePresenter
 import itis.ru.kpfu.join.presentation.util.exceptionprocessor.ExceptionProcessor

@@ -84,7 +84,6 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView()
-        initFields()
         initListeners()
     }
 
@@ -93,19 +92,17 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
         btn_add_spec.setOnClickListener { presenter.onAddSpec() }
     }
 
-    private fun initFields() {
-        val user = presenter.getUser()
-
+    override fun initFields(user: User?) {
         user?.name?.let { et_first_name.setText(it) }
         user?.lastname?.let { et_last_name.setText(it) }
         user?.username?.let { et_username.setText(it) }
         user?.email?.let { et_email.setText(it) }
         user?.phoneNumber?.let { et_phone.setText(it) }
         user?.profileImage?.let { setImageProfile(it) }
+        user?.getParsedSpecializations()?.let { adapter.items = it }
     }
 
     private fun initRecyclerView() {
-        adapter.items = presenter.getUser()?.getParsedSpecializations() ?: ArrayList()
         adapter.onItemEdit = { position, spec -> presenter.onEditSpec(position, spec) }
         adapter.onItemRemove = { position -> presenter.onRemoveSpec(position) }
 

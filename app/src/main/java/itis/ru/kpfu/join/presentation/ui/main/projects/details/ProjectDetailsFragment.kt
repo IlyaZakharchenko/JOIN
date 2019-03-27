@@ -19,6 +19,7 @@ import itis.ru.kpfu.join.presentation.recyclerView.adapter.ProjectMemberAdapter
 import itis.ru.kpfu.join.presentation.ui.main.profile.ProfileFragment
 import kotlinx.android.synthetic.main.fragment_project_details.*
 import kotlinx.android.synthetic.main.layout_progress_error.*
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -55,46 +56,39 @@ class ProjectDetailsFragment : BaseFragment(), ProjectDetailsView {
     override val toolbar: Toolbar?
         get() = toolbar_project
 
-    private var projectId: Long? = null
-
-    private var membersAdapter: ProjectMemberAdapter? = null
-    private var jobsAdapter: ProjectJobAdapter? = null
-
     @InjectPresenter
     lateinit var presenter: ProjectDetailsPresenter
 
+    @Inject
+    lateinit var membersAdapter: ProjectMemberAdapter
+    @Inject
+    lateinit var jobsAdapter: ProjectJobAdapter
     @Inject
     lateinit var presenterProvider: Provider<ProjectDetailsPresenter>
 
     @ProvidePresenter
     fun providePresenter(): ProjectDetailsPresenter = presenterProvider.get()
 
+    fun getProjectId(): Long = arguments?.getLong(PROJECT)
+            ?: throw IllegalArgumentException("project id is null")
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerViews()
         initListeners()
-        projectId = arguments?.getLong(PROJECT)
-
-        projectId?.let { presenter.getProject(it) }
     }
 
     private fun initListeners() {
-        add_member_container.setOnClickListener {
-            (baseActivity as? FragmentHostActivity)?.setFragment(UsersFragment.newInstance(projectId
-                    ?: -1), true)
-        }
+        add_member_container.setOnClickListener { presenter.onAddUser() }
     }
 
     private fun initRecyclerViews() {
-        membersAdapter = ProjectMemberAdapter { onUserClick(it) }
-        jobsAdapter = ProjectJobAdapter { onApply() }
-
         rv_project_members.layoutManager = LinearLayoutManager(baseActivity)
-        rv_project_members.adapter = membersAdapter
+        rv_project_members.adapter = membersAdapter.also { it.onUserClick = { id -> onUserClick(id) } }
 
         rv_project_jobs.layoutManager = LinearLayoutManager(baseActivity)
-        rv_project_jobs.adapter = jobsAdapter
+        rv_project_jobs.adapter = jobsAdapter.also { it.onApply = { onApply() } }
     }
 
     private fun onUserClick(id: Long) {
@@ -102,7 +96,7 @@ class ProjectDetailsFragment : BaseFragment(), ProjectDetailsView {
     }
 
     private fun onApply() {
-        presenter.sendApply(projectId)
+        presenter.onSendApply()
     }
 
     override fun onApplySuccess() {
@@ -125,9 +119,15 @@ class ProjectDetailsFragment : BaseFragment(), ProjectDetailsView {
         }
         item.participants?.let { allMembers.addAll(it) }
 
-        membersAdapter?.setMembers(allMembers)
-        item.vacancies?.let { jobsAdapter?.setJobs(it, isMyProject, isInProject) }
+        membersAdapter.items = allMembers
 
+        item.vacancies?.let {
+            jobsAdapter.apply {
+                this.isInProject = isInProject
+                this.isMyProject = isMyProject
+                items = it
+            }
+        }
         tv_project_empty_vacancies.visibility = if (item.vacancies?.size == 0) View.VISIBLE else View.GONE
     }
 
@@ -142,11 +142,15 @@ class ProjectDetailsFragment : BaseFragment(), ProjectDetailsView {
     override fun showRetry(errorText: String) {
         retry.visibility = View.VISIBLE
         retry_title.text = errorText
-        btn_retry.setOnClickListener { projectId?.let { it1 -> presenter.onRetry(it1) } }
+        btn_retry.setOnClickListener { presenter.onRetry() }
     }
 
     override fun hideRetry() {
         retry.visibility = View.GONE
+    }
+
+    override fun setUsersFragment(projectId: Long) {
+        (baseActivity as? FragmentHostActivity)?.setFragment(UsersFragment.newInstance(projectId), true)
     }
 
 }

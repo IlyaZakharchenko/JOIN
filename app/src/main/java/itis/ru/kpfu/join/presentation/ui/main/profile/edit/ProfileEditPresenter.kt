@@ -4,7 +4,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.zxy.tiny.Tiny
 import io.reactivex.android.schedulers.AndroidSchedulers
 import itis.ru.kpfu.join.db.entity.Specialization
-import itis.ru.kpfu.join.network.request.JoinApiRequest
+import itis.ru.kpfu.join.data.network.request.JoinApiRequest
 import itis.ru.kpfu.join.db.entity.User
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.presentation.base.BasePresenter
@@ -32,8 +32,9 @@ class ProfileEditPresenter @Inject constructor() : BasePresenter<ProfileEditView
     @Inject
     lateinit var exceptionProcessor: ExceptionProcessor
 
-    fun getUser(): User? {
-        return userRepository.getUser()
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+        viewState.initFields(userRepository.getUser())
     }
 
     fun onChoosePhoto() {
@@ -70,11 +71,12 @@ class ProfileEditPresenter @Inject constructor() : BasePresenter<ProfileEditView
                     .changeUser(userRepository.getUser()?.token, user, user?.id)
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe { viewState.showWaitDialog() }
-                    .doAfterTerminate { viewState.hideWaitDialog() }
                     .subscribe({
+                        viewState.hideWaitDialog()
                         user?.let { it1 -> userRepository.updateUser(it1) }
                         viewState.onEditSuccess()
                     }, {
+                        viewState.hideWaitDialog()
                         viewState.showErrorDialog(exceptionProcessor.processException(it))
                     })
                     .disposeWhenDestroy()

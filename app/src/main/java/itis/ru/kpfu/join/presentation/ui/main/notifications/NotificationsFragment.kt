@@ -8,7 +8,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.presentation.model.NotificationModel
-import itis.ru.kpfu.join.network.pojo.NotificationResponse
+import itis.ru.kpfu.join.data.network.pojo.NotificationResponse
 import itis.ru.kpfu.join.presentation.adapter.NotificationsAdapter
 import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
@@ -54,7 +54,8 @@ class NotificationsFragment : BaseFragment(), NotificationsView {
     @Inject
     lateinit var presenterProvider: Provider<NotificationsPresenter>
 
-    var adapter: NotificationsAdapter? = null
+    @Inject
+    lateinit var adapter: NotificationsAdapter
 
     @ProvidePresenter
     fun providePresenter(): NotificationsPresenter = presenterProvider.get()
@@ -66,12 +67,13 @@ class NotificationsFragment : BaseFragment(), NotificationsView {
     }
 
     private fun initRecyclerView() {
-        adapter = NotificationsAdapter(
-                onAccept = this::onAccept,
-                onDecline = this::onDecline,
-                onProjectClick = this::onProjectClick,
-                onUsernameClick = this::onUsernameClick
-        )
+        adapter.apply {
+            onAccept = { onAccept(it) }
+            onDecline = { onDecline(it) }
+            onProjectClick = { onProjectClick(it) }
+            onUsernameClick = { onUsernameClick(it) }
+        }
+
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(baseActivity)
     }
@@ -93,11 +95,7 @@ class NotificationsFragment : BaseFragment(), NotificationsView {
     }
 
     override fun setNotifications(notifications: List<NotificationModel>) {
-        adapter?.setItems(notifications)
-    }
-
-    override fun onDeleteSuccess(position: Int) {
-        adapter?.removeElement(position)
+        adapter.items = notifications
     }
 
     override fun showRetry(errorText: String) {

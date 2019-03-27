@@ -26,4 +26,7 @@ interface ProjectDetailsView: BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun onApplySuccess()
+
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun setUsersFragment(projectId: Long)
 }

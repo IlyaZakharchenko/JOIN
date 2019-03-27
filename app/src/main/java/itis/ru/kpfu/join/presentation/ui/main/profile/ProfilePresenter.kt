@@ -1,10 +1,11 @@
 package itis.ru.kpfu.join.presentation.ui.main.profile
 
+import bolts.Bolts
 import com.arellomobile.mvp.InjectViewState
 import com.zxy.tiny.Tiny
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import itis.ru.kpfu.join.network.request.JoinApiRequest
-import itis.ru.kpfu.join.db.entity.User
+import itis.ru.kpfu.join.data.network.request.JoinApiRequest
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.presentation.base.BasePresenter
 import itis.ru.kpfu.join.presentation.util.exceptionprocessor.ExceptionProcessor
@@ -28,33 +29,45 @@ class ProfilePresenter @Inject constructor() : BasePresenter<ProfileView>() {
     lateinit var apiRequest: JoinApiRequest
     @Inject
     lateinit var exceptionProcessor: ExceptionProcessor
+    @Inject
+    @JvmField
+    var userId: Long? = null
 
-    fun onRetry(userId: Long?) {
-        getUser(userId)
+    private fun isOwner(): Boolean = userId == userRepository.getUser()?.id
+
+    fun onRetry() {
+        getUser()
     }
 
-    fun getUser(userId: Long?): User? {
-        if (userId == userRepository.getUser()?.id || userId == -1L) {
-            return userRepository.getUser()
-        } else {
-            apiRequest.getUserInfo(userRepository.getUser()?.token, userId)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe {
-                        viewState.hideCollapsingToolbar()
-                        viewState.hideRetry()
-                        viewState.showProgress()
-                    }
-                    .doAfterTerminate { viewState.hideProgress() }
-                    .subscribe({
-                        viewState.showCollapsingToolbar()
-                        viewState.initFields(it)
-                    }, {
-                        viewState.showRetry(exceptionProcessor.processException(it))
-                    })
-                    .disposeWhenDestroy()
-        }
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+        getUser()
+    }
 
-        return null
+    private fun getUser() {
+        Observable.fromCallable {
+            viewState.setBackArrowEnabled(!isOwner())
+            userRepository.getUser()
+        }.flatMap {
+            if (isOwner()) {
+                Observable.just(it)
+            } else {
+                apiRequest.getUserInfo(userRepository.getUser()?.token, userId)
+            }
+        }.observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    viewState.hideCollapsingToolbar()
+                    viewState.hideRetry()
+                    viewState.showProgress()
+                }
+                .doAfterTerminate { viewState.hideProgress() }
+                .subscribe({
+                    viewState.showCollapsingToolbar()
+                    viewState.setUser(it, isOwner())
+                }, {
+                    viewState.showRetry(exceptionProcessor.processException(it))
+                })
+                .disposeWhenDestroy()
     }
 
     fun onChoosePhotoResult(path: String, requestCode: Int) {
@@ -93,11 +106,12 @@ class ProfilePresenter @Inject constructor() : BasePresenter<ProfileView>() {
         viewState.showChooseImageDialog(PROFILE_CHOOSE_PHOTO_REQUEST_CODE, PROFILE_CHOOSE_PHOTO_LIMIT)
     }
 
-    fun exit() {
+    fun onLogout() {
         userRepository.clearUser()
+        viewState.setSignInFragment()
     }
 
-    fun getUserFromDb(): User? {
-        return userRepository.getUser()
+    fun onEditProfile() {
+        viewState.setChangeProfileFragment()
     }
 }

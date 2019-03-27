@@ -2,9 +2,7 @@ package itis.ru.kpfu.join.presentation.ui.auth.signin
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -23,13 +21,11 @@ import com.vk.sdk.VKScope
 import com.vk.sdk.VKSdk
 import com.vk.sdk.VKServiceActivity
 import com.vk.sdk.api.VKError
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
 import itis.ru.kpfu.join.presentation.ui.main.projects.all.AllProjectsFragment
-import itis.ru.kpfu.join.presentation.ui.auth.restorepassword.RestorePassFragment
+import itis.ru.kpfu.join.presentation.ui.auth.restorepassword.stepone.RestorePassStepOneFragment
 import itis.ru.kpfu.join.presentation.ui.auth.signup.stepone.SignUpStepOneFragment
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 import javax.inject.Inject
@@ -92,7 +88,7 @@ class SignInFragment : BaseFragment(), SignInView {
             presenter.onCreateAccount()
         }
         btn_sign_in.setOnClickListener {
-            presenter.signIn(et_email.text.toString().trim(), et_password.text.toString().trim())
+            presenter.onSignIn(et_email.text.toString().trim(), et_password.text.toString().trim())
         }
         btn_forgot_pass.setOnClickListener {
             presenter.onRestorePassword()
@@ -173,7 +169,7 @@ class SignInFragment : BaseFragment(), SignInView {
     }
 
     override fun setRestorePasswordFragment() {
-        (activity as? FragmentHostActivity)?.setFragment(RestorePassFragment.newInstance(), true)
+        (activity as? FragmentHostActivity)?.setFragment(RestorePassStepOneFragment.newInstance(), true)
     }
 
     override fun setEmailErrorEnabled(enabled: Boolean) {

@@ -26,4 +26,7 @@ interface SignUpStepOneView: BaseView {
 
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun onInvalidPassword()
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun refreshErrors()
 }

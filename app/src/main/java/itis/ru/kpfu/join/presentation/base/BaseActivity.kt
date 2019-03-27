@@ -22,7 +22,7 @@ abstract class BaseActivity : MvpAppCompatActivity(), HasSupportFragmentInjector
 
     companion object {
         private const val EXIT_DIALOG_REQUEST_CODE = 2
-        private const val TAG_EXIT_DIALOG = "exit dialog tag"
+        private const val TAG_EXIT_DIALOG = "onLogout dialog tag"
         private const val TAG_ERROR_DIALOG = "tag error dialog"
         private const val TAG_WAIT_DIALOG = "tag wait dialog"
     }

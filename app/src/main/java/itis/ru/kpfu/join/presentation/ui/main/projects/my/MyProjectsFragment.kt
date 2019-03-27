@@ -66,17 +66,18 @@ class MyProjectsFragment : BaseFragment(), MyProjectsView {
 
         initRecyclerView()
         initClickListeners()
+        initFAB()
+    }
 
+    private fun initFAB() {
         fab_add_project.setContainer(my_projects_container)
         fab_add_project.setScale(0.8f)
         fab_add_project.setMargin(16)
-
-        presenter.getProjects()
     }
 
     private fun initClickListeners() {
         fab_add_project.setOnClickListener {
-            (baseActivity as? FragmentHostActivity)?.setFragment(AddProjectFragment.newInstance(), true)
+            presenter.onAddProject()
         }
     }
 
@@ -91,7 +92,8 @@ class MyProjectsFragment : BaseFragment(), MyProjectsView {
     override fun showRetry(errorText: String) {
         retry.visibility = View.VISIBLE
         retry_title.text = errorText
-        btn_retry.setOnClickListener { presenter.onRetry() }
+        btn_retry.setOnClickListener {
+            presenter.onRetry() }
     }
 
     override fun hideRetry() {
@@ -104,7 +106,7 @@ class MyProjectsFragment : BaseFragment(), MyProjectsView {
     }
 
     private fun initRecyclerView() {
-        adapter.onProjectClick = { onProjectClick(it) }
+        adapter.onProjectClick = { presenter.onProjectDetails(it) }
         rv_my_projects.adapter = adapter
         rv_my_projects.layoutManager = LinearLayoutManager(baseActivity)
         rv_my_projects.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -127,7 +129,11 @@ class MyProjectsFragment : BaseFragment(), MyProjectsView {
         })
     }
 
-    private fun onProjectClick(id: Long) {
+    override fun setAddProjectFragment() {
+        (baseActivity as? FragmentHostActivity)?.setFragment(AddProjectFragment.newInstance(), true)
+    }
+
+    override fun setProjectDetailsFragment(id: Long) {
         (activity as? FragmentHostActivity)?.setFragment(ProjectDetailsFragment.newInstance(id), true)
     }
 }

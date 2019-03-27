@@ -3,7 +3,6 @@ package itis.ru.kpfu.join.presentation.ui.auth.signup.stepone
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.View
-import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.jakewharton.rxbinding2.widget.RxTextView
@@ -73,7 +72,7 @@ class SignUpStepOneFragment : BaseFragment(), SignUpStepOneView {
                 RxTextView.textChanges(et_password_repeat))
 
         btn_sign_up.setOnClickListener {
-            presenter.onSignUpClick(
+            presenter.onSignUp(
                     RegistrationFormModel(et_username.text.toString(),
                             et_email.text.toString(),
                             et_password.text.toString(), et_password_repeat.text.toString()))
@@ -81,11 +80,6 @@ class SignUpStepOneFragment : BaseFragment(), SignUpStepOneView {
     }
 
     override fun setSignUpStepTwoFragment(user: RegistrationFormModel) {
-        ti_username.error = null
-        ti_email.error = null
-        ti_password.error = null
-        ti_password_repeat.error = null
-
         (activity as? FragmentHostActivity)?.setFragment(SignUpStepTwoFragment.newInstance(user), true)
     }
 
@@ -109,5 +103,12 @@ class SignUpStepOneFragment : BaseFragment(), SignUpStepOneView {
     override fun onInvalidPassword() {
         ti_password.error = getString(string.error_password)
         ti_password_repeat.error = getString(string.error_password)
+    }
+
+    override fun refreshErrors() {
+        ti_username.error = null
+        ti_email.error = null
+        ti_password.error = null
+        ti_password_repeat.error = null
     }
 }

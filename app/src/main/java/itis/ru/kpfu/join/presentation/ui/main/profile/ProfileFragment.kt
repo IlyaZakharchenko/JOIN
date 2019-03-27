@@ -1,9 +1,6 @@
 package itis.ru.kpfu.join.presentation.ui.main.profile
 
 import android.os.Bundle
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CollapsingToolbarLayout
-import android.support.design.widget.CoordinatorLayout
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
@@ -23,18 +20,19 @@ import itis.ru.kpfu.join.presentation.ui.main.profile.edit.ProfileEditFragment
 import itis.ru.kpfu.join.presentation.ui.auth.signin.SignInFragment
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.layout_progress_error.*
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 import javax.inject.Provider
 
 class ProfileFragment : BaseFragment(), ProfileView {
 
     companion object {
-        const val PROFILE_FRAGMENT = "profile fragment"
-        private const val TAG_CHOOSE_IMAGE_DIALOG = "choose image dialog "
+        private const val KEY_USER_ID = "KEY_USER_ID"
+        private const val TAG_CHOOSE_IMAGE_DIALOG = "TAG_CHOOSE_IMAGE_DIALOG"
 
-        fun newInstance(userId: Long?): ProfileFragment {
+        fun newInstance(userId: Long): ProfileFragment {
             val args = Bundle()
-            args.putLong(PROFILE_FRAGMENT, userId ?: -1L)
+            args.putLong(KEY_USER_ID, userId)
 
             val fragment = ProfileFragment()
             fragment.arguments = args
@@ -66,11 +64,13 @@ class ProfileFragment : BaseFragment(), ProfileView {
     @Inject
     lateinit var presenterProvider: Provider<ProfilePresenter>
 
-    private lateinit var user: User
-
     private var adapter: SpecializationsAdapter? = null
 
-    private var userId: Long? = null
+    private var logoutItem: MenuItem? = null
+    private var settingsItem: MenuItem? = null
+
+    fun getUserId(): Long = arguments?.getLong(KEY_USER_ID)
+            ?: throw IllegalArgumentException("User ID is null")
 
     @ProvidePresenter
     fun providePresenter(): ProfilePresenter = presenterProvider.get()
@@ -78,21 +78,26 @@ class ProfileFragment : BaseFragment(), ProfileView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userId = arguments?.getLong(PROFILE_FRAGMENT)
-        if (userId == presenter.getUserFromDb()?.id || userId == -1L) {
-            (activity as? FragmentHostActivity)?.enableBackPressed(false)
-        }
-        user = userId?.let { presenter.getUser(it) } ?: User()
-
+        toolbar_profile.setOnClickListener { app_bar_profile.setExpanded(true) }
         initRecyclerView()
-        initFields(user)
-        initListeners()
     }
 
-    override fun initFields(user: User) {
-        user.email?.let { tv_email.text = it }
-        user.username?.let { tv_username.text = it }
-        tv_phone.text = if (user.phoneNumber.isNullOrEmpty()) "Не указан" else "8${user.phoneNumber}"
+    override fun setUser(user: User, isOwner: Boolean) {
+        if (isOwner) {
+            logoutItem?.isVisible = true
+            settingsItem?.isVisible = true
+
+            btn_edit.apply {
+                visibility = View.VISIBLE
+                setOnClickListener { presenter.onEditProfile() }
+            }
+
+            collapsing_toolbar.setOnClickListener { presenter.onChoosePhoto() }
+        }
+
+        tv_email.text = user.email.orEmpty()
+        tv_username.text = user.username.orEmpty()
+        tv_phone.text = user.phoneNumber.orEmpty()
 
         user.profileImage?.let { setImageProfile(it) }
 
@@ -110,17 +115,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
         rv_specializations.adapter = adapter
         rv_specializations.isNestedScrollingEnabled = false
         rv_specializations.layoutManager = LinearLayoutManager(baseActivity)
-    }
-
-    private fun initListeners() {
-        if (userId == presenter.getUserFromDb()?.id || userId == -1L) {
-            btn_edit.visibility = View.VISIBLE
-            btn_edit.setOnClickListener {
-                (activity as? FragmentHostActivity)?.setFragment(ProfileEditFragment.newInstance(), true)
-            }
-            collapsing_toolbar.setOnClickListener { presenter.onChoosePhoto() }
-        }
-        toolbar_profile.setOnClickListener { app_bar_profile.setExpanded(true) }
     }
 
     override fun onAttachFragment(childFragment: Fragment?) {
@@ -148,7 +142,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     override fun showRetry(errorText: String) {
         retry.visibility = View.VISIBLE
         retry_title.text = errorText
-        btn_retry.setOnClickListener { presenter.onRetry(userId) }
+        btn_retry.setOnClickListener { presenter.onRetry() }
     }
 
     override fun hideRetry() {
@@ -189,16 +183,16 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        if (userId == presenter.getUserFromDb()?.id || userId == -1L) {
-            inflater?.inflate(R.menu.menu_profile, menu)
-        }
+        inflater?.inflate(R.menu.menu_profile, menu)
+
+        logoutItem = menu?.findItem(R.id.menu_logout)
+        settingsItem = menu?.findItem(R.id.menu_settings)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.menu_exit -> {
-                presenter.exit()
-                (activity as? FragmentHostActivity)?.setFragment(SignInFragment.newInstance(), false)
+            R.id.menu_logout -> {
+                presenter.onLogout()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -207,4 +201,17 @@ class ProfileFragment : BaseFragment(), ProfileView {
     override fun showChooseImageDialog(requestCode: Int, limit: Int) {
         ChooseImageDialog.getInstance(requestCode, limit).show(childFragmentManager, TAG_CHOOSE_IMAGE_DIALOG)
     }
+
+    override fun setBackArrowEnabled(enabled: Boolean) {
+        (activity as? FragmentHostActivity)?.enableBackPressed(enabled)
+    }
+
+    override fun setSignInFragment() {
+        (activity as? FragmentHostActivity)?.setFragment(SignInFragment.newInstance(), false)
+    }
+
+    override fun setChangeProfileFragment() {
+        (activity as? FragmentHostActivity)?.setFragment(ProfileEditFragment.newInstance(), true)
+    }
+
 }

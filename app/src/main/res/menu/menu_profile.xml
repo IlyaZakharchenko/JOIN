@@ -6,11 +6,13 @@
         android:id="@+id/menu_settings"
         android:title="@string/settings"
         app:showAsAction="never"
+        android:visible="false"
         />
 
     <item
-        android:id="@+id/menu_exit"
+        android:id="@+id/menu_logout"
         android:title="@string/exit"
         app:showAsAction="never"
+        android:visible="false"
         />
 </menu>

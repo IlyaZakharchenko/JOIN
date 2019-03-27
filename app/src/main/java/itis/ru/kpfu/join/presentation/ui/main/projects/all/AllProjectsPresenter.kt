@@ -2,7 +2,7 @@ package itis.ru.kpfu.join.presentation.ui.main.projects.all
 
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
-import itis.ru.kpfu.join.network.request.JoinApiRequest
+import itis.ru.kpfu.join.data.network.request.JoinApiRequest
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.presentation.base.BasePresenter
 import itis.ru.kpfu.join.presentation.util.exceptionprocessor.ExceptionProcessor
@@ -27,6 +27,10 @@ class AllProjectsPresenter @Inject constructor() : BasePresenter<AllProjectsView
         getProjects()
     }
 
+    fun onShowSearchFilters() {
+        viewState.showBottomSheetDialog()
+    }
+
     fun onSearch(projectName: String?, specName: String? = null, exp: String? = null,
                  lvl: String? = null) {
 
@@ -43,7 +47,9 @@ class AllProjectsPresenter @Inject constructor() : BasePresenter<AllProjectsView
         apiRequest.getProjects(userRepository.getUser()?.token, projectName, spec, level, experience)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { viewState.showProgress() }
-                .doAfterTerminate { viewState.hideProgress() }
+                .doAfterTerminate {
+                    viewState.hideBottomSheetDialog()
+                    viewState.hideProgress() }
                 .subscribe({
                     viewState.setProjects(it)
                 }, {

@@ -12,38 +12,40 @@ import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.presentation.model.NotificationModel
 import kotlinx.android.synthetic.main.item_notification.view.*
 
-class NotificationsAdapter(
-        private var list: List<NotificationModel> = ArrayList(),
-        private var onAccept: (Long) -> Unit,
-        private var onDecline: (Long) -> Unit,
-        private var onProjectClick: (Long) -> Unit,
-        private var onUsernameClick: (Long) -> Unit) : RecyclerView.Adapter<NotificationsAdapter.NotificationsViewHolder>() {
+class NotificationsAdapter : RecyclerView.Adapter<NotificationsAdapter.NotificationsViewHolder>() {
+
+    var items: List<NotificationModel> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    var onAccept: ((Long) -> Unit)? = null
+    var onDecline: ((Long) -> Unit)? = null
+    var onProjectClick: ((Long) -> Unit)? = null
+    var onUsernameClick: ((Long) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationsViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_notification, parent, false)
         return NotificationsViewHolder(view)
     }
 
-    override fun getItemCount() = list.size
+    override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: NotificationsViewHolder, position: Int) {
-        holder.bindViewHolder(list[position], onAccept, onDecline, onProjectClick, onUsernameClick)
-    }
-
-    fun setItems(list: List<NotificationModel>) {
-        this.list = list
-        notifyDataSetChanged()
+        holder.bindViewHolder()
     }
 
     fun removeElement(position: Int) {
-        list.drop(position)
+        items.drop(position)
         notifyDataSetChanged()
     }
 
     inner class NotificationsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindViewHolder(item: NotificationModel, onAccept: (Long) -> Unit, onDecline: (Long) -> Unit,
-                           onProjectClick: (Long) -> Unit, onUsernameClick: (Long) -> Unit) = with(itemView) {
+        fun bindViewHolder() = with(itemView) {
+            val item = items[adapterPosition]
+
             lateinit var message: SpannableString
             val startUser: Int
             val endUser: Int
@@ -52,13 +54,13 @@ class NotificationsAdapter(
 
             val userSpan = object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    item.user?.id?.let { onUsernameClick(it) }
+                    item.user?.id?.let { onUsernameClick?.invoke(it) }
                 }
             }
 
             val projectSpan = object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    item.project?.id?.let { onProjectClick(it) }
+                    item.project?.id?.let { onProjectClick?.invoke(it) }
                 }
             }
 
@@ -166,8 +168,8 @@ class NotificationsAdapter(
             tv_message.text = message
             tv_message.movementMethod = LinkMovementMethod.getInstance()
 
-            btn_accept.setOnClickListener { item.id?.let { it1 -> onAccept(it1) } }
-            btn_decline.setOnClickListener { item.id?.let { it2 -> onDecline(it2) } }
+            btn_accept.setOnClickListener { item.id?.let { it1 -> onAccept?.invoke(it1) } }
+            btn_decline.setOnClickListener { item.id?.let { it2 -> onDecline?.invoke(it2) } }
         }
     }
 }

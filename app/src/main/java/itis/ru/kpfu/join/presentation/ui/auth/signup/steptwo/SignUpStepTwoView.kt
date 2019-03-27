@@ -11,6 +11,9 @@ interface SignUpStepTwoView: BaseView {
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun setSignInFragment()
 
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun showSuccessMessage()
+
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun setButtonEnabled(state: Boolean)
 

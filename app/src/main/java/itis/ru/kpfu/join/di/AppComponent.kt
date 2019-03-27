@@ -6,15 +6,16 @@ import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import itis.ru.kpfu.join.JoinApplication
+import itis.ru.kpfu.join.data.DataModule
 import itis.ru.kpfu.join.di.modules.AppContextModule
 import itis.ru.kpfu.join.db.repository.RepositoryModule
-import itis.ru.kpfu.join.network.NetworkModule
+import itis.ru.kpfu.join.data.network.NetworkModule
 import itis.ru.kpfu.join.presentation.PresentationModule
 import itis.ru.kpfu.join.presentation.ui.RootBuilder
 import javax.inject.Singleton
 
 @Component(modules = [
-    NetworkModule::class,
+    DataModule::class,
     AppContextModule::class,
     RepositoryModule::class,
     AndroidSupportInjectionModule::class,

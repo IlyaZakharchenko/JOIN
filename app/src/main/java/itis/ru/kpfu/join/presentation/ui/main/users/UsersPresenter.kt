@@ -2,7 +2,7 @@ package itis.ru.kpfu.join.presentation.ui.main.users
 
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
-import itis.ru.kpfu.join.network.request.JoinApiRequest
+import itis.ru.kpfu.join.data.network.request.JoinApiRequest
 import itis.ru.kpfu.join.presentation.model.InviteFormModel
 import itis.ru.kpfu.join.presentation.model.ProjectMemberModel
 import itis.ru.kpfu.join.db.repository.UserRepository

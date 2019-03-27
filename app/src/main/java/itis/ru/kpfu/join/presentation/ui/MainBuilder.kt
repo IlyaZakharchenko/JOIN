@@ -2,8 +2,10 @@ package itis.ru.kpfu.join.presentation.ui
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import itis.ru.kpfu.join.presentation.ui.auth.restorepassword.RestorePassFragment
-import itis.ru.kpfu.join.presentation.ui.auth.restorepassword.RestorePassModule
+import itis.ru.kpfu.join.presentation.ui.auth.restorepassword.stepone.RestorePassStepOneFragment
+import itis.ru.kpfu.join.presentation.ui.auth.restorepassword.stepone.RestorePassStepOneModule
+import itis.ru.kpfu.join.presentation.ui.auth.restorepassword.steptwo.RestorePassStepTwoFragment
+import itis.ru.kpfu.join.presentation.ui.auth.restorepassword.steptwo.RestorePassStepTwoModule
 import itis.ru.kpfu.join.presentation.ui.main.profile.ProfileFragment
 import itis.ru.kpfu.join.presentation.ui.main.profile.edit.ProfileEditFragment
 import itis.ru.kpfu.join.presentation.ui.main.projects.add.AddProjectFragment
@@ -58,8 +60,11 @@ abstract class MainBuilder {
     @ContributesAndroidInjector(modules = [AllProjectsModule::class])
     abstract fun buildAllProjectsFragment(): AllProjectsFragment
 
-    @ContributesAndroidInjector(modules = [RestorePassModule::class])
-    abstract fun buildRestorePassFragment(): RestorePassFragment
+    @ContributesAndroidInjector(modules = [RestorePassStepOneModule::class])
+    abstract fun buildRestorePassStepOneFragment(): RestorePassStepOneFragment
+
+    @ContributesAndroidInjector(modules = [RestorePassStepTwoModule::class])
+    abstract fun buildRestorePassStepTwoFragment(): RestorePassStepTwoFragment
 
     @ContributesAndroidInjector(modules = [SignInModule::class])
     abstract fun buildSignInFragment(): SignInFragment

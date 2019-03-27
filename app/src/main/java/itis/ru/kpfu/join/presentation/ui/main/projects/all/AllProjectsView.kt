@@ -21,4 +21,10 @@ interface AllProjectsView: BaseView {
 
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun setProjects(projects: List<ProjectModel>)
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun showBottomSheetDialog()
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun hideBottomSheetDialog()
 }

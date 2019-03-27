@@ -4,115 +4,92 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="16dp"
-    android:paddingEnd="16dp"
+    android:background="@color/colorWhite"
     android:paddingStart="16dp"
-    android:background="@color/colorWhite">
+    android:paddingEnd="16dp"
+    android:paddingBottom="16dp">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/all_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tv_job_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="#212121"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Android developer" />
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/tv_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tv_job_lvl_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/spec_lvl"
+        android:textAlignment="textStart"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_job_name" />
 
-            <TextView
-                android:id="@+id/tv_job_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Android developer"
-                android:textSize="16sp"
-                android:textColor="#212121"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/tv_job_lvl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        tools:text="Middle"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/tv_job_lvl_title"
+        app:layout_constraintTop_toTopOf="@+id/tv_job_lvl_title" />
 
-            <TextView
-                android:id="@+id/tv_job_lvl_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Уровень:"
-                android:textAlignment="textStart"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_job_name" />
+    <TextView
+        android:id="@+id/tv_job_experience_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/spec_experience"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_job_lvl_title" />
 
-            <TextView
-                android:id="@+id/tv_job_lvl"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="Middle"
-                android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/tv_job_lvl_title"
-                app:layout_constraintTop_toTopOf="@+id/tv_job_lvl_title" />
-
-            <TextView
-                android:id="@+id/tv_job_experience_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Опыт:"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_job_lvl_title" />
-
-            <TextView
-                android:id="@+id/tv_job_experience"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="2"
-                android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/tv_job_experience_title"
-                app:layout_constraintTop_toTopOf="@+id/tv_job_experience_title" />
-
-            <TextView
-                android:id="@+id/tv_job_experience_years"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="года"
-                android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/tv_job_experience"
-                app:layout_constraintTop_toTopOf="@+id/tv_job_experience" />
-        </android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/tv_job_experience"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/tv_job_experience_title"
+        app:layout_constraintTop_toTopOf="@+id/tv_job_experience_title"
+        tools:text="2" />
 
 
-        <android.support.design.chip.ChipGroup
-            android:id="@+id/chip_container_job"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_container">
+    <android.support.design.chip.ChipGroup
+        android:id="@+id/chip_container_job"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_job_experience">
 
 
-        </android.support.design.chip.ChipGroup>
+    </android.support.design.chip.ChipGroup>
 
-        <Button
-            android:id="@+id/btn_send_apply"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:textSize="12sp"
-            android:background="@null"
-            android:text="Подать заявку"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintBottom_toTopOf="@+id/chip_container_job"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_container"
-            app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:id="@+id/btn_send_apply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@null"
+        android:text="@string/apply"
+        android:textColor="@color/colorPrimary"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_job_experience"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
 
     <View
         android:id="@+id/view"
@@ -122,7 +99,7 @@
         android:background="@color/colorGrey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/all_container" />
+        app:layout_constraintTop_toBottomOf="@id/chip_container_job" />
 
 
 </android.support.constraint.ConstraintLayout>

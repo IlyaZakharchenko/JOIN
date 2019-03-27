@@ -2,7 +2,7 @@ package itis.ru.kpfu.join.presentation.ui.main.projects.details
 
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
-import itis.ru.kpfu.join.network.request.JoinApiRequest
+import itis.ru.kpfu.join.data.network.request.JoinApiRequest
 import itis.ru.kpfu.join.presentation.model.InviteFormModel
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.presentation.base.BasePresenter
@@ -18,8 +18,16 @@ class ProjectDetailsPresenter @Inject constructor() : BasePresenter<ProjectDetai
     lateinit var userRepository: UserRepository
     @Inject
     lateinit var exceptionProcessor: ExceptionProcessor
+    @Inject
+    @JvmField
+    var projectId: Long = -1L
 
-    fun getProject(projectId: Long) {
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+        getProject()
+    }
+
+    private fun getProject() {
         apiRequest.getProject(userRepository.getUser()?.token, projectId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
@@ -38,11 +46,15 @@ class ProjectDetailsPresenter @Inject constructor() : BasePresenter<ProjectDetai
                 .disposeWhenDestroy()
     }
 
-    fun onRetry(projectId: Long) {
-        getProject(projectId)
+    fun onRetry() {
+        getProject()
     }
 
-    fun sendApply(projectId: Long?) {
+    fun onAddUser() {
+        viewState.setUsersFragment(projectId)
+    }
+
+    fun onSendApply() {
         apiRequest
                 .joinProject(userRepository.getUser()?.token,
                         InviteFormModel(userRepository.getUser()?.id, projectId))

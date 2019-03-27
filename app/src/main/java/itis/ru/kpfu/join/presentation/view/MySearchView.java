@@ -397,7 +397,7 @@ public class MySearchView extends FrameLayout implements Filter.FilterListener {
     //Public Methods
 
     /**
-     * Call this method to show suggestions list. This shows up when adapter is set. Call {@link
+     * Call this method to show suggestions items. This shows up when adapter is set. Call {@link
      * #setAdapter(ListAdapter)} before calling this.
      */
     public void showSuggestions() {
@@ -423,7 +423,7 @@ public class MySearchView extends FrameLayout implements Filter.FilterListener {
     }
 
     /**
-     * Set Adapter for suggestions list. Should implement Filterable.
+     * Set Adapter for suggestions items. Should implement Filterable.
      */
     public void setAdapter(ListAdapter adapter) {
         mAdapter = adapter;
@@ -432,7 +432,7 @@ public class MySearchView extends FrameLayout implements Filter.FilterListener {
     }
 
     /**
-     * Set Adapter for suggestions list with the given suggestion array
+     * Set Adapter for suggestions items with the given suggestion array
      *
      * @param suggestions array of suggestions
      */
@@ -454,7 +454,7 @@ public class MySearchView extends FrameLayout implements Filter.FilterListener {
     }
 
     /**
-     * Dismiss the suggestions list.
+     * Dismiss the suggestions items.
      */
     public void dismissSuggestions() {
         if (mSuggestionsListView.getVisibility() == VISIBLE) {

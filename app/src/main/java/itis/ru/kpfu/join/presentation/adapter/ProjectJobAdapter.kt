@@ -13,12 +13,17 @@ import itis.ru.kpfu.join.presentation.util.parseLevelFromInt
 import itis.ru.kpfu.join.presentation.util.toPx
 import kotlinx.android.synthetic.main.item_project_job.view.*
 
-class ProjectJobAdapter(
-        private var items: List<Specialization> = ArrayList(),
-        private var onApply: () -> Unit) : RecyclerView.Adapter<ProjectJobAdapter.ProjectJobViewHolder>() {
+class ProjectJobAdapter : RecyclerView.Adapter<ProjectJobAdapter.ProjectJobViewHolder>() {
 
-    private var isMyProject = false
-    private var isInProject = false
+    var items: List<Specialization> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+    var isMyProject = false
+    var isInProject = false
+
+    var onApply: (() -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectJobViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_project_job, parent, false)
@@ -30,14 +35,7 @@ class ProjectJobAdapter(
     }
 
     override fun onBindViewHolder(holder: ProjectJobViewHolder, position: Int) {
-        holder.bindViewHolder(items[position], onApply)
-    }
-
-    fun setJobs(list: List<Specialization>, isMyProject: Boolean, isInProject: Boolean) {
-        this.isMyProject = isMyProject
-        this.items = list
-        this.isInProject = isInProject
-        notifyDataSetChanged()
+        holder.bindViewHolder()
     }
 
     inner class ProjectJobViewHolder(
@@ -45,32 +43,23 @@ class ProjectJobAdapter(
             private var isMyProject: Boolean,
             private var isInProject: Boolean) : RecyclerView.ViewHolder(view) {
 
-        fun bindViewHolder(item: Specialization, onApply: () -> Unit) = with(itemView) {
+        fun bindViewHolder() = with(itemView) {
+            val item = items[adapterPosition]
 
             chip_container_job.removeAllViews()
             item.technologies?.let { initTechnologies(divideString(it)) }
 
-            tv_job_experience.text = item.experience.toString()
+            tv_job_experience.text = resources.getQuantityString(R.plurals.experience, item.experience, item.experience)
             tv_job_lvl.text = parseLevelFromInt(item.knowledgeLevel)
             tv_job_name.text = item.name
 
             btn_send_apply.setOnClickListener {
-                onApply()
+                onApply?.invoke()
                 btn_send_apply.visibility = View.GONE
             }
 
             if (isMyProject or isInProject) {
                 btn_send_apply.visibility = View.GONE
-            }
-
-            val rem = item.experience.rem(10)
-
-            if (rem == 1 || item.experience > 20) {
-                tv_job_experience_years.text = "год"
-            } else if ((rem == 2 || rem == 3 || rem == 4) && item.experience < 20) {
-                tv_job_experience_years.text = "года"
-            } else {
-                tv_job_experience_years.text = "лет"
             }
         }
 

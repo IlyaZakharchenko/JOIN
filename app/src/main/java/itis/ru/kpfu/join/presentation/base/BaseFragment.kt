@@ -54,6 +54,7 @@ abstract class BaseFragment : MvpAppCompatFragment(), BaseView {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
         this.menu?.let { inflater?.inflate(it, menu) }
     }
 

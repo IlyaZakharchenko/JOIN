@@ -3,7 +3,7 @@ package itis.ru.kpfu.join.presentation.ui.main.projects.add
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
 import itis.ru.kpfu.join.db.entity.Specialization
-import itis.ru.kpfu.join.network.request.JoinApiRequest
+import itis.ru.kpfu.join.data.network.request.JoinApiRequest
 import itis.ru.kpfu.join.presentation.model.ProjectModel
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.presentation.base.BasePresenter
@@ -34,10 +34,11 @@ class AddProjectPresenter @Inject constructor() : BasePresenter<AddProjectView>(
                         viewState.showWaitDialog()
                         viewState.hideKeyboard()
                     }
-                    .doAfterTerminate { viewState.hideWaitDialog() }
                     .subscribe({
+                        viewState.hideWaitDialog()
                         viewState.onSaveSuccess()
                     }, {
+                        viewState.hideWaitDialog()
                         viewState.showErrorDialog(exceptionProcessor.processException(it))
                     })
                     .disposeWhenDestroy()

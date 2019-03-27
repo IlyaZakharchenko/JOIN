@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <plurals name="experience">
+        <item quantity="zero">%d лет</item>
+        <item quantity="one">%d год</item>
+        <item quantity="two">%d года</item>
+        <item quantity="few">%d года</item><!-- Заканчивающиеся на 2,3,4 -->
+        <item quantity="many">%d лет</item><!-- Заканчивающиеся на 5> -->
+        <item quantity="other">%d лет</item>
+</plurals></resources>

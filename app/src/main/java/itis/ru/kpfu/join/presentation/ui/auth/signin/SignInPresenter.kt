@@ -11,7 +11,7 @@ import com.vk.sdk.api.VKRequest
 import com.vk.sdk.api.VKRequest.VKRequestListener
 import com.vk.sdk.api.VKResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
-import itis.ru.kpfu.join.network.request.JoinApiRequest
+import itis.ru.kpfu.join.data.network.request.JoinApiRequest
 import itis.ru.kpfu.join.db.entity.User
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.presentation.base.BasePresenter
@@ -30,7 +30,7 @@ class SignInPresenter @Inject constructor() : BasePresenter<SignInView>() {
     @Inject
     lateinit var exceptionProcessor: ExceptionProcessor
 
-    fun signIn(email: String, password: String) {
+    fun onSignIn(email: String, password: String) {
         if (!Validator.isEmailValid(email)) {
             viewState.setEmailErrorEnabled(true)
             return
@@ -52,7 +52,7 @@ class SignInPresenter @Inject constructor() : BasePresenter<SignInView>() {
                 }
                 .doAfterTerminate { viewState.hideWaitDialog() }
                 .flatMap {
-                    token = "Bearer ${it.token}"
+                    token = it.token
                     apiRequest.getUserInfo(token, it.userId)
                 }
                 .observeOn(AndroidSchedulers.mainThread())

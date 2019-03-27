@@ -15,7 +15,6 @@ open class User(
         var phoneNumber: String? = null,
         var profileImage: String? = null,
         var token: String? = null,
-        var code: String? = null,
         var password: String? = null,
         var specializations: RealmList<Specialization>? = null
 ) : RealmObject(), Serializable {

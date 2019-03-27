@@ -9,15 +9,6 @@
     android:paddingStart="16dp"
     android:background="@color/colorWhite">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/all_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/tv_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="0dp"
@@ -38,7 +29,7 @@
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_name"
-                tools:text="Уровень:" />
+                android:text="@string/spec_lvl" />
 
             <TextView
                 android:id="@+id/tv_lvl"
@@ -58,7 +49,7 @@
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_lvl_title"
-                tools:text="Опыт:" />
+                android:text="@string/spec_experience" />
 
             <TextView
                 android:id="@+id/tv_experience"
@@ -70,17 +61,6 @@
                 app:layout_constraintTop_toTopOf="@+id/tv_experience_title"
                 tools:text="2" />
 
-            <TextView
-                android:id="@+id/tv_experience_years"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/tv_experience"
-                app:layout_constraintTop_toTopOf="@+id/tv_experience"
-                tools:text="года" />
-        </android.support.constraint.ConstraintLayout>
-
 
         <android.support.design.chip.ChipGroup
             android:id="@+id/chip_container"
@@ -90,11 +70,10 @@
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_container">
+            app:layout_constraintTop_toBottomOf="@id/tv_experience">
 
         </android.support.design.chip.ChipGroup>
 
-    </android.support.constraint.ConstraintLayout>
 
     <Button
         android:id="@+id/btn_remove"
@@ -109,8 +88,8 @@
         android:paddingRight="8dp"
         android:paddingStart="8dp"
         app:layout_constraintEnd_toStartOf="@+id/btn_edit"
-        app:layout_constraintTop_toBottomOf="@+id/all_container"
-        android:text="Удалить" />
+        app:layout_constraintTop_toBottomOf="@+id/chip_container"
+        android:text="@string/delete" />
 
     <Button
         android:id="@+id/btn_edit"
@@ -126,8 +105,8 @@
         android:paddingStart="8dp"
         android:textColor="@color/ef_white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/all_container"
-        android:text="Редактировать" />
+        app:layout_constraintTop_toBottomOf="@+id/chip_container"
+        android:text="@string/edit" />
 
     <View
         android:id="@+id/view"

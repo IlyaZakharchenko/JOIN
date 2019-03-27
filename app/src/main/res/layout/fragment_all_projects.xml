@@ -23,7 +23,7 @@
                 android:id="@+id/toolbar_projects"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                app:titleTextColor="@color/colorWhite" />
+                app:titleTextColor="@color/colorWhite"/>
 
             <itis.ru.kpfu.join.presentation.view.MySearchView
                 android:id="@+id/search_view_projects"

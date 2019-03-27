@@ -122,7 +122,7 @@ class AllProjectsFragment : BaseFragment(), AllProjectsView {
 
     private fun initClickListeners() {
         btn_search_filter_projects.setOnClickListener {
-            bottomSheetDialog?.show()
+            presenter.onShowSearchFilters()
         }
 
         bottomSheetDialog?.btn_show_results_projects_filter?.setOnClickListener {
@@ -133,8 +133,6 @@ class AllProjectsFragment : BaseFragment(), AllProjectsView {
                         itemsExp[it.spinner_exp_projects_filter.selectedIndex],
                         itemsLvl[it.spinner_lvl_projects_filter.selectedIndex])
             }
-
-            bottomSheetDialog?.dismiss()
         }
     }
 
@@ -238,5 +236,13 @@ class AllProjectsFragment : BaseFragment(), AllProjectsView {
 
     private fun onProjectClick(id: Long) {
         (activity as? FragmentHostActivity)?.setFragment(ProjectDetailsFragment.newInstance(id), true)
+    }
+
+    override fun showBottomSheetDialog() {
+        bottomSheetDialog?.show()
+    }
+
+    override fun hideBottomSheetDialog() {
+       bottomSheetDialog?.dismiss()
     }
 }

@@ -22,4 +22,10 @@ interface MyProjectsView : BaseView {
 
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun setProjects(projects: List<ProjectModel>)
+
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun setAddProjectFragment()
+
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun setProjectDetailsFragment(id: Long)
 }

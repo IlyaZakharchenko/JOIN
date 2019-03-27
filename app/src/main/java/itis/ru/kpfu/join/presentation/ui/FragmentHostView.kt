@@ -9,7 +9,5 @@ import itis.ru.kpfu.join.presentation.base.BaseView
 @StateStrategyType(OneExecutionStateStrategy::class)
 interface FragmentHostView : BaseView {
 
-    fun setFragment(fragment: BaseFragment, addToBackStack: Boolean)
-
-    fun clearFragmentsStack()
+    fun setFragment(fragment: BaseFragment, addToBackStack: Boolean, clearStack: Boolean = false)
 }

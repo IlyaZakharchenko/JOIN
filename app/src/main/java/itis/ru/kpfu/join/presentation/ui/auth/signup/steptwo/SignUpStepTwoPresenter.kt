@@ -4,7 +4,7 @@ import android.os.CountDownTimer
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import itis.ru.kpfu.join.network.request.JoinApiRequest
+import itis.ru.kpfu.join.data.network.request.JoinApiRequest
 import itis.ru.kpfu.join.presentation.model.RegistrationFormModel
 import itis.ru.kpfu.join.presentation.base.BasePresenter
 import itis.ru.kpfu.join.presentation.model.ConfirmEmailFormModel
@@ -18,18 +18,36 @@ class SignUpStepTwoPresenter @Inject constructor() : BasePresenter<SignUpStepTwo
     lateinit var apiRequest: JoinApiRequest
     @Inject
     lateinit var exceptionProcessor: ExceptionProcessor
+    @Inject
+    lateinit var userRegistrationFormModel: RegistrationFormModel
 
     private var timer: CountDownTimer? = null
 
     private var timeLeft: Long = 15
 
-    fun finishRegistration(user: RegistrationFormModel) {
+    override fun attachView(view: SignUpStepTwoView?) {
+        super.attachView(view)
+        resumeTimer()
+    }
+
+    override fun detachView(view: SignUpStepTwoView?) {
+        super.detachView(view)
+        stopTimer()
+    }
+
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+        startTimer()
+    }
+
+    fun onRegistrationFinish(code: String) {
         apiRequest
-                .signUp(user)
+                .signUp(userRegistrationFormModel.also { it.code = code })
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { viewState.showWaitDialog() }
                 .doAfterTerminate { viewState.hideWaitDialog() }
                 .subscribe({
+                    viewState.showSuccessMessage()
                     viewState.setSignInFragment()
                 }, {
                     viewState.showErrorDialog(exceptionProcessor.processException(it))
@@ -44,9 +62,9 @@ class SignUpStepTwoPresenter @Inject constructor() : BasePresenter<SignUpStepTwo
                 .disposeWhenDestroy()
     }
 
-    fun resendCode(email: String?) {
+    fun onResendCode() {
         apiRequest
-                .confirmEmail(ConfirmEmailFormModel(email?.trim()))
+                .confirmEmail(ConfirmEmailFormModel(userRegistrationFormModel.email?.trim()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
                     viewState.showWaitDialog()
@@ -54,22 +72,22 @@ class SignUpStepTwoPresenter @Inject constructor() : BasePresenter<SignUpStepTwo
                 }
                 .doAfterTerminate { viewState.hideWaitDialog() }
                 .subscribe({
-                    startCounter()
+                    startTimer()
                 }, {
                     viewState.showErrorDialog(exceptionProcessor.processException(it))
                 })
                 .disposeWhenDestroy()
     }
 
-    fun startCounter() {
+    private fun startTimer() {
         runTimer(15000)
     }
 
-    fun stopTimer() {
+    private fun stopTimer() {
         timer?.cancel()
     }
 
-    fun resumeTimer() {
+    private fun resumeTimer() {
         runTimer(timeLeft * 1000)
     }
 

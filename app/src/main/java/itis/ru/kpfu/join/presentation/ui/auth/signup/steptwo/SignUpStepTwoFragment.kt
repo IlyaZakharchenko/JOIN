@@ -17,10 +17,11 @@ import kotlinx.android.synthetic.main.fragment_sign_up_step_two.et_confirmation_
 import kotlinx.android.synthetic.main.fragment_sign_up_step_two.ti_confirmation_code
 import kotlinx.android.synthetic.main.fragment_sign_up_step_two.toolbar_sign_up_two
 import kotlinx.android.synthetic.main.fragment_sign_up_step_two.tv_resend_code
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 import javax.inject.Provider
 
-class SignUpStepTwoFragment: BaseFragment(), SignUpStepTwoView {
+class SignUpStepTwoFragment : BaseFragment(), SignUpStepTwoView {
 
     companion object {
         private const val USER = "user"
@@ -35,6 +36,7 @@ class SignUpStepTwoFragment: BaseFragment(), SignUpStepTwoView {
         }
 
     }
+
     override val contentLayout: Int
         get() = R.layout.fragment_sign_up_step_two
     override val toolbarTitle: Int?
@@ -61,19 +63,16 @@ class SignUpStepTwoFragment: BaseFragment(), SignUpStepTwoView {
     @ProvidePresenter
     fun providePresenter(): SignUpStepTwoPresenter = presenterProvider.get()
 
+    fun getRegistrationFormModel(): RegistrationFormModel = arguments?.getSerializable(USER) as? RegistrationFormModel
+            ?: throw IllegalArgumentException("registration form model is null")
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val user = arguments?.getSerializable(USER) as RegistrationFormModel
-
         presenter.checkButtonState(RxTextView.textChanges(et_confirmation_code))
-        presenter.startCounter()
 
-        tv_resend_code.setOnClickListener { user.email.let { it1 -> presenter.resendCode(it1) } }
-        btn_sign_up.setOnClickListener {
-            user.code = et_confirmation_code.rawText.toString()
-            presenter.finishRegistration(user)
-        }
+        tv_resend_code.setOnClickListener { presenter.onResendCode() }
+        btn_sign_up.setOnClickListener { presenter.onRegistrationFinish(et_confirmation_code.rawText.toString().trim()) }
     }
 
     override fun setButtonEnabled(state: Boolean) {
@@ -81,24 +80,16 @@ class SignUpStepTwoFragment: BaseFragment(), SignUpStepTwoView {
         ti_confirmation_code.error = null
     }
 
-    override fun setSignInFragment() {
+    override fun showSuccessMessage() {
         Toast.makeText(activity, "Регистрация успешна", Toast.LENGTH_SHORT).show()
-        (activity as? FragmentHostActivity)?.clearFragmentsStack()
-        (activity as? FragmentHostActivity)?.setFragment(SignInFragment.newInstance(), false)
+    }
+
+    override fun setSignInFragment() {
+        (activity as? FragmentHostActivity)?.setFragment(SignInFragment.newInstance(), false, true)
     }
 
     override fun updateSendAgainMessage(text: String, isClickable: Boolean) {
         tv_resend_code.text = text
         tv_resend_code.isClickable = isClickable
-    }
-
-    override fun onPause() {
-        presenter.stopTimer()
-        super.onPause()
-    }
-
-    override fun onResume() {
-        presenter.resumeTimer()
-        super.onResume()
     }
 }

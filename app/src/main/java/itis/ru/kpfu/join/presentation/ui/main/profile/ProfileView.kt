@@ -25,7 +25,7 @@ interface ProfileView: BaseView {
     fun hideRetry()
 
     @StateStrategyType(AddToEndSingleStrategy::class)
-    fun initFields(user: User)
+    fun setUser(user: User, isOwner: Boolean)
 
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun showChooseImageDialog(requestCode: Int, limit: Int)
@@ -35,4 +35,13 @@ interface ProfileView: BaseView {
 
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun showCollapsingToolbar()
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun setBackArrowEnabled(enabled: Boolean)
+
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun setSignInFragment()
+
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun setChangeProfileFragment()
 }

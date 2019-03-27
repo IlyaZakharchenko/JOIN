@@ -21,21 +21,34 @@ class FragmentHostPresenter @Inject constructor(var userRepository: UserReposito
     private val myProjectsFragment = MyProjectsFragment.newInstance()
     private val dialogsFragment = DialogsFragment.newInstance()
     private val notificationsFragment = NotificationsFragment.newInstance()
-    private val profileFragment = ProfileFragment.newInstance(userRepository.getUser()?.id)
+    private val profileFragment = ProfileFragment.newInstance(userRepository.getUser()?.id ?: -1)
 
-    fun onBottomNavBarClick(itemId: Int) {
-        viewState.clearFragmentsStack()
-
-        when (itemId) {
-            R.id.bottom_projects -> viewState.setFragment(projectsFragment, false)
-            R.id.bottom_my_projects -> viewState.setFragment(myProjectsFragment, false)
-            R.id.bottom_dialogs -> viewState.setFragment(dialogsFragment, false)
-            R.id.bottom_notifications -> viewState.setFragment(notificationsFragment, false)
-            else -> viewState.setFragment(profileFragment, false)
-        }
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+        checkLogin()
     }
 
-    fun checkLogin() {
+    fun onAllProject() {
+        viewState.setFragment(projectsFragment, false, true)
+    }
+
+    fun onMyProjects() {
+        viewState.setFragment(myProjectsFragment, false, true)
+    }
+
+    fun onDialogs() {
+        viewState.setFragment(dialogsFragment, false, true)
+    }
+
+    fun onNotifications() {
+        viewState.setFragment(notificationsFragment, false, true)
+    }
+
+    fun onProfile() {
+        viewState.setFragment(profileFragment, false, true)
+    }
+
+    private fun checkLogin() {
         if (userRepository.getUser() != null) {
             viewState.setFragment(AllProjectsFragment.newInstance(), false)
         } else {

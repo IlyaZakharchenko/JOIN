@@ -1,10 +1,15 @@
 package itis.ru.kpfu.join.presentation.ui.main.projects.my
 
 import com.arellomobile.mvp.InjectViewState
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import itis.ru.kpfu.join.network.request.JoinApiRequest
+import io.reactivex.subjects.Subject
+import itis.ru.kpfu.join.data.EventType
+import itis.ru.kpfu.join.data.ProjectAddedEvent
+import itis.ru.kpfu.join.data.network.request.JoinApiRequest
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.presentation.base.BasePresenter
+import itis.ru.kpfu.join.presentation.model.ProjectModel
 import itis.ru.kpfu.join.presentation.util.exceptionprocessor.ExceptionProcessor
 import javax.inject.Inject
 
@@ -17,24 +22,53 @@ class MyProjectsPresenter @Inject constructor() : BasePresenter<MyProjectsView>(
     lateinit var userRepository: UserRepository
     @Inject
     lateinit var exceptionProcessor: ExceptionProcessor
+    @Inject
+    lateinit var eventSubject: Subject<EventType>
 
     fun onRetry() {
-        getProjects()
-    }
-
-    fun getProjects() {
-        apiRequest.getMyProjects(userRepository.getUser()?.token, userRepository.getUser()?.id)
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    viewState.showProgress()
-                    viewState.hideRetry()
-                }
-                .doAfterTerminate { viewState.hideProgress() }
+        Observable.concat(
+                getProjectsObservable()
+                        .doOnSubscribe {
+                            viewState.hideRetry()
+                            viewState.showProgress()
+                        }
+                        .doAfterTerminate { viewState.hideProgress() },
+                eventSubject.filter { it is ProjectAddedEvent }
+                        .flatMap { getProjectsObservable() })
                 .subscribe({
                     viewState.setProjects(it)
                 }, {
                     viewState.showRetry(exceptionProcessor.processException(it))
-                })
-                .disposeWhenDestroy()
+                }).disposeWhenDestroy()
+    }
+
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+
+        Observable.concat(
+                getProjectsObservable()
+                        .doOnSubscribe { viewState.showProgress() }
+                        .doAfterTerminate { viewState.hideProgress() },
+                eventSubject.filter { it is ProjectAddedEvent }
+                        .flatMap { getProjectsObservable() })
+                .subscribe({
+                    viewState.setProjects(it)
+                }, {
+                    viewState.showRetry(exceptionProcessor.processException(it))
+                }).disposeWhenDestroy()
+    }
+
+    fun onAddProject() {
+        viewState.setAddProjectFragment()
+    }
+
+    fun onProjectDetails(id: Long) {
+        viewState.setProjectDetailsFragment(id)
+    }
+
+    private fun getProjectsObservable(): Observable<List<ProjectModel>> {
+        return apiRequest.getMyProjects(userRepository.getUser()?.token, userRepository.getUser()?.id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .toObservable()
     }
 }

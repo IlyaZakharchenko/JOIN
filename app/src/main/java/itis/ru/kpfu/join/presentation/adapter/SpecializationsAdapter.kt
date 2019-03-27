@@ -33,27 +33,16 @@ class SpecializationsAdapter(private var items: List<Specialization> = ArrayList
         this.items = items
         notifyDataSetChanged()
     }
-    
+
     inner class SpecializationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindViewHolder(item: Specialization) = with(itemView) {
-
             chip_container.removeAllViews()
             item.technologies?.let { initTechnologies(divideString(it)) }
 
-            tv_experience.text = item.experience.toString()
             tv_lvl.text = parseLevelFromInt(item.knowledgeLevel)
             tv_name.text = item.name
-
-            val rem = item.experience.rem(10)
-
-            if (rem == 1 || item.experience > 20) {
-                tv_experience_years.text = "год"
-            } else if ((rem == 2 || rem == 3 || rem == 4) && item.experience < 20) {
-                tv_experience_years.text = "года"
-            } else {
-                tv_experience_years.text = "лет"
-            }
+            tv_experience.text = resources.getQuantityString(R.plurals.experience, item.experience, item.experience)
         }
 
         private fun initTechnologies(items: HashSet<String>) = with(itemView) {

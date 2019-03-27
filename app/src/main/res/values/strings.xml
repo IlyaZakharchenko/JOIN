@@ -18,7 +18,7 @@
     <string name="toolbar_title_empty" />
     <string name="toolbar_add_project">Новый проект</string>
     <string name="toolbar_users">Пользователи</string>
-    <string name="restore_pass_title">Мы отправим сообщения для восстановления пароля на вашу электронную почту</string>
+    <string name="restore_pass_title">Мы отправим код на вашу электронную почту</string>
     <string name="restore_password">Восстановить пароль</string>
     <string name="repeat">Повторить</string>
     <string name="download_error">Произошла ошибка при загрузке данных</string>
@@ -48,6 +48,11 @@
     <string name="dialog_exit_title">Вы действительно хотите выйти?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="new_password">Новый пароль</string>
+    <string name="send_code">Отправить код</string>
+    <string name="change_password">Изменить пароль</string>
+    <string name="restore_pass_description">Мы отправили код подтверждения на введенную вами электронную почту, введите его и придумайте новый пароль.</string>
+    <string name="password_successfully_changed">Пароль успешно изменен</string>
 
     <!--Exceptions-->
     <string name="exception_incorrect_data">Некорректно заполнены поля</string>
@@ -55,11 +60,22 @@
     <string name="exception_not_authorized">Для выполнения данного действия требуется авторизация</string>
     <string name="exception_time_out">Сервер просыпается&#8230;&#8230;&#8230;</string>
     <string name="exception_unexpected">Неизвестная ошибка</string>
+    <string name="exception_sign_in">Неправильные имя пользователя или пароль</string>
+    <string name="exception_email_already_exists">Пользователь с такой электронной почтой уже существует</string>
+    <string name="exception_username_already_exists">Пользователь с таким именем пользователя уже существует</string>
+    <string name="exception_invalid_code">Неверный код</string>
+    <string name="exception_user_with_this_email_not_exists">Пользователь с такой электронной почтой не существует</string>
 
     <!--Errors-->
     <string name="error">Ошибка</string>
     <string name="error_email">Недопустимая электронная почта</string>
-    <string name="error_password">Недопустый пароль(должен содержать как минимум 7 символов) </string>
+    <string name="error_password">Недопустимый пароль(должен содержать как минимум 7 символов) </string>
     <string name="error_password_should_be_equals">Пароли должны совпадать</string>
     <string name="error_username">Имя пользователя должно содержать как минимум 6 символов</string>
+    <string name="error_code">Недопустимый код подтверждения(должен содержать ровно 6 символов)</string>
+    <string name="spec_lvl">Уровень:</string>
+    <string name="spec_experience">Опыт:</string>
+    <string name="apply">Подать заявку</string>
+    <string name="edit">Редактировать</string>
+    <string name="delete">Удалить</string>
 </resources>

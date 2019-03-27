@@ -24,21 +24,19 @@ class DialogsAdapter : RecyclerView.Adapter<DialogsAdapter.DialogViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: DialogViewHolder, position: Int) {
-        holder.bindViewHolder(getItem(position), onChatClick)
+        holder.bindViewHolder()
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
 
-    private fun getItem(position: Int): DialogModel {
-        return items[position]
-    }
-
     inner class DialogViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindViewHolder(item: DialogModel, onItemClick: ((DialogModel) -> Unit)?) = with(itemView) {
-            setOnClickListener { onItemClick?.invoke(item) }
+        fun bindViewHolder() = with(itemView) {
+            val item = items[adapterPosition]
+
+            setOnClickListener { onChatClick?.invoke(item) }
 
             dialog_last_message.text = item.lastMessage?.text
             dialog_time.text = item.lastMessage?.dateSend

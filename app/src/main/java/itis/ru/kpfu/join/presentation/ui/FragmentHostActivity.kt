@@ -1,11 +1,16 @@
 package itis.ru.kpfu.join.presentation.ui
 
+import android.app.ActivityOptions
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessagingService
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.presentation.base.BaseActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
@@ -42,36 +47,30 @@ class FragmentHostActivity : BaseActivity(), FragmentHostView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if(savedInstanceState == null) {
-            presenter.checkLogin()
-        }
-
+        bottom_nav_bar.selectedItemId = R.id.bottom_projects
         bottom_nav_bar.setOnNavigationItemSelectedListener {
-            presenter.onBottomNavBarClick(it.itemId)
+            when (it.itemId) {
+                R.id.bottom_projects -> presenter.onAllProject()
+                R.id.bottom_my_projects -> presenter.onMyProjects()
+                R.id.bottom_dialogs -> presenter.onDialogs()
+                R.id.bottom_notifications -> presenter.onNotifications()
+                else -> presenter.onProfile()
+            }
             true
         }
     }
 
-    override fun setFragment(fragment: BaseFragment, addToBackStack: Boolean) {
+    override fun setFragment(fragment: BaseFragment, addToBackStack: Boolean, clearStack: Boolean) {
         val transaction = supportFragmentManager?.beginTransaction()
-
         if (addToBackStack) {
             transaction?.addToBackStack(fragment.javaClass.name)
+        }
+        if (clearStack) {
+            supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
         transaction?.replace(R.id.main_container, fragment, fragment.javaClass.name)?.commit()
     }
 
-    override fun clearFragmentsStack() {
-        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-    }
-
-    fun showToolbar() {
-        supportActionBar?.show()
-    }
-
-    fun hideToolbar() {
-        supportActionBar?.hide()
-    }
 
     fun enableBottomNavBar(state: Boolean) {
         bottom_nav_bar.visibility = if (state) View.VISIBLE else View.GONE

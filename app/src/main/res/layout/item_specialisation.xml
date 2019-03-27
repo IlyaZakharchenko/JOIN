@@ -4,99 +4,79 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="16dp"
-    android:paddingEnd="16dp"
+    android:background="@color/colorWhite"
     android:paddingStart="16dp"
-    android:background="@color/colorWhite">
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/all_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/tv_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                tools:text="Android developer"
-                android:textSize="16sp"
-                android:textColor="#212121"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_lvl_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                tools:text="Уровень:"
-                android:textAlignment="textStart"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_name" />
-
-            <TextView
-                android:id="@+id/tv_lvl"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                tools:text="Middle"
-                android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/tv_lvl_title"
-                app:layout_constraintTop_toTopOf="@+id/tv_lvl_title" />
-
-            <TextView
-                android:id="@+id/tv_experience_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                tools:text="Опыт:"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_lvl_title" />
-
-            <TextView
-                android:id="@+id/tv_experience"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                tools:text="2"
-                android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/tv_experience_title"
-                app:layout_constraintTop_toTopOf="@+id/tv_experience_title" />
-
-            <TextView
-                android:id="@+id/tv_experience_years"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                tools:text="года"
-                android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/tv_experience"
-                app:layout_constraintTop_toTopOf="@+id/tv_experience" />
-        </android.support.constraint.ConstraintLayout>
+    android:paddingEnd="16dp"
+    android:paddingBottom="16dp">
 
 
-        <android.support.design.chip.ChipGroup
-            android:id="@+id/chip_container"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="#212121"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Android developer" />
 
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_container">
+    <TextView
+        android:id="@+id/tv_lvl_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textAlignment="textStart"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name"
+        android:text="@string/spec_lvl" />
+
+    <TextView
+        android:id="@+id/tv_lvl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/tv_lvl_title"
+        app:layout_constraintTop_toTopOf="@+id/tv_lvl_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Middle" />
+
+    <TextView
+        android:id="@+id/tv_experience_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_lvl_title"
+        android:text="@string/spec_experience" />
+
+    <TextView
+        android:id="@+id/tv_experience"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/tv_experience_title"
+        app:layout_constraintTop_toTopOf="@+id/tv_experience_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="2" />
 
 
-        </android.support.design.chip.ChipGroup>
+    <android.support.design.chip.ChipGroup
+        android:id="@+id/chip_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
 
-    </android.support.constraint.ConstraintLayout>
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_experience">
+    </android.support.design.chip.ChipGroup>
+
 
     <View
         android:id="@+id/view"
@@ -106,7 +86,7 @@
         android:background="@color/colorGrey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/all_container" />
+        app:layout_constraintTop_toBottomOf="@id/chip_container" />
 
 
 </android.support.constraint.ConstraintLayout>
