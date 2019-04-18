@@ -1,7 +1,8 @@
 package itis.ru.kpfu.join.presentation.ui.auth.restorepassword.stepone
 
 import com.arellomobile.mvp.InjectViewState
-import itis.ru.kpfu.join.data.network.request.JoinApiRequest
+import io.reactivex.android.schedulers.AndroidSchedulers
+import itis.ru.kpfu.join.data.network.joinapi.request.JoinApiRequest
 import itis.ru.kpfu.join.presentation.base.BasePresenter
 import itis.ru.kpfu.join.presentation.util.exceptionprocessor.ExceptionProcessor
 import javax.inject.Inject
@@ -21,6 +22,7 @@ class RestorePassStepOnePresenter @Inject constructor() : BasePresenter<RestoreP
         } else {
             apiRequest
                     .restorePassChange(email)
+                    .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe { viewState.showWaitDialog() }
                     .doAfterTerminate {
                         viewState.hideWaitDialog()

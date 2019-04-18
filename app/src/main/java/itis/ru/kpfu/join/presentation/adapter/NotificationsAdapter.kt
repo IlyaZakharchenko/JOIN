@@ -46,6 +46,8 @@ class NotificationsAdapter : RecyclerView.Adapter<NotificationsAdapter.Notificat
         fun bindViewHolder() = with(itemView) {
             val item = items[adapterPosition]
 
+            ll_button_line.visibility = View.VISIBLE
+
             lateinit var message: SpannableString
             val startUser: Int
             val endUser: Int

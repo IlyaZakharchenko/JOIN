@@ -16,6 +16,7 @@ import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
 import itis.ru.kpfu.join.presentation.ui.main.users.UsersFragment
 import itis.ru.kpfu.join.presentation.recyclerView.adapter.ProjectMemberAdapter
+import itis.ru.kpfu.join.presentation.ui.auth.signin.SignInFragment
 import itis.ru.kpfu.join.presentation.ui.main.profile.ProfileFragment
 import kotlinx.android.synthetic.main.fragment_project_details.*
 import kotlinx.android.synthetic.main.layout_progress_error.*
@@ -151,6 +152,10 @@ class ProjectDetailsFragment : BaseFragment(), ProjectDetailsView {
 
     override fun setUsersFragment(projectId: Long) {
         (baseActivity as? FragmentHostActivity)?.setFragment(UsersFragment.newInstance(projectId), true)
+    }
+
+    override fun setSignInFragment() {
+        (activity as? FragmentHostActivity)?.setFragment(SignInFragment.newInstance(), false, clearStack = true)
     }
 
 }

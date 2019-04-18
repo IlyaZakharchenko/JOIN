@@ -4,7 +4,7 @@ import android.os.CountDownTimer
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import itis.ru.kpfu.join.data.network.request.JoinApiRequest
+import itis.ru.kpfu.join.data.network.joinapi.request.JoinApiRequest
 import itis.ru.kpfu.join.presentation.model.RegistrationFormModel
 import itis.ru.kpfu.join.presentation.base.BasePresenter
 import itis.ru.kpfu.join.presentation.model.ConfirmEmailFormModel
@@ -30,9 +30,10 @@ class SignUpStepTwoPresenter @Inject constructor() : BasePresenter<SignUpStepTwo
         resumeTimer()
     }
 
-    override fun detachView(view: SignUpStepTwoView?) {
+    override fun detachView(view: SignUpStepTwoView) {
         super.detachView(view)
         stopTimer()
+
     }
 
     override fun onFirstViewAttach() {

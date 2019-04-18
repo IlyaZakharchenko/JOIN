@@ -1,8 +1,8 @@
-package itis.ru.kpfu.join.data.network.error
+package itis.ru.kpfu.join.data.network.joinapi.error
 
 import io.reactivex.Observable
 import itis.ru.kpfu.join.data.network.exception.domain.SignInException
-import itis.ru.kpfu.join.data.network.pojo.UserInfoResponse
+import itis.ru.kpfu.join.data.network.joinapi.pojo.UserInfoResponse
 import retrofit2.HttpException
 
 class SignInObservableErrorFunction : ErrorFunction<Observable<UserInfoResponse>> {

@@ -5,7 +5,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 
-@Module
+@Module(includes = [ServiceBuilder::class])
 class AppContextModule {
 
     @Provides

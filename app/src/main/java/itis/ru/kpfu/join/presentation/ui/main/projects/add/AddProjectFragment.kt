@@ -15,6 +15,8 @@ import itis.ru.kpfu.join.db.entity.Specialization
 import itis.ru.kpfu.join.presentation.adapter.SpecializationsEditAdapter
 import itis.ru.kpfu.join.presentation.base.BaseFragment
 import itis.ru.kpfu.join.presentation.dialog.AddSpecializationDialog
+import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
+import itis.ru.kpfu.join.presentation.ui.auth.signin.SignInFragment
 import kotlinx.android.synthetic.main.fragment_add_project.btn_add_job
 import kotlinx.android.synthetic.main.fragment_add_project.et_project_desc
 import kotlinx.android.synthetic.main.fragment_add_project.et_project_name
@@ -137,5 +139,9 @@ class AddProjectFragment : BaseFragment(), AddProjectView {
 
     override fun showAddSpecDialog(requestCode: Int, position: Int, spec: Specialization?) {
         AddSpecializationDialog.getInstance(requestCode, position, spec).show(childFragmentManager, TAG_ADD_JOBS_DIALOG)
+    }
+
+    override fun setSignInFragment() {
+        (activity as? FragmentHostActivity)?.setFragment(SignInFragment.newInstance(), false, clearStack = true)
     }
 }

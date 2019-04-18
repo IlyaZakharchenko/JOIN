@@ -28,4 +28,7 @@ interface MyProjectsView : BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun setProjectDetailsFragment(id: Long)
+
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun setSignInFragment()
 }

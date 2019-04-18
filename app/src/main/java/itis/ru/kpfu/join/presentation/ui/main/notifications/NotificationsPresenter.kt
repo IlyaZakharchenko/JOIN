@@ -3,8 +3,9 @@ package itis.ru.kpfu.join.presentation.ui.main.notifications
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import itis.ru.kpfu.join.data.network.request.JoinApiRequest
-import itis.ru.kpfu.join.data.network.pojo.NotificationResponse
+import itis.ru.kpfu.join.data.network.exception.NotAuthorizedException
+import itis.ru.kpfu.join.data.network.joinapi.request.JoinApiRequest
+import itis.ru.kpfu.join.data.network.joinapi.pojo.NotificationResponse
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.presentation.base.BasePresenter
 import itis.ru.kpfu.join.presentation.util.exceptionprocessor.ExceptionProcessor
@@ -38,7 +39,11 @@ class NotificationsPresenter @Inject constructor() : BasePresenter<Notifications
                 .subscribe({
                     viewState.setNotifications(it)
                 }, {
-                    viewState.showRetry(exceptionProcessor.processException(it))
+                    if (it is NotAuthorizedException) {
+                        viewState.setSignInFragment()
+                    } else {
+                        viewState.showRetry(exceptionProcessor.processException(it))
+                    }
                 })
                 .disposeWhenDestroy()
     }
@@ -57,7 +62,11 @@ class NotificationsPresenter @Inject constructor() : BasePresenter<Notifications
                 .subscribe({
                     getNotifications()
                 }, {
-                    viewState.showErrorDialog(exceptionProcessor.processException(it))
+                    if (it is NotAuthorizedException) {
+                        viewState.setSignInFragment()
+                    } else {
+                        viewState.showErrorDialog(exceptionProcessor.processException(it))
+                    }
                 })
                 .disposeWhenDestroy()
     }

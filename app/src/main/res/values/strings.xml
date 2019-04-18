@@ -78,4 +78,15 @@
     <string name="apply">Подать заявку</string>
     <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
+
+    <!-- Push messages -->
+    <string name="push_add_to_project_invite">Пользователь %s приглашает вас в проект %s</string>
+    <string name="push_add_to_project_accept">Пользователь %s принял приглашение о вступлении в %s</string>
+    <string name="push_add_to_project_refuse">Пользователь %s отклонил приглашение о вступлении в %s</string>
+    <string name="push_join_to_project_invite">Пользователь %s хочет присоединиться в проект %s</string>
+    <string name="push_join_to_project_accept">Вы были приняты в проект %s</string>
+    <string name="push_join_to_project_refuse">Вас не приняли в проект %s</string>
+    <string name="push_remove_from_project">Вас удалили из проекта %s</string>
+    <string name="push_unknown">Неизвестный тип пуша</string>
+
 </resources>

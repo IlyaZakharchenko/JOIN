@@ -19,8 +19,7 @@ import javax.inject.Singleton
     AppContextModule::class,
     RepositoryModule::class,
     AndroidSupportInjectionModule::class,
-    PresentationModule::class,
-    RootBuilder::class
+    PresentationModule::class
     ]
 )
 @Singleton

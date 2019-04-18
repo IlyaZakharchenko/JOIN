@@ -23,6 +23,7 @@ import android.widget.FrameLayout
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import itis.ru.kpfu.join.R.style
 import itis.ru.kpfu.join.presentation.adapter.UsersAdapter
+import itis.ru.kpfu.join.presentation.ui.auth.signin.SignInFragment
 import itis.ru.kpfu.join.presentation.ui.main.profile.ProfileFragment
 import itis.ru.kpfu.join.presentation.util.toPx
 import kotlinx.android.synthetic.main.bottom_sheet_search_filter.btn_show_results_projects_filter
@@ -260,5 +261,9 @@ class UsersFragment : BaseFragment(), UsersView {
 
     override fun onInviteSuccess(user: ProjectMemberModel) {
         Snackbar.make(rv_users, "Пользователь ${user.username} приглашен в проект", Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun setSignInFragment() {
+        (activity as? FragmentHostActivity)?.setFragment(SignInFragment.newInstance(), false, clearStack = true)
     }
 }

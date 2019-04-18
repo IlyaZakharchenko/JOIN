@@ -25,4 +25,7 @@ interface UsersView: BaseView {
 
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun hideRetry()
+
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun setSignInFragment()
 }

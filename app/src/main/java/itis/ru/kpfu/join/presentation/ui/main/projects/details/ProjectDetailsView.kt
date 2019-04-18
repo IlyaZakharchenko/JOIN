@@ -29,4 +29,7 @@ interface ProjectDetailsView: BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun setUsersFragment(projectId: Long)
+
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun setSignInFragment()
 }

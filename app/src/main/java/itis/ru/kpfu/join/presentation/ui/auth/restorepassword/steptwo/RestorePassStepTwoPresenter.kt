@@ -1,7 +1,8 @@
 package itis.ru.kpfu.join.presentation.ui.auth.restorepassword.steptwo
 
 import com.arellomobile.mvp.InjectViewState
-import itis.ru.kpfu.join.data.network.request.JoinApiRequest
+import io.reactivex.android.schedulers.AndroidSchedulers
+import itis.ru.kpfu.join.data.network.joinapi.request.JoinApiRequest
 import itis.ru.kpfu.join.presentation.base.BasePresenter
 import itis.ru.kpfu.join.presentation.model.RestorePassFormModel
 import itis.ru.kpfu.join.presentation.util.exceptionprocessor.ExceptionProcessor
@@ -30,6 +31,7 @@ class RestorePassStepTwoPresenter @Inject constructor() : BasePresenter<RestoreP
 
             joinApiRequest
                     .restorePassChange(RestorePassFormModel(email, newPass, code))
+                    .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe { viewState.showWaitDialog() }
                     .doAfterTerminate { viewState.hideWaitDialog() }
                     .subscribe({

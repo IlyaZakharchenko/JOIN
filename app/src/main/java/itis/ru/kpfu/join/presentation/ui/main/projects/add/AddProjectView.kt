@@ -31,4 +31,7 @@ interface AddProjectView: BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun showAddSpecDialog(requestCode: Int, position: Int, spec: Specialization?)
+
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun setSignInFragment()
 }

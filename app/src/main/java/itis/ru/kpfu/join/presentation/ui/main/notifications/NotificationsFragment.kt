@@ -8,10 +8,11 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.presentation.model.NotificationModel
-import itis.ru.kpfu.join.data.network.pojo.NotificationResponse
+import itis.ru.kpfu.join.data.network.joinapi.pojo.NotificationResponse
 import itis.ru.kpfu.join.presentation.adapter.NotificationsAdapter
 import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
+import itis.ru.kpfu.join.presentation.ui.auth.signin.SignInFragment
 import itis.ru.kpfu.join.presentation.ui.main.profile.ProfileFragment
 import itis.ru.kpfu.join.presentation.ui.main.projects.details.ProjectDetailsFragment
 import kotlinx.android.synthetic.main.fragment_notifications.*
@@ -114,5 +115,9 @@ class NotificationsFragment : BaseFragment(), NotificationsView {
 
     override fun hideProgress() {
         progress.visibility = View.GONE
+    }
+
+    override fun setSignInFragment() {
+        (activity as? FragmentHostActivity)?.setFragment(SignInFragment.newInstance(), false, clearStack = true)
     }
 }

@@ -21,4 +21,7 @@ interface SignInView : BaseView {
 
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun setPasswordErrorEnabled(enabled: Boolean)
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun setBottomNavBarFirstPageEnabled()
 }

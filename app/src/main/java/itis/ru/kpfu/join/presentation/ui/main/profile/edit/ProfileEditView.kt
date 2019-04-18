@@ -68,4 +68,7 @@ interface ProfileEditView : BaseView {
 
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun initFields(user: User?)
+
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun setSignInFragment()
 }

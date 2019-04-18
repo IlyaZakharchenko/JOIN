@@ -1,12 +1,12 @@
-package itis.ru.kpfu.join.data.network.request
+package itis.ru.kpfu.join.data.network.joinapi.request
 
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import itis.ru.kpfu.join.data.network.pojo.NotificationResponse
-import itis.ru.kpfu.join.data.network.pojo.ProfileImage
+import itis.ru.kpfu.join.data.network.joinapi.pojo.NotificationResponse
+import itis.ru.kpfu.join.data.network.joinapi.pojo.ProfileImage
 import itis.ru.kpfu.join.db.entity.User
-import itis.ru.kpfu.join.data.network.pojo.UserInfoResponse
+import itis.ru.kpfu.join.data.network.joinapi.pojo.UserInfoResponse
 import itis.ru.kpfu.join.presentation.model.*
 import okhttp3.MultipartBody
 import retrofit2.http.Body

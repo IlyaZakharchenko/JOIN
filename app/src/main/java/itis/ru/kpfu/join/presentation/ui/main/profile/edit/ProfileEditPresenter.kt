@@ -3,8 +3,9 @@ package itis.ru.kpfu.join.presentation.ui.main.profile.edit
 import com.arellomobile.mvp.InjectViewState
 import com.zxy.tiny.Tiny
 import io.reactivex.android.schedulers.AndroidSchedulers
+import itis.ru.kpfu.join.data.network.exception.NotAuthorizedException
 import itis.ru.kpfu.join.db.entity.Specialization
-import itis.ru.kpfu.join.data.network.request.JoinApiRequest
+import itis.ru.kpfu.join.data.network.joinapi.request.JoinApiRequest
 import itis.ru.kpfu.join.db.entity.User
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.presentation.base.BasePresenter
@@ -66,18 +67,22 @@ class ProfileEditPresenter @Inject constructor() : BasePresenter<ProfileEditView
     fun onUpdateUser(user: User?) {
         user?.id = userRepository.getUser()?.id
         user?.profileImage = userRepository.getUser()?.profileImage
+
         if (!hasErrors(user)) {
             apiRequest
                     .changeUser(userRepository.getUser()?.token, user, user?.id)
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe { viewState.showWaitDialog() }
+                    .doAfterTerminate { viewState.hideWaitDialog() }
                     .subscribe({
-                        viewState.hideWaitDialog()
                         user?.let { it1 -> userRepository.updateUser(it1) }
                         viewState.onEditSuccess()
                     }, {
-                        viewState.hideWaitDialog()
-                        viewState.showErrorDialog(exceptionProcessor.processException(it))
+                        if (it is NotAuthorizedException) {
+                            viewState.setSignInFragment()
+                        } else {
+                            viewState.showErrorDialog(exceptionProcessor.processException(it))
+                        }
                     })
                     .disposeWhenDestroy()
         }
@@ -107,7 +112,11 @@ class ProfileEditPresenter @Inject constructor() : BasePresenter<ProfileEditView
                                         viewState.onImageSetSuccess(url)
                                     }
                                 }, {
-                                    viewState.showErrorDialog(exceptionProcessor.processException(it))
+                                    if (it is NotAuthorizedException) {
+                                        viewState.setSignInFragment()
+                                    } else {
+                                        viewState.showErrorDialog(exceptionProcessor.processException(it))
+                                    }
                                 })
                                 .disposeWhenDestroy()
                     }

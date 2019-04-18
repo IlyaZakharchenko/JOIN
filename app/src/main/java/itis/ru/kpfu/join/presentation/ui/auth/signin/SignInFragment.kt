@@ -179,4 +179,8 @@ class SignInFragment : BaseFragment(), SignInView {
     override fun setPasswordErrorEnabled(enabled: Boolean) {
         ti_password.error = if (enabled) getString(R.string.error_password) else null
     }
+
+    override fun setBottomNavBarFirstPageEnabled() {
+        (activity as? FragmentHostActivity)?.setAllProjectsTabEnabled()
+    }
 }

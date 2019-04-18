@@ -9,6 +9,8 @@ abstract class BasePresenter<T : MvpView> : MvpPresenter<T>() {
 
     private var destroyDisposable = CompositeDisposable()
 
+    private var detachViewDisposable = CompositeDisposable()
+
     override fun onDestroy() {
         super.onDestroy()
         if (!destroyDisposable.isDisposed) {
@@ -16,7 +18,18 @@ abstract class BasePresenter<T : MvpView> : MvpPresenter<T>() {
         }
     }
 
+    override fun detachView(view: T) {
+        super.detachView(view)
+        if(!detachViewDisposable.isDisposed) {
+            detachViewDisposable.dispose()
+        }
+    }
+
     protected fun Disposable.disposeWhenDestroy() {
         destroyDisposable.add(this)
+    }
+
+    protected fun Disposable.disposeWhenDetachView() {
+        detachViewDisposable.add(this)
     }
 }

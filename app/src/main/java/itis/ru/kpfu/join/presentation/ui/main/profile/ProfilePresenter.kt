@@ -1,11 +1,12 @@
 package itis.ru.kpfu.join.presentation.ui.main.profile
 
-import bolts.Bolts
 import com.arellomobile.mvp.InjectViewState
+import com.google.firebase.iid.FirebaseInstanceId
 import com.zxy.tiny.Tiny
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import itis.ru.kpfu.join.data.network.request.JoinApiRequest
+import itis.ru.kpfu.join.data.network.exception.NotAuthorizedException
+import itis.ru.kpfu.join.data.network.joinapi.request.JoinApiRequest
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.presentation.base.BasePresenter
 import itis.ru.kpfu.join.presentation.util.exceptionprocessor.ExceptionProcessor
@@ -65,7 +66,11 @@ class ProfilePresenter @Inject constructor() : BasePresenter<ProfileView>() {
                     viewState.showCollapsingToolbar()
                     viewState.setUser(it, isOwner())
                 }, {
-                    viewState.showRetry(exceptionProcessor.processException(it))
+                    if (it is NotAuthorizedException) {
+                        viewState.setSignInFragment()
+                    } else {
+                        viewState.showRetry(exceptionProcessor.processException(it))
+                    }
                 })
                 .disposeWhenDestroy()
     }
@@ -94,7 +99,11 @@ class ProfilePresenter @Inject constructor() : BasePresenter<ProfileView>() {
                                         viewState.setChangedPhotoProfile(url)
                                     }
                                 }, {
-                                    viewState.showErrorDialog(exceptionProcessor.processException(it))
+                                    if(it is NotAuthorizedException) {
+                                        viewState.setSignInFragment()
+                                    } else {
+                                        viewState.showErrorDialog(exceptionProcessor.processException(it))
+                                    }
                                 })
                                 .disposeWhenDestroy()
 

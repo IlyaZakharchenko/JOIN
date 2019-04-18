@@ -6,7 +6,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.Subject
 import itis.ru.kpfu.join.data.EventType
 import itis.ru.kpfu.join.data.ProjectAddedEvent
-import itis.ru.kpfu.join.data.network.request.JoinApiRequest
+import itis.ru.kpfu.join.data.network.exception.NotAuthorizedException
+import itis.ru.kpfu.join.data.network.joinapi.request.JoinApiRequest
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.presentation.base.BasePresenter
 import itis.ru.kpfu.join.presentation.model.ProjectModel
@@ -38,7 +39,11 @@ class MyProjectsPresenter @Inject constructor() : BasePresenter<MyProjectsView>(
                 .subscribe({
                     viewState.setProjects(it)
                 }, {
-                    viewState.showRetry(exceptionProcessor.processException(it))
+                    if (it is NotAuthorizedException) {
+                        viewState.setSignInFragment()
+                    } else {
+                        viewState.showRetry(exceptionProcessor.processException(it))
+                    }
                 }).disposeWhenDestroy()
     }
 
@@ -54,7 +59,11 @@ class MyProjectsPresenter @Inject constructor() : BasePresenter<MyProjectsView>(
                 .subscribe({
                     viewState.setProjects(it)
                 }, {
-                    viewState.showRetry(exceptionProcessor.processException(it))
+                    if (it is NotAuthorizedException) {
+                        viewState.setSignInFragment()
+                    } else {
+                        viewState.showRetry(exceptionProcessor.processException(it))
+                    }
                 }).disposeWhenDestroy()
     }
 

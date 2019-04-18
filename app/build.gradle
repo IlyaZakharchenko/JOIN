@@ -14,8 +14,8 @@ android {
         applicationId "itis.ru.kpfu.join"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 4
-        versionName "2.0"
+        versionCode 5
+        versionName "2.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         GoogleServicesPlugin.config.disableVersionCheck = true

@@ -4,6 +4,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.facebook.GraphRequest
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.iid.FirebaseInstanceId
 import com.vk.sdk.VKAccessToken
 import com.vk.sdk.api.VKApiConst
 import com.vk.sdk.api.VKParameters
@@ -11,13 +12,15 @@ import com.vk.sdk.api.VKRequest
 import com.vk.sdk.api.VKRequest.VKRequestListener
 import com.vk.sdk.api.VKResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
-import itis.ru.kpfu.join.data.network.request.JoinApiRequest
+import io.reactivex.subjects.BehaviorSubject
+import itis.ru.kpfu.join.data.network.joinapi.request.JoinApiRequest
 import itis.ru.kpfu.join.db.entity.User
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.presentation.base.BasePresenter
 import itis.ru.kpfu.join.presentation.model.SignInFormModel
 import itis.ru.kpfu.join.presentation.util.Validator
 import itis.ru.kpfu.join.presentation.util.exceptionprocessor.ExceptionProcessor
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 @InjectViewState
@@ -43,8 +46,22 @@ class SignInPresenter @Inject constructor() : BasePresenter<SignInView>() {
         }
 
         var token: String? = null
-        apiRequest
-                .signIn(SignInFormModel(email, password))
+        val behaviorSubject = BehaviorSubject.create<String>()
+
+        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener {
+            val deviceToken = it.result?.token
+            if (deviceToken != null) {
+                behaviorSubject.onNext(deviceToken)
+            } else {
+                behaviorSubject.onError(IllegalArgumentException("Device token is null"))
+            }
+        }
+
+        behaviorSubject
+                .flatMap { deviceToken ->
+                    apiRequest
+                            .signIn(SignInFormModel(email, password, deviceToken))
+                }
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
                     viewState.showWaitDialog()
@@ -57,9 +74,12 @@ class SignInPresenter @Inject constructor() : BasePresenter<SignInView>() {
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ user ->
+                    behaviorSubject.onComplete()
                     userRepository.addUser(user.apply { this.token = token })
+                    viewState.setBottomNavBarFirstPageEnabled()
                     viewState.setAllProjectsFragment()
                 }, {
+                    behaviorSubject.onComplete()
                     viewState.showErrorDialog(exceptionProcessor.processException(it))
                 }).disposeWhenDestroy()
     }
@@ -81,6 +101,7 @@ class SignInPresenter @Inject constructor() : BasePresenter<SignInView>() {
                     val user = User(name = firstName, lastname = lastName)
                     userRepository.addUser(user)
 
+                    viewState.setBottomNavBarFirstPageEnabled()
                     viewState.setAllProjectsFragment()
                 } catch (e: Exception) {
                     viewState.showErrorDialog(exceptionProcessor.processException(e))
@@ -101,6 +122,7 @@ class SignInPresenter @Inject constructor() : BasePresenter<SignInView>() {
         val user = User(name = givenName, lastname = lastName, email = email)
         userRepository.addUser(user)
 
+        viewState.setBottomNavBarFirstPageEnabled()
         viewState.setAllProjectsFragment()
     }
 
@@ -115,6 +137,7 @@ class SignInPresenter @Inject constructor() : BasePresenter<SignInView>() {
             val user = User(name = firstName, lastname = lastName, email = email)
             userRepository.addUser(user)
 
+            viewState.setBottomNavBarFirstPageEnabled()
             viewState.setAllProjectsFragment()
         }.executeAsync()
     }

@@ -13,6 +13,7 @@ import itis.ru.kpfu.join.presentation.model.ProjectModel
 import itis.ru.kpfu.join.presentation.adapter.ProjectsAdapter
 import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
+import itis.ru.kpfu.join.presentation.ui.auth.signin.SignInFragment
 import itis.ru.kpfu.join.presentation.ui.main.projects.add.AddProjectFragment
 import itis.ru.kpfu.join.presentation.ui.main.projects.details.ProjectDetailsFragment
 import kotlinx.android.synthetic.main.fragment_my_projects.*
@@ -93,7 +94,8 @@ class MyProjectsFragment : BaseFragment(), MyProjectsView {
         retry.visibility = View.VISIBLE
         retry_title.text = errorText
         btn_retry.setOnClickListener {
-            presenter.onRetry() }
+            presenter.onRetry()
+        }
     }
 
     override fun hideRetry() {
@@ -135,5 +137,9 @@ class MyProjectsFragment : BaseFragment(), MyProjectsView {
 
     override fun setProjectDetailsFragment(id: Long) {
         (activity as? FragmentHostActivity)?.setFragment(ProjectDetailsFragment.newInstance(id), true)
+    }
+
+    override fun setSignInFragment() {
+        (activity as? FragmentHostActivity)?.setFragment(SignInFragment.newInstance(), false, clearStack = true)
     }
 }

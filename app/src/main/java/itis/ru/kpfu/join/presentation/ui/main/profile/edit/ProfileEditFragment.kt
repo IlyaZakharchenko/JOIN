@@ -21,6 +21,7 @@ import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
 import itis.ru.kpfu.join.presentation.dialog.AddSpecializationDialog
 import itis.ru.kpfu.join.presentation.dialog.ChooseImageDialog
+import itis.ru.kpfu.join.presentation.ui.auth.signin.SignInFragment
 import kotlinx.android.synthetic.main.fragment_profile_edit.btn_add_spec
 import kotlinx.android.synthetic.main.fragment_profile_edit.et_email
 import kotlinx.android.synthetic.main.fragment_profile_edit.et_first_name
@@ -119,7 +120,8 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
             }
         } else if (childFragment is ChooseImageDialog) {
             childFragment.photoListener = { imagePaths, requestCode ->
-                presenter.onChoosePhotoResult(imagePaths[0], requestCode) }
+                presenter.onChoosePhotoResult(imagePaths[0], requestCode)
+            }
         }
     }
 
@@ -258,4 +260,7 @@ class ProfileEditFragment : BaseFragment(), ProfileEditView {
                 .show(childFragmentManager, CHOOSE_IMAGE_DIALOG_TAG)
     }
 
+    override fun setSignInFragment() {
+        (activity as? FragmentHostActivity)?.setFragment(SignInFragment.newInstance(), false, clearStack = true)
+    }
 }

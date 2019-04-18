@@ -5,8 +5,8 @@ import dagger.Provides
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.Subject
 import itis.ru.kpfu.join.data.EventType
-import itis.ru.kpfu.join.data.network.request.JoinApiRequest
-import itis.ru.kpfu.join.data.network.request.JoinApiRequestDecorator
+import itis.ru.kpfu.join.data.network.joinapi.request.JoinApiRequest
+import itis.ru.kpfu.join.data.network.joinapi.request.JoinApiRequestDecorator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

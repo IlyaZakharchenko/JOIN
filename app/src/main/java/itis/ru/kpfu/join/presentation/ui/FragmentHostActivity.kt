@@ -1,6 +1,7 @@
 package itis.ru.kpfu.join.presentation.ui
 
 import android.app.ActivityOptions
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -14,11 +15,16 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.presentation.base.BaseActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
+import itis.ru.kpfu.join.presentation.model.PushModel
 import kotlinx.android.synthetic.main.activity_fragment_host.bottom_nav_bar
 import javax.inject.Inject
 import javax.inject.Provider
 
 class FragmentHostActivity : BaseActivity(), FragmentHostView {
+
+    companion object {
+        const val KEY_PUSH_CATEGORY = "KEY_PUSH_CATEGORY"
+    }
 
     @InjectPresenter
     lateinit var presenter: FragmentHostPresenter
@@ -47,7 +53,6 @@ class FragmentHostActivity : BaseActivity(), FragmentHostView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        bottom_nav_bar.selectedItemId = R.id.bottom_projects
         bottom_nav_bar.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.bottom_projects -> presenter.onAllProject()
@@ -57,6 +62,19 @@ class FragmentHostActivity : BaseActivity(), FragmentHostView {
                 else -> presenter.onProfile()
             }
             true
+        }
+
+        if(intent.getSerializableExtra(KEY_PUSH_CATEGORY) != null) {
+            onNewIntent(intent)
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        val pushModel = intent?.getSerializableExtra(KEY_PUSH_CATEGORY) as? PushModel
+
+        if(pushModel != null) {
+            presenter.onReceivePush(pushModel)
         }
     }
 
@@ -74,5 +92,25 @@ class FragmentHostActivity : BaseActivity(), FragmentHostView {
 
     fun enableBottomNavBar(state: Boolean) {
         bottom_nav_bar.visibility = if (state) View.VISIBLE else View.GONE
+    }
+
+    override fun setAllProjectsTabEnabled() {
+        bottom_nav_bar.selectedItemId = R.id.bottom_projects
+    }
+
+    override fun setMyProjectsTabEnabled() {
+        bottom_nav_bar.selectedItemId = R.id.bottom_my_projects
+    }
+
+    override fun setNotificationsTabEnabled() {
+        bottom_nav_bar.selectedItemId = R.id.bottom_notifications
+    }
+
+    override fun setProfileTabEnabled() {
+        bottom_nav_bar.selectedItemId = R.id.bottom_profile
+    }
+
+    override fun setDialogsTabEnabled() {
+        bottom_nav_bar.selectedItemId = R.id.bottom_dialogs
     }
 }

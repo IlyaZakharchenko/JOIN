@@ -19,8 +19,10 @@ import itis.ru.kpfu.join.presentation.model.ProjectModel
 import itis.ru.kpfu.join.presentation.adapter.ProjectsAdapter
 import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
+import itis.ru.kpfu.join.presentation.ui.auth.signin.SignInFragment
 import itis.ru.kpfu.join.presentation.ui.main.projects.details.ProjectDetailsFragment
 import itis.ru.kpfu.join.presentation.util.toPx
+import kotlinx.android.synthetic.main.activity_fragment_host.*
 import kotlinx.android.synthetic.main.bottom_sheet_search_filter.btn_show_results_projects_filter
 import kotlinx.android.synthetic.main.bottom_sheet_search_filter.spinner_exp_projects_filter
 import kotlinx.android.synthetic.main.bottom_sheet_search_filter.spinner_lvl_projects_filter
@@ -243,6 +245,10 @@ class AllProjectsFragment : BaseFragment(), AllProjectsView {
     }
 
     override fun hideBottomSheetDialog() {
-       bottomSheetDialog?.dismiss()
+        bottomSheetDialog?.dismiss()
+    }
+
+    override fun setSignInFragment() {
+        (activity as? FragmentHostActivity)?.setFragment(SignInFragment.newInstance(), false, clearStack = true)
     }
 }

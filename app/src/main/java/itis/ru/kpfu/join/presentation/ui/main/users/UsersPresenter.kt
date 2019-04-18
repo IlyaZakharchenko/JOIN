@@ -2,7 +2,8 @@ package itis.ru.kpfu.join.presentation.ui.main.users
 
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
-import itis.ru.kpfu.join.data.network.request.JoinApiRequest
+import itis.ru.kpfu.join.data.network.exception.NotAuthorizedException
+import itis.ru.kpfu.join.data.network.joinapi.request.JoinApiRequest
 import itis.ru.kpfu.join.presentation.model.InviteFormModel
 import itis.ru.kpfu.join.presentation.model.ProjectMemberModel
 import itis.ru.kpfu.join.db.repository.UserRepository
@@ -31,7 +32,11 @@ class UsersPresenter @Inject constructor() : BasePresenter<UsersView>() {
                 .subscribe({
                     viewState.setUsers(it)
                 }, {
-                    viewState.showRetry(exceptionProcessor.processException(it))
+                    if (it is NotAuthorizedException) {
+                        viewState.setSignInFragment()
+                    } else {
+                        viewState.showRetry(exceptionProcessor.processException(it))
+                    }
                 })
                 .disposeWhenDestroy()
     }
@@ -60,7 +65,11 @@ class UsersPresenter @Inject constructor() : BasePresenter<UsersView>() {
                 .subscribe({
                     viewState.setUsers(it)
                 }, {
-                    viewState.showErrorDialog(exceptionProcessor.processException(it))
+                    if (it is NotAuthorizedException) {
+                        viewState.setSignInFragment()
+                    } else {
+                        viewState.showErrorDialog(exceptionProcessor.processException(it))
+                    }
                 })
                 .disposeWhenDestroy()
     }
@@ -71,7 +80,11 @@ class UsersPresenter @Inject constructor() : BasePresenter<UsersView>() {
                 .subscribe({
                     user?.let { it1 -> viewState.onInviteSuccess(it1) }
                 }, {
-                    viewState.showErrorDialog(exceptionProcessor.processException(it))
+                    if (it is NotAuthorizedException) {
+                        viewState.setSignInFragment()
+                    } else {
+                        viewState.showErrorDialog(exceptionProcessor.processException(it))
+                    }
                 })
                 .disposeWhenDestroy()
     }

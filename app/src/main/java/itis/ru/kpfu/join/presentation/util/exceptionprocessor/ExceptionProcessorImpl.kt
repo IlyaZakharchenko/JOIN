@@ -12,7 +12,6 @@ class ExceptionProcessorImpl(val context: Context) : ExceptionProcessor {
         return when (t) {
             is IncorrectDataException -> getString(R.string.exception_incorrect_data)
             is NoInternetConnectionException -> getString(R.string.exception_no_connection)
-            is NotAuthorizedException -> getString(R.string.exception_not_authorized)
             is TimeOutException -> getString(R.string.exception_time_out)
             is SignInException -> getString(R.string.exception_sign_in)
             is SignUpEmailAlreadyExistsException -> getString(R.string.exception_email_already_exists)

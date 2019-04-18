@@ -1,19 +1,20 @@
-package itis.ru.kpfu.join.data.network.request
+package itis.ru.kpfu.join.data.network.joinapi.request
 
 import io.reactivex.*
 import io.reactivex.subjects.Subject
 import itis.ru.kpfu.join.data.EventType
 import itis.ru.kpfu.join.data.ProjectAddedEvent
-import itis.ru.kpfu.join.data.network.error.RestorePasswordCompletableErrorFunction
-import itis.ru.kpfu.join.data.network.error.SignInObservableErrorFunction
-import itis.ru.kpfu.join.data.network.error.SignUpCompletableErrorFunction
+import itis.ru.kpfu.join.data.network.joinapi.error.RestorePasswordCompletableErrorFunction
+import itis.ru.kpfu.join.data.network.joinapi.error.SignInObservableErrorFunction
+import itis.ru.kpfu.join.data.network.joinapi.error.SignUpCompletableErrorFunction
 import itis.ru.kpfu.join.db.entity.User
 import itis.ru.kpfu.join.data.network.exception.*
 import itis.ru.kpfu.join.data.network.exception.domain.DomainException
-import itis.ru.kpfu.join.data.network.pojo.*
+import itis.ru.kpfu.join.data.network.joinapi.pojo.*
 import itis.ru.kpfu.join.presentation.model.NotificationModel
 import itis.ru.kpfu.join.presentation.model.*
 import okhttp3.MultipartBody
+import java.lang.IllegalArgumentException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
@@ -26,9 +27,10 @@ class JoinApiRequestDecorator(
         private fun processApiThrowable(t: Throwable): Throwable {
             return when (t) {
                 is DomainException -> t
+                is IllegalArgumentException -> NotAuthorizedException()
                 is UnknownHostException -> NoInternetConnectionException()
                 is SocketTimeoutException -> TimeOutException()
-                else -> UnexpectedException()
+                else -> UnknownException()
             }
         }
     }
