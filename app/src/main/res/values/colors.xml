@@ -22,4 +22,18 @@
     <color name="colorLink">#5192b1</color>
     <color name="colorDivider">#e1e7e8</color>
     <color name="ledColor">#e2e7e8</color>
+
+    <!-- Avatar Colors -->
+    <color name="colorAvatarOne">#3b64a5</color>
+    <color name="colorAvatarTwo">#82382e</color>
+    <color name="colorAvatarThree">#ad7327</color>
+    <color name="colorAvatarFour">#ccbb4b</color>
+    <color name="colorAvatarFive">#73933e</color>
+    <color name="colorAvatarSix">#3d9292</color>
+    <color name="colorAvatarSeven">#625599</color>
+    <color name="colorAvatarEight">#a03d75</color>
+    <color name="colorAvatarNine">#4c4c4c</color>
+    <color name="colorAvatarTen">#bc0000</color>
+    <color name="colorAvatarEleven">#d68700</color>
+    <color name="colorAvatarTwelve">#1c7200</color>
 </resources>

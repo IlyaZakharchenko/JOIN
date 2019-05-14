@@ -35,10 +35,11 @@ class AddProjectPresenter @Inject constructor() : BasePresenter<AddProjectView>(
                         viewState.showWaitDialog()
                         viewState.hideKeyboard()
                     }
-                    .doAfterTerminate { viewState.hideWaitDialog() }
                     .subscribe({
+                        viewState.hideWaitDialog()
                         viewState.onSaveSuccess()
                     }, {
+                        viewState.hideWaitDialog()
                         if (it is NotAuthorizedException) {
                             viewState.setSignInFragment()
                         } else {

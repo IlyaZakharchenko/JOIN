@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f0f4f7">
 
-    <android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_chat"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:elevation="8dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_chat"
@@ -20,62 +23,85 @@
             app:titleTextColor="@color/colorWhite" />
     </android.support.design.widget.AppBarLayout>
 
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_messages"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#f0f4f7"
+        android:clipToPadding="true"
+        android:overScrollMode="never"
+        android:paddingTop="8dp"
+        app:layout_constraintBottom_toTopOf="@id/input_message_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/app_bar_chat" />
+
+    <TextView
+        android:id="@+id/tv_chat_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="@string/no_messages_yet"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/input_message_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/app_bar_chat" />
+
     <RelativeLayout
-        android:id="@+id/chat_fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?actionBarSize">
+        android:id="@+id/input_message_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_messages"
+        <EditText
+            android:id="@+id/et_message_text"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/input_message_layout"
-            android:background="#f0f4f7"
-            android:clipToPadding="true"
-            android:overScrollMode="never"
-            android:paddingTop="8dp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_toStartOf="@id/btn_send_msg"
+            android:layout_toLeftOf="@id/btn_send_msg"
+            android:background="@null"
+            android:hint="@string/type_your_message"
+            android:maxLines="4"
+            android:textColor="#212121"
+            android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/tv_chat_empty"
+        <ImageView
+            android:id="@+id/btn_send_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="@string/no_messages_yet"
-            android:textSize="16sp"
-            android:visibility="gone" />
-
-        <RelativeLayout
-            android:id="@+id/input_message_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/colorWhite"
-            android:padding="16dp">
-
-            <EditText
-                android:id="@+id/et_message_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:background="@null"
-                android:maxLines="4"
-                android:layout_toLeftOf="@id/btn_send_msg"
-                android:layout_toStartOf="@id/btn_send_msg"
-                android:hint="@string/type_your_message"
-                android:textColor="#212121"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:id="@+id/btn_send_msg"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_send_msg" />
-        </RelativeLayout>
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/background_send_message" />
     </RelativeLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+    <include
+        android:id="@+id/progress"
+        layout="@layout/layout_progress"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/input_message_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/app_bar_chat" />
+
+    <include
+        android:id="@+id/progress_error"
+        layout="@layout/layout_progress_error"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/input_message_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/app_bar_chat" />
+
+</android.support.constraint.ConstraintLayout>

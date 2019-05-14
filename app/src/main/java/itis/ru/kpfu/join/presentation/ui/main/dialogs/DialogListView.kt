@@ -1,25 +1,14 @@
-package itis.ru.kpfu.join.presentation.ui.main.dialogs.selected
+package itis.ru.kpfu.join.presentation.ui.main.dialogs
 
 import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import itis.ru.kpfu.join.presentation.base.BaseView
+import itis.ru.kpfu.join.presentation.model.DialogModel
 
 @StateStrategyType(OneExecutionStateStrategy::class)
-interface ChatView: BaseView {
-
-    @StateStrategyType(AddToEndSingleStrategy::class)
-    fun startListeningAdapter()
-
-    @StateStrategyType(AddToEndSingleStrategy::class)
-    fun stopListeningAdapter()
-
-    @StateStrategyType(AddToEndSingleStrategy::class)
-    fun setButtonEnabled(enabled: Boolean)
-
-    @StateStrategyType(AddToEndSingleStrategy::class)
-    fun clearMessageField()
+interface DialogListView: BaseView {
 
     @StateStrategyType(AddToEndSingleStrategy::class)
     fun showProgress()
@@ -28,8 +17,11 @@ interface ChatView: BaseView {
     fun hideProgress()
 
     @StateStrategyType(AddToEndSingleStrategy::class)
-    fun setItemDecorationItems(items: MutableList<String>)
+    fun showRetry(errorText: String)
 
     @StateStrategyType(AddToEndSingleStrategy::class)
-    fun setToolbarTitle(title: String)
+    fun hideRetry()
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun setDialogs(dialogs: List<DialogModel>)
 }
