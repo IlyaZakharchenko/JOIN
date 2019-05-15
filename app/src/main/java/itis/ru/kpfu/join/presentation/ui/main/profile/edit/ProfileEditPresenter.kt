@@ -73,7 +73,7 @@ class ProfileEditPresenter @Inject constructor() : BasePresenter<ProfileEditView
                     .changeUser(userRepository.getUser()?.token, user, user?.id)
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe { viewState.showWaitDialog() }
-                    .doAfterTerminate { viewState.hideWaitDialog() }
+                    .doOnComplete { viewState.hideWaitDialog() }
                     .subscribe({
                         user?.let { it1 -> userRepository.updateUser(it1) }
                         viewState.onEditSuccess()

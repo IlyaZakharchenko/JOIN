@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhite">
 
-    <android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_project"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,7 +51,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
-                        android:text="Название"
+                        android:text="@string/project_details_name"
                         android:textColor="@color/colorGreyText"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -65,7 +64,6 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:background="@drawable/edit_text_back"
                         android:enabled="false"
                         android:padding="8dp"
                         android:textColor="@color/colorBlackText"
@@ -79,7 +77,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
-                        android:text="Описание"
+                        android:text="@string/project_details_descr"
                         android:textColor="@color/colorGreyText"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/et_project_name" />
@@ -92,7 +90,6 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="8dp"
-                        android:background="@drawable/edit_text_back"
                         android:enabled="false"
                         android:padding="8dp"
                         android:textColor="@color/colorBlackText"
@@ -125,7 +122,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
-                        android:text="Вакансии"
+                        android:text="@string/project_details_vacancies"
                         android:textColor="@color/colorGreyText"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -148,7 +145,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:text="Нет доступных вакансий"
+                        android:text="@string/project_details_no_vacancies"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="16sp"
                         android:visibility="gone"
@@ -179,7 +176,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
-                        android:text="Участники"
+                        android:text="@string/project_details_team"
                         android:textColor="@color/colorGreyText"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -194,16 +191,12 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_members_title">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="16dp"
-                            android:src="@drawable/ic_add_member" />
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Добавить участника"
+                            android:drawableStart="@drawable/ic_add_member"
+                            android:drawablePadding="16dp"
+                            android:text="@string/project_details_add"
                             android:textColor="@color/colorPrimaryDark"
                             android:textSize="16sp" />
                     </LinearLayout>

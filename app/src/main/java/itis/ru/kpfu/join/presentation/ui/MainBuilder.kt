@@ -32,6 +32,8 @@ import itis.ru.kpfu.join.presentation.ui.main.projects.details.ProjectDetailsMod
 import itis.ru.kpfu.join.presentation.ui.main.projects.my.MyProjectsModule
 import itis.ru.kpfu.join.presentation.ui.main.users.UsersFragment
 import itis.ru.kpfu.join.presentation.ui.main.users.UsersModule
+import itis.ru.kpfu.join.presentation.ui.splash.SplashFragment
+import itis.ru.kpfu.join.presentation.ui.splash.SplashModule
 
 @Module
 abstract class MainBuilder {
@@ -80,4 +82,8 @@ abstract class MainBuilder {
 
     @ContributesAndroidInjector(modules = [ProjectDetailsModule::class])
     abstract fun buildProjectDetailsFragment(): ProjectDetailsFragment
+
+    @ContributesAndroidInjector(modules = [SplashModule::class])
+    abstract fun buildSplashFragment(): SplashFragment
+
 }

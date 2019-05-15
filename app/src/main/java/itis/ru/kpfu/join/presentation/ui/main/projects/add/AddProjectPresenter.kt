@@ -35,8 +35,8 @@ class AddProjectPresenter @Inject constructor() : BasePresenter<AddProjectView>(
                         viewState.showWaitDialog()
                         viewState.hideKeyboard()
                     }
-                    .doAfterTerminate { viewState.hideWaitDialog() }
                     .subscribe({
+                        viewState.hideWaitDialog()
                         viewState.onSaveSuccess()
                     }, {
                         if (it is NotAuthorizedException) {

@@ -16,6 +16,7 @@ import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.presentation.base.BaseActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
 import itis.ru.kpfu.join.presentation.model.PushModel
+import itis.ru.kpfu.join.presentation.ui.splash.SplashFragment
 import kotlinx.android.synthetic.main.activity_fragment_host.bottom_nav_bar
 import javax.inject.Inject
 import javax.inject.Provider
@@ -112,5 +113,9 @@ class FragmentHostActivity : BaseActivity(), FragmentHostView {
 
     override fun setDialogsTabEnabled() {
         bottom_nav_bar.selectedItemId = R.id.bottom_dialogs
+    }
+
+    override fun openSplashFragment() {
+        setFragment(SplashFragment.newInstance(), addToBackStack = false)
     }
 }

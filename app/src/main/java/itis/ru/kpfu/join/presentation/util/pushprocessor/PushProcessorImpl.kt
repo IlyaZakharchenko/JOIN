@@ -39,7 +39,7 @@ class PushProcessorImpl() : PushProcessor {
             val primaryColor = ContextCompat.getColor(context, R.color.colorPrimary)
             val ledColor = ContextCompat.getColor(context, R.color.ledColor)
             val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-                    .setSmallIcon(R.mipmap.ic_launcher_rounded)
+                    .setSmallIcon(R.mipmap.ic_launcher_round)
                     .setCustomContentView(collapsedView)
                     .setStyle(NotificationCompat.DecoratedCustomViewStyle())
                     /*.setCustomBigContentView(expandedView)
@@ -50,7 +50,7 @@ class PushProcessorImpl() : PushProcessor {
                     .setContentIntent(getIntent(context, pushModel))
                     .setLights(ledColor, 500, 500)
 
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 builder.color = primaryColor
                 builder.setVibrate(LongArray(0))
             }

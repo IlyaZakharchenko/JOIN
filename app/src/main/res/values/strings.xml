@@ -88,5 +88,11 @@
     <string name="push_join_to_project_refuse">Вас не приняли в проект %s</string>
     <string name="push_remove_from_project">Вас удалили из проекта %s</string>
     <string name="push_unknown">Неизвестный тип пуша</string>
+    <string name="project_details_name">Название</string>
+    <string name="project_details_descr">Описание</string>
+    <string name="project_details_vacancies">Вакансии</string>
+    <string name="project_details_no_vacancies">Нет доступных вакансий</string>
+    <string name="project_details_team">Участники</string>
+    <string name="project_details_add">Добавить участника</string>
 
 </resources>
