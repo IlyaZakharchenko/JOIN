@@ -32,4 +32,7 @@ interface ProjectDetailsView: BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun setSignInFragment()
+
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun exitFragment()
 }

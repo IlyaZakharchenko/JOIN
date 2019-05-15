@@ -1,4 +1,4 @@
-package itis.ru.kpfu.join.presentation.recyclerView.adapter
+package itis.ru.kpfu.join.presentation.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -17,7 +17,10 @@ class ProjectMemberAdapter : RecyclerView.Adapter<ProjectMemberAdapter.ProjectMe
             notifyDataSetChanged()
         }
 
+    var isMyProject: Boolean = false
+
     var onUserClick: ((Long) -> Unit)? = null
+    var onUserExclude: ((Long) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectMemberViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_project_member, parent, false)
@@ -37,7 +40,16 @@ class ProjectMemberAdapter : RecyclerView.Adapter<ProjectMemberAdapter.ProjectMe
         fun bindViewHolder() = with(itemView) {
             val user = items[adapterPosition]
 
-            if (user.isLeader == true) iv_is_leader.visibility = View.VISIBLE else iv_is_leader.visibility = View.GONE
+            if (user.isLeader == true)
+                iv_is_leader.visibility = View.VISIBLE
+            else
+                iv_is_leader.visibility = View.GONE
+
+            if (isMyProject && user.isLeader == false)
+                btn_exclude.visibility = View.VISIBLE
+            else
+                btn_exclude.visibility = View.GONE
+
 
             tv_name_project_member.text = user.username
 
@@ -50,6 +62,7 @@ class ProjectMemberAdapter : RecyclerView.Adapter<ProjectMemberAdapter.ProjectMe
                         .into(civ_project_member)
             }
 
+            btn_exclude.setOnClickListener { user.id?.let { onUserExclude?.invoke(it) } }
             itemView.setOnClickListener { user.id?.let { onUserClick?.invoke(it) } }
         }
     }

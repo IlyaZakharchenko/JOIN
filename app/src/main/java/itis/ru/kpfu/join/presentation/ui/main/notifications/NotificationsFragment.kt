@@ -8,7 +8,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.presentation.model.NotificationModel
-import itis.ru.kpfu.join.data.network.joinapi.pojo.NotificationResponse
+import itis.ru.kpfu.join.data.network.joinapi.pojo.NotificationRequest
 import itis.ru.kpfu.join.presentation.adapter.NotificationsAdapter
 import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
@@ -80,11 +80,11 @@ class NotificationsFragment : BaseFragment(), NotificationsView {
     }
 
     private fun onAccept(id: Long) {
-        presenter.responseToNotification(id, NotificationResponse(true))
+        presenter.responseToNotification(id, NotificationRequest(true))
     }
 
     private fun onDecline(id: Long) {
-        presenter.responseToNotification(id, NotificationResponse(false))
+        presenter.responseToNotification(id, NotificationRequest(false))
     }
 
     private fun onProjectClick(id: Long) {

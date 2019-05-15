@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.View
-import android.view.View.GONE
 import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
@@ -12,10 +11,10 @@ import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.presentation.model.ProjectModel
 import itis.ru.kpfu.join.presentation.model.ProjectMemberModel
 import itis.ru.kpfu.join.presentation.adapter.ProjectJobAdapter
+import itis.ru.kpfu.join.presentation.adapter.ProjectMemberAdapter
 import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
 import itis.ru.kpfu.join.presentation.ui.main.users.UsersFragment
-import itis.ru.kpfu.join.presentation.recyclerView.adapter.ProjectMemberAdapter
 import itis.ru.kpfu.join.presentation.ui.auth.signin.SignInFragment
 import itis.ru.kpfu.join.presentation.ui.main.profile.ProfileFragment
 import kotlinx.android.synthetic.main.fragment_project_details.*
@@ -86,18 +85,19 @@ class ProjectDetailsFragment : BaseFragment(), ProjectDetailsView {
 
     private fun initRecyclerViews() {
         rv_project_members.layoutManager = LinearLayoutManager(baseActivity)
-        rv_project_members.adapter = membersAdapter.also { it.onUserClick = { id -> onUserClick(id) } }
+        rv_project_members.adapter = membersAdapter.also {
+            it.onUserClick = { id -> onUserClick(id) }
+            it.onUserExclude = { id -> presenter.onUserExclude(id) }
+        }
 
         rv_project_jobs.layoutManager = LinearLayoutManager(baseActivity)
-        rv_project_jobs.adapter = jobsAdapter.also { it.onApply = { onApply() } }
+        rv_project_jobs.adapter = jobsAdapter.also {
+            it.onApply = { presenter.onSendApply() }
+        }
     }
 
     private fun onUserClick(id: Long) {
         (activity as? FragmentHostActivity)?.setFragment(ProfileFragment.newInstance(id), true)
-    }
-
-    private fun onApply() {
-        presenter.onSendApply()
     }
 
     override fun onApplySuccess() {
@@ -108,8 +108,15 @@ class ProjectDetailsFragment : BaseFragment(), ProjectDetailsView {
         et_project_name.setText(item.name)
         et_project_desc.setText(item.description)
 
+        membersAdapter.isMyProject = isMyProject
+
         if (!isMyProject) {
-            add_member_container.visibility = GONE
+            add_member_container.visibility = View.GONE
+        }
+
+        if (isInProject) {
+            btn_leave_project.visibility = View.VISIBLE
+            btn_leave_project.setOnClickListener { presenter.onExit() }
         }
 
         val allMembers = ArrayList<ProjectMemberModel>()
@@ -151,11 +158,14 @@ class ProjectDetailsFragment : BaseFragment(), ProjectDetailsView {
     }
 
     override fun setUsersFragment(projectId: Long) {
-        (baseActivity as? FragmentHostActivity)?.setFragment(UsersFragment.newInstance(projectId), true)
+        (activity as? FragmentHostActivity)?.setFragment(UsersFragment.newInstance(projectId), true)
     }
 
     override fun setSignInFragment() {
         (activity as? FragmentHostActivity)?.setFragment(SignInFragment.newInstance(), false, clearStack = true)
     }
 
+    override fun exitFragment() {
+        (activity as? FragmentHostActivity)?.onBackPressed()
+    }
 }

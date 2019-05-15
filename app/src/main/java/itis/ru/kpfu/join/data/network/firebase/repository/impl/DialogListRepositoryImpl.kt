@@ -35,7 +35,7 @@ class DialogListRepositoryImpl @Inject constructor() : DialogListRepository {
     override fun createDialog(opponentId: String): Observable<CreatedDialogModel> {
         val asyncSubject = AsyncSubject.create<Pair<Boolean, String>>()
 
-        val d = checkIfExistsChat(opponentId, userRepository.getUser()?.id.toString())
+        val d = checkIfExistsChat(userRepository.getUser()?.id.toString(), opponentId)
                 .subscribe({ chatId ->
                     if (chatId.isEmpty()) {
                         val ref = firebaseDB.getReference("chats").push()
@@ -94,7 +94,7 @@ class DialogListRepositoryImpl @Inject constructor() : DialogListRepository {
 
                         snapshot.children.forEach { ds ->
                             val item = ds.getValue(CreateDialogItem::class.java)
-                            if (item?.user_id == opponentId) {
+                            if (item?.user_id == userId) {
                                 items.add(ds.key.orEmpty())
                             }
                         }

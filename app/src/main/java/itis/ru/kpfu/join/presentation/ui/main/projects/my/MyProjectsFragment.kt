@@ -109,6 +109,8 @@ class MyProjectsFragment : BaseFragment(), MyProjectsView {
 
     private fun initRecyclerView() {
         adapter.onProjectClick = { presenter.onProjectDetails(it) }
+        adapter.onProjectDelete = { presenter.onDeleteProject(it) }
+
         rv_my_projects.adapter = adapter
         rv_my_projects.layoutManager = LinearLayoutManager(baseActivity)
         rv_my_projects.addOnScrollListener(object : RecyclerView.OnScrollListener() {

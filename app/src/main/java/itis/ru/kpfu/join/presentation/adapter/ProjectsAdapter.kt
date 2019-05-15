@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import itis.ru.kpfu.join.R
+import itis.ru.kpfu.join.db.repository.impl.UserRepositoryImpl
 import itis.ru.kpfu.join.presentation.model.ProjectModel
 import kotlinx.android.synthetic.main.item_project.view.*
 
@@ -22,6 +23,7 @@ class ProjectsAdapter : RecyclerView.Adapter<ProjectsAdapter.ProjectsViewHolder>
         }
 
     var onProjectClick: ((Long) -> Unit)? = null
+    var onProjectDelete: ((Long) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectsViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_project, parent, false)
@@ -57,6 +59,15 @@ class ProjectsAdapter : RecyclerView.Adapter<ProjectsAdapter.ProjectsViewHolder>
                 }
             }
 
+            if (item.leader?.id == UserRepositoryImpl().getUser()?.id) {
+                btn_delete_project.visibility = View.VISIBLE
+                btn_edit_project.visibility = View.VISIBLE
+            } else {
+                btn_delete_project.visibility = View.GONE
+                btn_edit_project.visibility = View.GONE
+            }
+
+            btn_delete_project.setOnClickListener { onProjectDelete?.invoke(item.id ?: -1L) }
             itemView.setOnClickListener { item.id?.let { it1 -> onClick?.invoke(it1) } }
         }
     }

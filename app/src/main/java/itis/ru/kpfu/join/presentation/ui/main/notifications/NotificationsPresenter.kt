@@ -5,7 +5,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import itis.ru.kpfu.join.data.network.exception.NotAuthorizedException
 import itis.ru.kpfu.join.data.network.joinapi.request.JoinApiRequest
-import itis.ru.kpfu.join.data.network.joinapi.pojo.NotificationResponse
+import itis.ru.kpfu.join.data.network.joinapi.pojo.NotificationRequest
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.presentation.base.BasePresenter
 import itis.ru.kpfu.join.presentation.util.exceptionprocessor.ExceptionProcessor
@@ -53,9 +53,9 @@ class NotificationsPresenter @Inject constructor() : BasePresenter<Notifications
         compositeDisposable.dispose()
     }
 
-    fun responseToNotification(id: Long, response: NotificationResponse) {
+    fun responseToNotification(id: Long, request: NotificationRequest) {
         apiRequest
-                .responseToNotification(userRepository.getUser()?.token, response, id)
+                .responseToNotification(userRepository.getUser()?.token, request, id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { viewState.showWaitDialog() }
                 .doAfterTerminate { viewState.hideWaitDialog() }

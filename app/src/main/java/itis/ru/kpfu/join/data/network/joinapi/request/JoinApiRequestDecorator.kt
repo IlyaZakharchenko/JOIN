@@ -3,6 +3,7 @@ package itis.ru.kpfu.join.data.network.joinapi.request
 import io.reactivex.*
 import io.reactivex.subjects.Subject
 import itis.ru.kpfu.join.data.EventType
+import itis.ru.kpfu.join.data.LeaveFromProjectEvent
 import itis.ru.kpfu.join.data.ProjectAddedEvent
 import itis.ru.kpfu.join.data.network.joinapi.error.RestorePasswordCompletableErrorFunction
 import itis.ru.kpfu.join.data.network.joinapi.error.SignInObservableErrorFunction
@@ -148,7 +149,7 @@ class JoinApiRequestDecorator(
                 .compose(ApiRequestErrorCompletableTransformer())
     }
 
-    override fun responseToNotification(token: String?, answer: NotificationResponse, id: Long?): Completable {
+    override fun responseToNotification(token: String?, answer: NotificationRequest, id: Long?): Completable {
         return apiRequest
                 .responseToNotification(token, answer, id)
                 .compose(ApiRequestErrorCompletableTransformer())
@@ -170,6 +171,28 @@ class JoinApiRequestDecorator(
     override fun restorePassChange(form: RestorePassFormModel): Completable {
         return apiRequest
                 .restorePassChange(form)
+                .compose(ApiRequestErrorCompletableTransformer())
+    }
+
+    override fun excludeFromProject(token: String?, id: Long?, request: ExcludeRequest): Completable {
+        return apiRequest
+                .excludeFromProject(token, id, request)
+                .compose(ApiRequestErrorCompletableTransformer())
+
+    }
+
+    override fun exitFromProject(token: String?, id: Long?, request: ExitRequest): Completable {
+        return apiRequest
+                .exitFromProject(token, id, request)
+                .compose(ApiRequestErrorCompletableTransformer())
+                .doOnComplete {
+                    eventSubject.onNext(LeaveFromProjectEvent())
+                }
+    }
+
+    override fun deleteProject(token: String?, id: Long): Completable {
+        return apiRequest
+                .deleteProject(token, id)
                 .compose(ApiRequestErrorCompletableTransformer())
     }
 }

@@ -3,6 +3,8 @@ package itis.ru.kpfu.join.presentation.ui.main.projects.details
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
 import itis.ru.kpfu.join.data.network.exception.NotAuthorizedException
+import itis.ru.kpfu.join.data.network.joinapi.pojo.ExcludeRequest
+import itis.ru.kpfu.join.data.network.joinapi.pojo.ExitRequest
 import itis.ru.kpfu.join.data.network.joinapi.request.JoinApiRequest
 import itis.ru.kpfu.join.presentation.model.InviteFormModel
 import itis.ru.kpfu.join.db.repository.UserRepository
@@ -76,5 +78,41 @@ class ProjectDetailsPresenter @Inject constructor() : BasePresenter<ProjectDetai
                     }
                 })
                 .disposeWhenDestroy()
+    }
+
+    fun onUserExclude(excludeUserId: Long) {
+        apiRequest
+                .excludeFromProject(
+                        userRepository.getUser()?.token,
+                        excludeUserId,
+                        ExcludeRequest(excludeUserId, projectId)
+                )
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { viewState.showWaitDialog() }
+                .doAfterTerminate { viewState.hideWaitDialog() }
+                .subscribe({
+                    getProject()
+                }, {
+                    viewState.showErrorDialog("Ошибка при исключении пользователя")
+                })
+                .disposeWhenDestroy()
+    }
+
+    fun onExit() {
+        apiRequest
+                .exitFromProject(
+                        userRepository.getUser()?.token,
+                        userRepository.getUser()?.id,
+                        ExitRequest(userRepository.getUser()?.id, projectId)
+                )
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { viewState.showWaitDialog() }
+                .subscribe({
+                    viewState.hideWaitDialog()
+                    viewState.exitFragment()
+                }, {
+                    viewState.hideWaitDialog()
+                    viewState.showErrorDialog("Ошибка при выходе из проекта")
+                }).disposeWhenDestroy()
     }
 }
