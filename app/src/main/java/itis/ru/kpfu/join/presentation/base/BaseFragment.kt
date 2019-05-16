@@ -3,11 +3,7 @@ package itis.ru.kpfu.join.presentation.base
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import com.arellomobile.mvp.MvpAppCompatFragment
 import dagger.android.support.AndroidSupportInjection
@@ -45,6 +41,7 @@ abstract class BaseFragment : MvpAppCompatFragment(), BaseView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (activity as? FragmentHostActivity)?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         (activity as? FragmentHostActivity)?.setToolbar(toolbar)
         (activity as? FragmentHostActivity)?.setToolbarTitle(toolbarTitle)
         (activity as? FragmentHostActivity)?.enableBackPressed(enableBackPressed)

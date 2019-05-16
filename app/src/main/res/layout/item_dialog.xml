@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorWhite">
+    android:background="@color/colorInverse">
 
     <LinearLayout
         android:id="@+id/view"
@@ -15,24 +16,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp">
 
-            <ImageView
-                android:id="@+id/dialog_image"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+            <FrameLayout
+                android:id="@+id/container_dialog_avatar"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
                 android:layout_marginBottom="22dp"
-                android:src="@mipmap/ic_launcher" />
+                android:background="@drawable/background_avatar">
+
+                <TextView
+                    android:id="@+id/tv_dialog_avatar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="FL"
+                    android:layout_gravity="center"
+                    android:textColor="@color/colorInverse"
+                    android:textSize="24sp"/>
+
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginLeft="17dp"
                 android:layout_marginStart="17dp"
-                android:layout_toEndOf="@+id/dialog_image"
-                android:layout_toRightOf="@+id/dialog_image"
+                android:layout_marginLeft="17dp"
+                android:layout_toEndOf="@+id/container_dialog_avatar"
+                android:layout_toRightOf="@+id/container_dialog_avatar"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -51,10 +63,10 @@
                         android:lines="1"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="Техподдержка"
                         android:textColor="#212121"
                         android:textSize="16sp"
-                        android:textStyle="normal" />
+                        android:textStyle="normal"
+                        tools:text="Техподдержка" />
 
                     <TextView
                         android:id="@+id/dialog_time"
@@ -63,18 +75,18 @@
                         android:layout_gravity="top"
                         android:fontFamily="sans-serif"
                         android:gravity="top|end"
-                        android:text="22:12"
                         android:textColor="#bdbdbd"
                         android:textSize="12sp"
-                        android:textStyle="normal" />
+                        android:textStyle="normal"
+                        tools:text="22:12" />
 
                 </LinearLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -84,27 +96,26 @@
                         android:layout_centerVertical="true"
                         android:fontFamily="sans-serif"
                         android:lineSpacingExtra="6sp"
-                        android:text="Вы: "
-                        android:textColor="#0091ea"
+                        android:textColor="@color/colorPrimaryDark"
                         android:textSize="14sp"
                         android:textStyle="normal"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        android:text="Вы: " />
 
                     <TextView
                         android:id="@+id/dialog_last_message"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_toEndOf="@id/dialog_you"
-                        android:layout_toLeftOf="@id/dialog_count_view"
-                        android:layout_toRightOf="@id/dialog_you"
                         android:layout_toStartOf="@id/dialog_count_view"
+                        android:layout_toLeftOf="@id/dialog_count_view"
+                        android:layout_toEndOf="@id/dialog_you"
+                        android:layout_toRightOf="@id/dialog_you"
                         android:fontFamily="sans-serif"
                         android:lineSpacingExtra="6sp"
                         android:lines="1"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="Здравствуйте! Не обновляются задачи!!11111!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!…"
                         android:textColor="#9e9e9e"
                         android:textSize="14sp"
                         android:textStyle="normal" />
@@ -115,8 +126,8 @@
                         android:layout_height="22dp"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_marginLeft="20dp"
                         android:layout_marginStart="20dp"
+                        android:layout_marginLeft="20dp"
                         android:visibility="gone">
 
                     </RelativeLayout>
@@ -125,9 +136,8 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorGrey" />
-
+                    android:layout_height="0.5dp"
+                    android:background="@color/colorDivider" />
             </LinearLayout>
 
         </RelativeLayout>

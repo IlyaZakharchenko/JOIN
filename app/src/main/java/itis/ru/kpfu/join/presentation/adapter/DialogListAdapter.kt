@@ -1,14 +1,19 @@
 package itis.ru.kpfu.join.presentation.adapter
 
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import itis.ru.kpfu.join.R
 import itis.ru.kpfu.join.presentation.model.DialogModel
+import itis.ru.kpfu.join.presentation.model.MessageFromType
+import itis.ru.kpfu.join.presentation.util.color.ColorGenerator
+import itis.ru.kpfu.join.presentation.util.extensions.toPresentationHourMinute
+import itis.ru.kpfu.join.presentation.util.getDialogAvatar
 import kotlinx.android.synthetic.main.item_dialog.view.*
 
-class DialogsAdapter : RecyclerView.Adapter<DialogsAdapter.DialogViewHolder>() {
+class DialogListAdapter : RecyclerView.Adapter<DialogListAdapter.DialogViewHolder>() {
 
     var items: List<DialogModel> = emptyList()
         set(value) {
@@ -38,16 +43,17 @@ class DialogsAdapter : RecyclerView.Adapter<DialogsAdapter.DialogViewHolder>() {
 
             setOnClickListener { onChatClick?.invoke(item) }
 
-            dialog_last_message.text = item.lastMessage?.text
-            dialog_time.text = item.lastMessage?.dateSend
-            dialog_title.text = item.dialogName
-            item.image?.let { dialog_image.setImageResource(it) }
+            dialog_last_message.text = item.lastMessage
+            dialog_time.text = item.lastMessageDate?.toPresentationHourMinute()
+            dialog_title.text = item.username
 
-            if (item.lastMessage?.to == "staff") {
-                dialog_you.visibility = View.VISIBLE
-            } else {
-                dialog_you.visibility = View.GONE
+            when (item.lastMessageFrom) {
+                MessageFromType.ME -> dialog_you.visibility = View.VISIBLE
+                else -> dialog_you.visibility = View.GONE
             }
+
+            tv_dialog_avatar.text = item.username?.getDialogAvatar()
+            container_dialog_avatar.background.setTint(ColorGenerator.getColor(context))
         }
     }
 }

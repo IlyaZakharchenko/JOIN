@@ -6,6 +6,7 @@ import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import itis.ru.kpfu.join.db.entity.User
 import itis.ru.kpfu.join.presentation.base.BaseView
+import itis.ru.kpfu.join.presentation.model.CreatedDialogModel
 
 interface ProfileView: BaseView {
 
@@ -44,4 +45,7 @@ interface ProfileView: BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun setChangeProfileFragment()
+
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun setDialogFragment(dialog: CreatedDialogModel)
 }

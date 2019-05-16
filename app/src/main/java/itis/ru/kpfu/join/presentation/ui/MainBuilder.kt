@@ -17,8 +17,8 @@ import itis.ru.kpfu.join.presentation.ui.auth.signup.stepone.SignUpStepOneFragme
 import itis.ru.kpfu.join.presentation.ui.auth.signup.stepone.SignUpStepOneModule
 import itis.ru.kpfu.join.presentation.ui.auth.signup.steptwo.SignUpStepTwoFragment
 import itis.ru.kpfu.join.presentation.ui.auth.signup.steptwo.SignUpStepTwoModule
-import itis.ru.kpfu.join.presentation.ui.main.dialogs.DialogsFragment
-import itis.ru.kpfu.join.presentation.ui.main.dialogs.DialogsModule
+import itis.ru.kpfu.join.presentation.ui.main.dialogs.DialogListFragment
+import itis.ru.kpfu.join.presentation.ui.main.dialogs.DialogListModule
 import itis.ru.kpfu.join.presentation.ui.main.dialogs.selected.ChatFragment
 import itis.ru.kpfu.join.presentation.ui.main.dialogs.selected.ChatModule
 import itis.ru.kpfu.join.presentation.ui.main.notifications.NotificationsFragment
@@ -44,8 +44,8 @@ abstract class MainBuilder {
     @ContributesAndroidInjector(modules = [ChatModule::class])
     abstract fun buildChatFragment(): ChatFragment
 
-    @ContributesAndroidInjector(modules = [DialogsModule::class])
-    abstract fun buildDialogsFragment(): DialogsFragment
+    @ContributesAndroidInjector(modules = [DialogListModule::class])
+    abstract fun buildDialogsFragment(): DialogListFragment
 
     @ContributesAndroidInjector(modules = [MyProjectsModule::class])
     abstract fun buildMyProjectsFragment(): MyProjectsFragment

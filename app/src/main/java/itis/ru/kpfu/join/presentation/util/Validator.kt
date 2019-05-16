@@ -7,6 +7,6 @@ object Validator {
     }
 
     fun isPasswordValid(password: String?): Boolean {
-        return password?.length ?: 0 >= 7
+        return password?.length ?: 0 >= 5
     }
 }

@@ -1,6 +1,7 @@
 package itis.ru.kpfu.join.presentation.adapter
 
 import android.support.design.chip.Chip
+import android.support.design.chip.ChipDrawable
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -66,11 +67,14 @@ class ProjectJobAdapter : RecyclerView.Adapter<ProjectJobAdapter.ProjectJobViewH
         private fun initTechnologies(items: HashSet<String>) = with(itemView) {
             items.forEach {
                 if (it.isNotEmpty()) {
-                    val chip = Chip(context)
-                    chip.chipText = it
-                    val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                    layoutParams.setMargins(toPx(8, context), 0, 0, toPx(8, context))
-                    chip.layoutParams = layoutParams
+                    val chipDrawable = ChipDrawable.createFromAttributes(context, null, 0, R.style.Widget_MaterialComponents_Chip_Action).apply {
+                        rippleColor = null
+                    }
+
+                    val chip = Chip(context).apply {
+                        setChipDrawable(chipDrawable)
+                        chipText = it
+                    }
                     chip_container_job.addView(chip)
                 }
             }

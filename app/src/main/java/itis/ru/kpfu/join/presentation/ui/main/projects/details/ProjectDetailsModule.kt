@@ -3,7 +3,7 @@ package itis.ru.kpfu.join.presentation.ui.main.projects.details
 import dagger.Module
 import dagger.Provides
 import itis.ru.kpfu.join.presentation.adapter.ProjectJobAdapter
-import itis.ru.kpfu.join.presentation.recyclerView.adapter.ProjectMemberAdapter
+import itis.ru.kpfu.join.presentation.adapter.ProjectMemberAdapter
 
 @Module
 class ProjectDetailsModule {

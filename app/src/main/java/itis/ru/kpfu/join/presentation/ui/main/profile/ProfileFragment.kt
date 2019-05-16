@@ -16,8 +16,10 @@ import itis.ru.kpfu.join.presentation.adapter.SpecializationsAdapter
 import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
 import itis.ru.kpfu.join.presentation.dialog.ChooseImageDialog
+import itis.ru.kpfu.join.presentation.model.CreatedDialogModel
 import itis.ru.kpfu.join.presentation.ui.main.profile.edit.ProfileEditFragment
 import itis.ru.kpfu.join.presentation.ui.auth.signin.SignInFragment
+import itis.ru.kpfu.join.presentation.ui.main.dialogs.selected.ChatFragment
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.layout_progress_error.*
 import java.lang.IllegalArgumentException
@@ -89,10 +91,17 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
             btn_edit.apply {
                 visibility = View.VISIBLE
+                text = "Редактировать"
                 setOnClickListener { presenter.onEditProfile() }
             }
 
             collapsing_toolbar.setOnClickListener { presenter.onChoosePhoto() }
+        } else {
+            btn_edit.apply {
+                visibility = View.VISIBLE
+                text = "Написать сообщение"
+                setOnClickListener { presenter.onOpenChat() }
+            }
         }
 
         tv_email.text = user.email.orEmpty()
@@ -214,4 +223,10 @@ class ProfileFragment : BaseFragment(), ProfileView {
         (activity as? FragmentHostActivity)?.setFragment(ProfileEditFragment.newInstance(), true)
     }
 
+    override fun setDialogFragment(dialog: CreatedDialogModel) {
+        (activity as? FragmentHostActivity)?.setFragment(
+                ChatFragment.newInstance(dialog),
+                true
+        )
+    }
 }

@@ -5,11 +5,11 @@ import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.presentation.base.BasePresenter
 import itis.ru.kpfu.join.presentation.model.PushCategoriesType
 import itis.ru.kpfu.join.presentation.model.PushModel
-import itis.ru.kpfu.join.presentation.ui.main.dialogs.DialogsFragment
-import itis.ru.kpfu.join.presentation.ui.main.notifications.NotificationsFragment
-import itis.ru.kpfu.join.presentation.ui.main.profile.ProfileFragment
-import itis.ru.kpfu.join.presentation.ui.main.projects.all.AllProjectsFragment
+import itis.ru.kpfu.join.presentation.ui.main.dialogs.DialogListFragment
 import itis.ru.kpfu.join.presentation.ui.main.projects.my.MyProjectsFragment
+import itis.ru.kpfu.join.presentation.ui.main.profile.ProfileFragment
+import itis.ru.kpfu.join.presentation.ui.main.notifications.NotificationsFragment
+import itis.ru.kpfu.join.presentation.ui.main.projects.all.AllProjectsFragment
 import javax.inject.Inject
 
 @InjectViewState
@@ -31,7 +31,7 @@ class FragmentHostPresenter @Inject constructor(var userRepository: UserReposito
     }
 
     fun onDialogs() {
-        viewState.setFragment(DialogsFragment.newInstance(), false, clearStack = true)
+        viewState.setFragment(DialogListFragment.newInstance(), false, clearStack = true)
     }
 
     fun onNotifications() {

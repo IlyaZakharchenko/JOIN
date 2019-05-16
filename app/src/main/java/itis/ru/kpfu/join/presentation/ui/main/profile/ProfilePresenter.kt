@@ -1,11 +1,14 @@
 package itis.ru.kpfu.join.presentation.ui.main.profile
 
 import com.arellomobile.mvp.InjectViewState
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.iid.FirebaseInstanceId
 import com.zxy.tiny.Tiny
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import itis.ru.kpfu.join.data.network.exception.NotAuthorizedException
+import itis.ru.kpfu.join.data.network.firebase.repository.DialogListRepository
 import itis.ru.kpfu.join.data.network.joinapi.request.JoinApiRequest
 import itis.ru.kpfu.join.db.repository.UserRepository
 import itis.ru.kpfu.join.presentation.base.BasePresenter
@@ -27,9 +30,12 @@ class ProfilePresenter @Inject constructor() : BasePresenter<ProfileView>() {
     @Inject
     lateinit var userRepository: UserRepository
     @Inject
+    lateinit var dialogListRepository: DialogListRepository
+    @Inject
     lateinit var apiRequest: JoinApiRequest
     @Inject
     lateinit var exceptionProcessor: ExceptionProcessor
+
     @Inject
     @JvmField
     var userId: Long? = null
@@ -122,5 +128,20 @@ class ProfilePresenter @Inject constructor() : BasePresenter<ProfileView>() {
 
     fun onEditProfile() {
         viewState.setChangeProfileFragment()
+    }
+
+    fun onOpenChat() {
+        dialogListRepository
+                .createDialog(userId.toString())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { viewState.showWaitDialog() }
+                .doAfterTerminate { viewState.hideWaitDialog() }
+                .subscribe({
+                    viewState.setDialogFragment(it)
+                }, {
+                    viewState.showErrorDialog("Ошибка при создании диалога")
+                })
+                .disposeWhenDestroy()
     }
 }
