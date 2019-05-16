@@ -81,20 +81,19 @@ class DialogListRepositoryImpl @Inject constructor() : DialogListRepository {
         }
     }
 
-    private fun checkIfExistsChat(userId: String, opponentId: String): Observable<String> {
+    private fun checkIfExistsChat(userId: String, companionId: String): Observable<String> {
         val asyncSubject = AsyncSubject.create<Pair<Boolean, String>>()
 
         firebaseDB
                 .getReference("chats")
-                .orderByChild("user_id")
-                .equalTo(userId)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val items = mutableListOf<String>()
 
                         snapshot.children.forEach { ds ->
                             val item = ds.getValue(CreateDialogItem::class.java)
-                            if (item?.user_id == userId) {
+                            if ((item?.user_id == userId && item.companion_id == companionId) ||
+                                    (item?.user_id == companionId && item.companion_id == userId)) {
                                 items.add(ds.key.orEmpty())
                             }
                         }
@@ -127,15 +126,18 @@ class DialogListRepositoryImpl @Inject constructor() : DialogListRepository {
         val ref = firebaseDB.getReference("chats")
 
         ref
-                .orderByChild("user_id")
-                .equalTo(userRepository.getUser()?.id.toString())
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val items = mutableListOf<CreateDialogModel>()
 
                         snapshot.children.forEach { sp ->
                             val item = sp.getValue(CreateDialogItem::class.java)
-                            item?.let { items.add(CreateDialogModel(sp.key, item.user_id, item.companion_id)) }
+
+                            if (item?.user_id == userRepository.getUser()?.id.toString()) {
+                                item.let { items.add(CreateDialogModel(sp.key, item.user_id, item.companion_id)) }
+                            } else if (item?.companion_id == userRepository.getUser()?.id.toString()) {
+                                item.let { items.add(CreateDialogModel(sp.key, item.companion_id, item.user_id)) }
+                            }
                         }
 
                         asyncSubject.onNext(Pair(true, items))

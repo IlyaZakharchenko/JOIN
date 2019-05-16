@@ -4,6 +4,7 @@ import com.arellomobile.mvp.InjectViewState
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.Subject
+import itis.ru.kpfu.join.data.EditProjectEvent
 import itis.ru.kpfu.join.data.EventType
 import itis.ru.kpfu.join.data.LeaveFromProjectEvent
 import itis.ru.kpfu.join.data.ProjectAddedEvent
@@ -28,24 +29,7 @@ class MyProjectsPresenter @Inject constructor() : BasePresenter<MyProjectsView>(
     lateinit var eventSubject: Subject<EventType>
 
     fun onRetry() {
-        Observable.concat(
-                getProjectsObservable()
-                        .doOnSubscribe {
-                            viewState.hideRetry()
-                            viewState.showProgress()
-                        }
-                        .doAfterTerminate { viewState.hideProgress() },
-                eventSubject.filter { it is ProjectAddedEvent || it is LeaveFromProjectEvent }
-                        .flatMap { getProjectsObservable() })
-                .subscribe({
-                    viewState.setProjects(it)
-                }, {
-                    if (it is NotAuthorizedException) {
-                        viewState.setSignInFragment()
-                    } else {
-                        viewState.showRetry(exceptionProcessor.processException(it))
-                    }
-                }).disposeWhenDestroy()
+        update()
     }
 
     override fun onFirstViewAttach() {
@@ -56,9 +40,12 @@ class MyProjectsPresenter @Inject constructor() : BasePresenter<MyProjectsView>(
     private fun update() {
         Observable.concat(
                 getProjectsObservable()
-                        .doOnSubscribe { viewState.showProgress() }
+                        .doOnSubscribe {
+                            viewState.hideRetry()
+                            viewState.showProgress()
+                        }
                         .doAfterTerminate { viewState.hideProgress() },
-                eventSubject.filter { it is ProjectAddedEvent }
+                eventSubject.filter { it is ProjectAddedEvent || it is LeaveFromProjectEvent || it is EditProjectEvent }
                         .flatMap { getProjectsObservable() })
                 .subscribe({
                     viewState.setProjects(it)
@@ -89,6 +76,10 @@ class MyProjectsPresenter @Inject constructor() : BasePresenter<MyProjectsView>(
                 }, {
                     viewState.showErrorDialog("Ошибка при удалении проекта")
                 }).disposeWhenDestroy()
+    }
+
+    fun onEditProject(id: Long) {
+        viewState.setEditProjectFragment(id)
     }
 
     private fun getProjectsObservable(): Observable<List<ProjectModel>> {

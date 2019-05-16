@@ -16,6 +16,7 @@ import itis.ru.kpfu.join.presentation.base.BaseFragment
 import itis.ru.kpfu.join.presentation.ui.auth.signin.SignInFragment
 import itis.ru.kpfu.join.presentation.ui.main.projects.add.AddProjectFragment
 import itis.ru.kpfu.join.presentation.ui.main.projects.details.ProjectDetailsFragment
+import itis.ru.kpfu.join.presentation.ui.main.projects.edit.EditProjectFragment
 import kotlinx.android.synthetic.main.fragment_my_projects.*
 import kotlinx.android.synthetic.main.layout_progress_error.*
 import javax.inject.Inject
@@ -110,6 +111,7 @@ class MyProjectsFragment : BaseFragment(), MyProjectsView {
     private fun initRecyclerView() {
         adapter.onProjectClick = { presenter.onProjectDetails(it) }
         adapter.onProjectDelete = { presenter.onDeleteProject(it) }
+        adapter.onProjectEdit = { presenter.onEditProject(it) }
 
         rv_my_projects.adapter = adapter
         rv_my_projects.layoutManager = LinearLayoutManager(baseActivity)
@@ -143,5 +145,9 @@ class MyProjectsFragment : BaseFragment(), MyProjectsView {
 
     override fun setSignInFragment() {
         (activity as? FragmentHostActivity)?.setFragment(SignInFragment.newInstance(), false, clearStack = true)
+    }
+
+    override fun setEditProjectFragment(projectId: Long) {
+        (activity as? FragmentHostActivity)?.setFragment(EditProjectFragment.getInstance(projectId), true)
     }
 }

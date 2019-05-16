@@ -114,9 +114,44 @@ class ProjectDetailsFragment : BaseFragment(), ProjectDetailsView {
             add_member_container.visibility = View.GONE
         }
 
+        if (!isMyProject) {
+            when (item.status) {
+                0 -> {
+                    tv_action_description.visibility = View.GONE
+                    btn_action.apply {
+                        visibility = View.VISIBLE
+                        text = getString(R.string.join_project)
+                        setOnClickListener { presenter.onSendApply() }
+                    }
+                }
+                1 -> {
+                    tv_action_description.visibility = View.GONE
+                    btn_action.apply {
+                        visibility = View.VISIBLE
+                        text = getString(R.string.leave_project)
+                        setOnClickListener { presenter.onExit() }
+                    }
+                }
+                2 -> {
+                    btn_action.visibility = View.GONE
+                    tv_action_description.apply {
+                        visibility = View.VISIBLE
+                        text = getString(R.string.request_apply)
+                    }
+                }
+                3 -> {
+                    btn_action.visibility = View.GONE
+                    tv_action_description.apply {
+                        visibility = View.VISIBLE
+                        text = getString(R.string.request_sent)
+                    }
+                }
+            }
+        }
+
         if (isInProject) {
-            btn_leave_project.visibility = View.VISIBLE
-            btn_leave_project.setOnClickListener { presenter.onExit() }
+            btn_action.visibility = View.VISIBLE
+            btn_action.setOnClickListener { presenter.onExit() }
         }
 
         val allMembers = ArrayList<ProjectMemberModel>()

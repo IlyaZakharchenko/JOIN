@@ -8,14 +8,13 @@ import itis.ru.kpfu.join.presentation.base.BasePresenter
 import javax.inject.Inject
 
 @InjectViewState
-class DialogListPresenter @Inject constructor(): BasePresenter<DialogListView>() {
+class DialogListPresenter @Inject constructor() : BasePresenter<DialogListView>() {
 
     @Inject
     lateinit var dialogsRepository: DialogListRepository
 
-
-    override fun onFirstViewAttach() {
-        super.onFirstViewAttach()
+    override fun attachView(view: DialogListView?) {
+        super.attachView(view)
         update()
     }
 

@@ -24,6 +24,7 @@ class ProjectsAdapter : RecyclerView.Adapter<ProjectsAdapter.ProjectsViewHolder>
 
     var onProjectClick: ((Long) -> Unit)? = null
     var onProjectDelete: ((Long) -> Unit)? = null
+    var onProjectEdit: ((Long) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectsViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_project, parent, false)
@@ -68,6 +69,8 @@ class ProjectsAdapter : RecyclerView.Adapter<ProjectsAdapter.ProjectsViewHolder>
             }
 
             btn_delete_project.setOnClickListener { onProjectDelete?.invoke(item.id ?: -1L) }
+            btn_edit_project.setOnClickListener { onProjectEdit?.invoke(item.id ?: -1L) }
+
             itemView.setOnClickListener { item.id?.let { it1 -> onClick?.invoke(it1) } }
         }
     }

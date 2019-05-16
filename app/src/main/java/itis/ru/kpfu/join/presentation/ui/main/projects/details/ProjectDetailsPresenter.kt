@@ -69,6 +69,7 @@ class ProjectDetailsPresenter @Inject constructor() : BasePresenter<ProjectDetai
                 .doOnSubscribe { viewState.showWaitDialog() }
                 .doAfterTerminate { viewState.hideWaitDialog() }
                 .subscribe({
+                    getProject()
                     viewState.onApplySuccess()
                 }, {
                     if (it is NotAuthorizedException) {
