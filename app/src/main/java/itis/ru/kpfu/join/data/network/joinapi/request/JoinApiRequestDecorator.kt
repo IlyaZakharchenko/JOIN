@@ -2,6 +2,7 @@ package itis.ru.kpfu.join.data.network.joinapi.request
 
 import io.reactivex.*
 import io.reactivex.subjects.Subject
+import itis.ru.kpfu.join.data.EditProjectEvent
 import itis.ru.kpfu.join.data.EventType
 import itis.ru.kpfu.join.data.LeaveFromProjectEvent
 import itis.ru.kpfu.join.data.ProjectAddedEvent
@@ -194,5 +195,12 @@ class JoinApiRequestDecorator(
         return apiRequest
                 .deleteProject(token, id)
                 .compose(ApiRequestErrorCompletableTransformer())
+    }
+
+    override fun editProject(token: String?, projectModel: ProjectModel, projectId: Long): Completable {
+        return apiRequest
+                .editProject(token, projectModel, projectId)
+                .compose(ApiRequestErrorCompletableTransformer())
+                .doOnComplete { eventSubject.onNext(EditProjectEvent()) }
     }
 }

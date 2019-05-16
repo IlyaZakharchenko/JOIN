@@ -27,7 +27,7 @@ class ProjectJobAdapter : RecyclerView.Adapter<ProjectJobAdapter.ProjectJobViewH
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectJobViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_project_job, parent, false)
-        return ProjectJobViewHolder(view, isMyProject, isInProject)
+        return ProjectJobViewHolder(view)
     }
 
     override fun getItemCount(): Int {
@@ -39,9 +39,7 @@ class ProjectJobAdapter : RecyclerView.Adapter<ProjectJobAdapter.ProjectJobViewH
     }
 
     inner class ProjectJobViewHolder(
-            view: View,
-            private var isMyProject: Boolean,
-            private var isInProject: Boolean) : RecyclerView.ViewHolder(view) {
+            view: View) : RecyclerView.ViewHolder(view) {
 
         fun bindViewHolder() = with(itemView) {
             val item = items[adapterPosition]
@@ -52,15 +50,6 @@ class ProjectJobAdapter : RecyclerView.Adapter<ProjectJobAdapter.ProjectJobViewH
             tv_job_experience.text = resources.getQuantityString(R.plurals.experience, item.experience, item.experience)
             tv_job_lvl.text = parseLevelFromInt(item.knowledgeLevel)
             tv_job_name.text = item.name
-
-            btn_send_apply.setOnClickListener {
-                onApply?.invoke()
-                btn_send_apply.visibility = View.GONE
-            }
-
-            if (isMyProject or isInProject) {
-                btn_send_apply.visibility = View.GONE
-            }
         }
 
         private fun initTechnologies(items: HashSet<String>) = with(itemView) {

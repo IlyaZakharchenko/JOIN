@@ -89,4 +89,9 @@
     <string name="push_remove_from_project">Вас удалили из проекта %s</string>
     <string name="push_unknown">Неизвестный тип пуша</string>
 
+    <string name="leave_project">Покинуть проект</string>
+    <string name="join_project">Вступить в проект</string>
+    <string name="request_sent">Заявка на вступление на рассмотрении</string>
+    <string name="request_apply">Вас приглашают в проект, примите или отклоните заявку в окне уведомлений</string>
+    <string name="edit_project">Изменение проекта</string>
 </resources>

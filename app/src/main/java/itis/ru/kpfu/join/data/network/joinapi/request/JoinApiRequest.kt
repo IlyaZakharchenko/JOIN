@@ -109,4 +109,10 @@ interface JoinApiRequest {
 
     @DELETE("/projects/{id}")
     fun deleteProject(@Header("Authorization") token: String?, @Path("id") id: Long): Completable
+
+    @PUT("/projects/{id}")
+    fun editProject(
+            @Header("Authorization") token: String?,
+            @Body projectModel: ProjectModel,
+            @Path("id") projectId: Long): Completable
 }
