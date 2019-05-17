@@ -21,6 +21,7 @@ import itis.ru.kpfu.join.presentation.ui.FragmentHostActivity
 import itis.ru.kpfu.join.presentation.base.BaseFragment
 import itis.ru.kpfu.join.presentation.ui.auth.signin.SignInFragment
 import itis.ru.kpfu.join.presentation.ui.main.projects.details.ProjectDetailsFragment
+import itis.ru.kpfu.join.presentation.ui.main.projects.edit.EditProjectFragment
 import itis.ru.kpfu.join.presentation.util.toPx
 import kotlinx.android.synthetic.main.activity_fragment_host.*
 import kotlinx.android.synthetic.main.bottom_sheet_search_filter.btn_show_results_projects_filter
@@ -232,6 +233,9 @@ class AllProjectsFragment : BaseFragment(), AllProjectsView {
 
     private fun initRecyclerView() {
         adapter.onProjectClick = { onProjectClick(it) }
+        adapter.onProjectEdit = { presenter.onEditProject(it) }
+        adapter.onProjectDelete = { presenter.onDeleteProject(it) }
+
         rv_projects.adapter = adapter
         rv_projects.layoutManager = LinearLayoutManager(baseActivity)
     }
@@ -250,5 +254,9 @@ class AllProjectsFragment : BaseFragment(), AllProjectsView {
 
     override fun setSignInFragment() {
         (activity as? FragmentHostActivity)?.setFragment(SignInFragment.newInstance(), false, clearStack = true)
+    }
+
+    override fun setEditProjectFragment(projectId: Long) {
+        (activity as? FragmentHostActivity)?.setFragment(EditProjectFragment.getInstance(projectId), true)
     }
 }

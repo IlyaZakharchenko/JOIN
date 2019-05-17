@@ -31,4 +31,7 @@ interface AllProjectsView: BaseView {
 
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun setSignInFragment()
+
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun setEditProjectFragment(projectId: Long)
 }

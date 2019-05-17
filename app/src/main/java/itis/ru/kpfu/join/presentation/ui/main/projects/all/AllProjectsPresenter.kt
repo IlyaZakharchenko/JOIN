@@ -83,4 +83,19 @@ class AllProjectsPresenter @Inject constructor() : BasePresenter<AllProjectsView
                     }
                 }).disposeWhenDestroy()
     }
+
+    fun onDeleteProject(id: Long) {
+        apiRequest
+                .deleteProject(userRepository.getUser()?.token, id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    getProjects()
+                }, {
+                    viewState.showErrorDialog("Ошибка при удалении проекта")
+                }).disposeWhenDestroy()
+    }
+
+    fun onEditProject(id: Long) {
+        viewState.setEditProjectFragment(id)
+    }
 }
